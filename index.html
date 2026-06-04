@@ -216,6 +216,8 @@ a{color:var(--jaune)}
 @keyframes blink{50%{opacity:.2}}
 .mm .tm{font-size:10px;opacity:.6;margin-top:4px;display:flex;gap:8px;align-items:center}
 .mm .del{cursor:pointer}
+.mm .rds{color:var(--muted)}
+.mm .rdv{color:var(--orange);font-weight:700;opacity:1}
 .msg-bar{padding:10px;border-top:1px solid var(--line);background:var(--anthra-2);display:flex;gap:6px;align-items:flex-end}
 .msg-bar textarea{flex:1;min-width:0;background:var(--anthra);border:1px solid var(--line);color:var(--txt);border-radius:20px;padding:11px 15px;font-size:15px;resize:none;max-height:120px;line-height:1.4}
 .msg-bar .em{background:var(--anthra-3);border:1px solid var(--line);border-radius:50%;font-size:18px;height:44px;width:44px;padding:0;color:var(--txt);flex-shrink:0}
@@ -1028,10 +1030,14 @@ async function msgSwitch(id){
   if(msgRoom){await sb.removeChannel(msgRoom);msgRoom=null;}
   const {data,error}=await sb.from('messages').select('*').eq('channel',id).order('created_at',{ascending:true}).limit(300);
   if(error){document.getElementById('msgList').innerHTML='<div class="msg-empty">Erreur : '+esc(error.message)+'<br>(As-tu lancé le SQL dans Supabase ?)</div>';return;}
+  const ids=(data||[]).map(m=>m.id);
+  await loadReads(ids);
   msgRender(data||[]);
+  markRead(data||[]);
   const cid=chatClientId();
   msgRoom=sb.channel('room-'+id,{config:{presence:{key:cid}}});
-  msgRoom.on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'channel=eq.'+id},p=>msgAppend(p.new));
+  msgRoom.on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'channel=eq.'+id},p=>{msgAppend(p.new);if(p.new.client_id!==cid)markRead([p.new]);});
+  msgRoom.on('postgres_changes',{event:'INSERT',schema:'public',table:'message_reads'},p=>{const mid=p.new.message_id;(readsMap[mid]=readsMap[mid]||new Set()).add(p.new.client_id);const el=document.getElementById('rd-'+mid);if(el)el.innerHTML=readBadge(mid);});
   msgRoom.on('postgres_changes',{event:'DELETE',schema:'public',table:'messages'},p=>{const el=document.getElementById('msg-'+(p.old&&p.old.id));if(el)el.remove();});
   msgRoom.on('presence',{event:'sync'},()=>msgOnline(msgRoom.presenceState()));
   msgRoom.subscribe(async st=>{if(st==='SUBSCRIBED')await msgRoom.track({pseudo:state.settings.name,color:chatColor(state.settings.name)});});
@@ -1051,7 +1057,7 @@ function msgAppend(m,bulk){
     <div class="bub"><div class="nm" style="color:${m.color||'#FF6A00'}">${esc(m.pseudo)}</div>
     ${m.media?mediaHTML(m):''}
     ${m.text?`<div class="tx">${esc(m.text)}</div>`:''}
-    <div class="tm"><span>${new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span>${mine?`<span class="del" onclick="msgDel('${m.id}')">🗑</span>`:''}</div></div>`;
+    <div class="tm"><span>${new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span>${mine?`<span class="rd" id="rd-${m.id}">${readBadge(m.id)}</span>`:''}${mine?`<span class="del" onclick="msgDel('${m.id}')">🗑</span>`:''}</div></div>`;
   box.appendChild(d);if(!bulk)box.scrollTop=box.scrollHeight;
 }
 function msgGrow(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,120)+'px';}
@@ -1113,6 +1119,24 @@ function toggleDictation(){
   rec.onresult=(ev)=>{let txt='';for(let i=0;i<ev.results.length;i++)txt+=ev.results[i][0].transcript;inp.value=(base?base+' ':'')+txt;msgGrow(inp);};
   rec.start();
 }
+let readsMap={};
+function chatClientIdSafe(){return state.settings.chatClientId||chatClientId();}
+async function loadReads(ids){
+  readsMap={};
+  if(!ids.length)return;
+  const db=ensureSB();if(!db)return;
+  try{const {data}=await db.from('message_reads').select('message_id,client_id').in('message_id',ids);
+    (data||[]).forEach(r=>{(readsMap[r.message_id]=readsMap[r.message_id]||new Set()).add(r.client_id);});}catch(e){}
+}
+async function markRead(messages){
+  const db=ensureSB();if(!db)return;
+  const cid=chatClientIdSafe();
+  const rows=(messages||[]).filter(m=>m.client_id!==cid).map(m=>({message_id:m.id,client_id:cid,pseudo:state.settings.name}));
+  if(!rows.length)return;
+  try{await db.from('message_reads').upsert(rows,{onConflict:'message_id,client_id',ignoreDuplicates:true});}catch(e){}
+}
+function readCount(id){const s=readsMap[id];if(!s)return 0;const cid=chatClientIdSafe();let n=0;s.forEach(c=>{if(c!==cid)n++;});return n;}
+function readBadge(id){const n=readCount(id);if(n>0)return `<span class="rdv">✓✓${n>1?' '+n:''}</span>`;return '<span class="rds">✓</span>';}
 async function msgSend(){
   const i=document.getElementById('msgInput');const t=i.value.trim();
   if(!t&&!pendMedia)return;
