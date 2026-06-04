@@ -1029,12 +1029,21 @@ function renderDMList(){
   const add=`<div class="msg-chan dmadd" onclick="openDMPicker()">＋ Privé</div>`;
   el.innerHTML=add+(dmList.length?dmList.map(d=>`<div class="msg-chan ${d.id===msgCur?'active':''}" data-id="${d.id}" onclick="msgSwitch('${d.id}')">🔒 ${esc(d.pseudo||'Privé')}</div>`).join(''):'');
 }
-let lastOnline=[];
-function openDMPicker(){
-  const others=lastOnline.filter(p=>p.cid&&p.cid!==chatClientIdSafe());
+let lastOnline=[],membersList=[];
+async function registerMe(){const db=ensureSB();if(!db)return;try{await db.from('members').upsert({cid:chatClientIdSafe(),pseudo:state.settings.name,last_seen:new Date().toISOString()},{onConflict:'cid'});}catch(e){}}
+async function loadMembers(){const db=ensureSB();if(!db)return;try{const {data}=await db.from('members').select('*');membersList=data||[];}catch(e){}}
+async function openDMPicker(){
+  await loadMembers().catch(()=>{});
+  const myCid=chatClientIdSafe();
+  const onlineCids=new Set(lastOnline.filter(p=>p.cid).map(p=>p.cid));
+  const map={};
+  membersList.forEach(m=>{if(m.cid&&m.cid!==myCid)map[m.cid]={cid:m.cid,pseudo:m.pseudo};});
+  lastOnline.forEach(p=>{if(p.cid&&p.cid!==myCid)map[p.cid]={cid:p.cid,pseudo:p.pseudo};});
+  const list=Object.values(map).sort((a,b)=>(onlineCids.has(b.cid)?1:0)-(onlineCids.has(a.cid)?1:0)||(a.pseudo||'').localeCompare(b.pseudo||''));
   let ov=document.getElementById('dmPicker');
   if(!ov){ov=document.createElement('div');ov.id='dmPicker';ov.className='dmpicker';ov.onclick=e=>{if(e.target===ov)closeDMPicker();};document.body.appendChild(ov);}
-  ov.innerHTML=`<div class="dmpbox"><div class="dmph">Discussion privée</div>${others.length?others.map(p=>`<button onclick="openDM('${p.cid}','${esc(p.pseudo)}');closeDMPicker()">🔒 ${esc(p.pseudo)}</button>`).join(''):'<div style="padding:12px;color:var(--txt-mute);font-size:13px">Personne d\'autre en ligne. La personne doit ouvrir la messagerie pour apparaître ici.</div>'}<button class="dmpcancel" onclick="closeDMPicker()">Fermer</button></div>`;
+  const items=list.length?list.map(p=>{const on=onlineCids.has(p.cid);return `<button onclick="openDM('${p.cid}','${esc(p.pseudo)}');closeDMPicker()"><span class="doton" style="background:${on?'#39d353':'#555'}"></span> ${esc(p.pseudo)} ${on?'':'<span style="color:var(--txt-mute);font-size:11px">(hors ligne)</span>'}</button>`;}).join(''):'<div style="padding:12px;color:var(--txt-mute);font-size:13px">Aucun membre connu. Chaque personne doit ouvrir la messagerie une fois pour apparaître ici.</div>';
+  ov.innerHTML=`<div class="dmpbox"><div class="dmph">Discussion privée</div>${items}<button class="dmpcancel" onclick="closeDMPicker()">Fermer</button></div>`;
   ov.style.display='flex';
 }
 function closeDMPicker(){const ov=document.getElementById('dmPicker');if(ov)ov.style.display='none';}
@@ -1047,6 +1056,7 @@ function renderWA(){
     document.getElementById('msgChans').innerHTML='';document.getElementById('msgOnline').innerHTML='';return;
   }
   if(!sb)sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
+  registerMe();loadMembers();
   document.getElementById('msgChans').innerHTML=MSG_CHANNELS.map(c=>`<div class="msg-chan ${c.id===msgCur?'active':''}" data-id="${c.id}" onclick="msgSwitch('${c.id}')">${c.name}</div>`).join('');
   loadDMs().then(renderDMList);
   msgSwitch(msgCur);
@@ -1209,7 +1219,7 @@ function msgOnline(stt){
 }
 
 /* ============ SETTINGS / DATA ============ */
-function saveName(){state.settings.name=document.getElementById('setName').value.trim()||'Anonyme';save();fillSettings();}
+function saveName(){state.settings.name=document.getElementById('setName').value.trim()||'Anonyme';save();fillSettings();if(window.registerMe)registerMe();}
 function saveMistral(){
   state.settings.mistralKey=document.getElementById('setMistralKey').value.trim();
   state.settings.mistralModel=document.getElementById('setMistralModel').value;
