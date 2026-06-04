@@ -216,10 +216,10 @@ a{color:var(--jaune)}
 @keyframes blink{50%{opacity:.2}}
 .mm .tm{font-size:10px;opacity:.6;margin-top:4px;display:flex;gap:8px;align-items:center}
 .mm .del{cursor:pointer}
-.msg-bar{padding:12px;border-top:1px solid var(--line);background:var(--anthra-2);display:flex;gap:8px;align-items:flex-end}
-.msg-bar textarea{flex:1;background:var(--anthra);border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:11px 14px;font-size:15px;resize:none;max-height:120px;line-height:1.4}
-.msg-bar .em{background:var(--anthra-3);border:1px solid var(--line);border-radius:10px;font-size:19px;height:44px;padding:0 12px;color:var(--txt)}
-.msg-bar .snd{height:44px;border:none;border-radius:12px;background:var(--orange);color:#000;font-weight:800;padding:0 18px}
+.msg-bar{padding:10px;border-top:1px solid var(--line);background:var(--anthra-2);display:flex;gap:6px;align-items:flex-end}
+.msg-bar textarea{flex:1;min-width:0;background:var(--anthra);border:1px solid var(--line);color:var(--txt);border-radius:20px;padding:11px 15px;font-size:15px;resize:none;max-height:120px;line-height:1.4}
+.msg-bar .em{background:var(--anthra-3);border:1px solid var(--line);border-radius:50%;font-size:18px;height:44px;width:44px;padding:0;color:var(--txt);flex-shrink:0}
+.msg-bar .snd2{height:44px;width:44px;border:none;border-radius:50%;background:var(--orange);color:#000;font-weight:800;font-size:17px;flex-shrink:0}
 .epk{position:absolute;bottom:78px;left:250px;background:var(--anthra-2);border:1px solid var(--line);border-radius:12px;padding:10px;display:none;grid-template-columns:repeat(8,1fr);gap:4px;z-index:20}
 .epk.show{display:grid}
 .epk span{cursor:pointer;font-size:20px;padding:3px;border-radius:6px;text-align:center}
@@ -1016,14 +1016,14 @@ async function msgSwitch(id){
       <button onclick="pickMedia('image')">📷 Photo</button>
       <button onclick="pickMedia('video')">🎬 Vidéo</button>
       <button onclick="toggleVoice()">🎙️ Message vocal</button>
+      <button onclick="document.getElementById('epk').classList.toggle('show');document.getElementById('attMenu').classList.remove('show')">😊 Emoji</button>
     </div>
     <div class="msg-bar">
-      <button class="em" onclick="document.getElementById('epk').classList.toggle('show')">😊</button>
       <button class="em" onclick="document.getElementById('attMenu').classList.toggle('show')" title="Joindre">➕</button>
-      <button class="em" id="micBtn" onclick="toggleDictation()" title="Dicter (parler → écrit)">🎤</button>
       <input type="file" id="mediaPick" style="display:none" onchange="onMediaPick(event.target.files[0])">
-      <textarea id="msgInput" rows="1" placeholder="Message à l'équipe…" oninput="msgGrow(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();msgSend();}"></textarea>
-      <button class="snd" onclick="msgSend()">Envoyer</button>
+      <textarea id="msgInput" rows="1" placeholder="Écris ton message…" oninput="msgGrow(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();msgSend();}"></textarea>
+      <button class="em" id="micBtn" onclick="toggleDictation()" title="Dicter (parler → écrit)">🎤</button>
+      <button class="snd2" onclick="msgSend()" title="Envoyer">➤</button>
     </div>`;
   if(msgRoom){await sb.removeChannel(msgRoom);msgRoom=null;}
   const {data,error}=await sb.from('messages').select('*').eq('channel',id).order('created_at',{ascending:true}).limit(300);
