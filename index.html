@@ -196,6 +196,13 @@ a{color:var(--jaune)}
 .msg-chan{padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:700;color:var(--txt-mute);font-size:14px;margin-bottom:4px}
 .msg-chan:hover{background:var(--anthra-3);color:var(--txt)}
 .msg-chan.active{background:var(--orange);color:#000}
+.msg-chan.dmadd{border:1px dashed var(--line);color:var(--orange)}
+.dmpicker{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:200;padding:20px}
+.dmpbox{background:var(--anthra-2);border:1px solid var(--line);border-radius:16px;padding:14px;width:100%;max-width:340px;max-height:70vh;overflow:auto}
+.dmph{font-weight:800;font-size:16px;margin-bottom:10px}
+.dmpbox button{display:block;width:100%;text-align:left;background:var(--anthra-3);border:1px solid var(--line);color:var(--txt);padding:12px 14px;border-radius:10px;margin-bottom:8px;font-weight:700;cursor:pointer;font-family:'Manrope';font-size:14px}
+.dmpbox button:hover{background:var(--orange);color:#000}
+.dmpbox .dmpcancel{text-align:center;background:none;color:var(--txt-mute);font-weight:600;margin-top:4px}
 .msg-online{margin-top:auto;padding:12px 14px;border-top:1px solid var(--line);font-size:12px;color:var(--txt-mute);max-height:240px;overflow:auto}
 .msg-online .o{display:flex;align-items:center;gap:8px;margin-top:7px;color:var(--txt)}
 .doton{width:8px;height:8px;border-radius:50%;background:var(--ok);flex-shrink:0;box-shadow:0 0 8px var(--ok)}
@@ -459,6 +466,8 @@ body.mobile .pill{display:none}
       <div class="msg-side">
         <div class="msg-side-h">Salons</div>
         <div id="msgChans" class="msg-chans"></div>
+        <div class="msg-side-h">Privé</div>
+        <div id="msgDMs" class="msg-chans"></div>
         <div class="msg-online" id="msgOnline"></div>
       </div>
       <div class="msg-main" id="msgMain">
@@ -1002,6 +1011,33 @@ const MSG_CHANNELS=[{id:'general',name:'💬 Général'},{id:'chantiers',name:'�
 const MSG_PALETTE=['#FF6A00','#FFC400','#B23A00','#7a4a00','#FF8C42','#E5BC00','#C0522A','#FFB000'];
 const MSG_EMOJIS=['😀','😂','👍','👎','🙏','🔥','💪','🎉','❤️','✅','❌','🚧','🚚','☕','🍻','⚽','🤝','😴','😬','🥳','💯','🤙','⚠️','📍'];
 let sb=null,msgCur='general',msgRoom=null,msgInit=false;
+let dmList=[],dmNames={};
+function dmId(other){return 'dm:'+[chatClientIdSafe(),other].sort().join('__');}
+function openDM(other,pseudo){const id=dmId(other);dmNames[id]=pseudo;if(!dmList.find(d=>d.id===id))dmList.push({id,pseudo,other});renderDMList();msgSwitch(id);}
+async function loadDMs(){
+  const db=ensureSB();if(!db)return;const cid=chatClientIdSafe();
+  try{
+    const {data}=await db.from('messages').select('channel,pseudo,client_id').like('channel','dm:%').limit(2000);
+    const map={};
+    (data||[]).forEach(m=>{if(!m.channel.includes(cid))return;const parts=m.channel.slice(3).split('__');const other=parts.find(p=>p!==cid)||parts[0];if(!map[m.channel])map[m.channel]={id:m.channel,other,pseudo:dmNames[m.channel]||null};if(m.client_id!==cid&&m.pseudo)map[m.channel].pseudo=m.pseudo;});
+    dmList=Object.values(map);
+    dmList.forEach(d=>{if(d.pseudo)dmNames[d.id]=d.pseudo;});
+  }catch(e){}
+}
+function renderDMList(){
+  const el=document.getElementById('msgDMs');if(!el)return;
+  const add=`<div class="msg-chan dmadd" onclick="openDMPicker()">＋ Privé</div>`;
+  el.innerHTML=add+(dmList.length?dmList.map(d=>`<div class="msg-chan ${d.id===msgCur?'active':''}" data-id="${d.id}" onclick="msgSwitch('${d.id}')">🔒 ${esc(d.pseudo||'Privé')}</div>`).join(''):'');
+}
+let lastOnline=[];
+function openDMPicker(){
+  const others=lastOnline.filter(p=>p.cid&&p.cid!==chatClientIdSafe());
+  let ov=document.getElementById('dmPicker');
+  if(!ov){ov=document.createElement('div');ov.id='dmPicker';ov.className='dmpicker';ov.onclick=e=>{if(e.target===ov)closeDMPicker();};document.body.appendChild(ov);}
+  ov.innerHTML=`<div class="dmpbox"><div class="dmph">Discussion privée</div>${others.length?others.map(p=>`<button onclick="openDM('${p.cid}','${esc(p.pseudo)}');closeDMPicker()">🔒 ${esc(p.pseudo)}</button>`).join(''):'<div style="padding:12px;color:var(--txt-mute);font-size:13px">Personne d\'autre en ligne. La personne doit ouvrir la messagerie pour apparaître ici.</div>'}<button class="dmpcancel" onclick="closeDMPicker()">Fermer</button></div>`;
+  ov.style.display='flex';
+}
+function closeDMPicker(){const ov=document.getElementById('dmPicker');if(ov)ov.style.display='none';}
 function chatColor(name){let h=0;for(let i=0;i<(name||'').length;i++)h=name.charCodeAt(i)+((h<<5)-h);return MSG_PALETTE[Math.abs(h)%MSG_PALETTE.length];}
 function chatClientId(){if(!state.settings.chatClientId){state.settings.chatClientId='c_'+Math.random().toString(36).slice(2)+Date.now().toString(36);save();}return state.settings.chatClientId;}
 
@@ -1011,15 +1047,18 @@ function renderWA(){
     document.getElementById('msgChans').innerHTML='';document.getElementById('msgOnline').innerHTML='';return;
   }
   if(!sb)sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
-  document.getElementById('msgChans').innerHTML=MSG_CHANNELS.map(c=>`<div class="msg-chan ${c.id===msgCur?'active':''}" onclick="msgSwitch('${c.id}')">${c.name}</div>`).join('');
+  document.getElementById('msgChans').innerHTML=MSG_CHANNELS.map(c=>`<div class="msg-chan ${c.id===msgCur?'active':''}" data-id="${c.id}" onclick="msgSwitch('${c.id}')">${c.name}</div>`).join('');
+  loadDMs().then(renderDMList);
   msgSwitch(msgCur);
 }
 async function msgSwitch(id){
   msgCur=id;
-  document.querySelectorAll('.msg-chan').forEach(c=>c.classList.toggle('active',c.textContent===MSG_CHANNELS.find(x=>x.id===id).name));
+  const chan=MSG_CHANNELS.find(c=>c.id===id);
+  const title=chan?chan.name:('🔒 '+(dmNames[id]||'Privé'));
+  document.querySelectorAll('.msg-chan').forEach(c=>c.classList.toggle('active',c.dataset.id===id));
   const main=document.getElementById('msgMain');
   main.innerHTML=`
-    <div class="msg-top"><h3>${MSG_CHANNELS.find(c=>c.id===id).name}</h3><span class="cnt" id="msgCnt"></span></div>
+    <div class="msg-top"><h3>${title}</h3><span class="cnt" id="msgCnt"></span></div>
     <div class="msg-list" id="msgList"><div class="msg-empty">Chargement…</div></div>
     <div class="epk" id="epk">${MSG_EMOJIS.map(e=>`<span onclick="msgEmoji('${e}')">${e}</span>`).join('')}</div>
     <div id="msgPend" style="padding:6px 12px 0"></div>
@@ -1049,7 +1088,7 @@ async function msgSwitch(id){
   msgRoom.on('postgres_changes',{event:'INSERT',schema:'public',table:'message_reads'},p=>{const mid=p.new.message_id;(readsMap[mid]=readsMap[mid]||new Set()).add(p.new.client_id);const el=document.getElementById('rd-'+mid);if(el)el.innerHTML=readBadge(mid);});
   msgRoom.on('postgres_changes',{event:'DELETE',schema:'public',table:'messages'},p=>{const el=document.getElementById('msg-'+(p.old&&p.old.id));if(el)el.remove();});
   msgRoom.on('presence',{event:'sync'},()=>msgOnline(msgRoom.presenceState()));
-  msgRoom.subscribe(async st=>{if(st==='SUBSCRIBED')await msgRoom.track({pseudo:state.settings.name,color:chatColor(state.settings.name)});});
+  msgRoom.subscribe(async st=>{if(st==='SUBSCRIBED')await msgRoom.track({pseudo:state.settings.name,color:chatColor(state.settings.name),cid:chatClientIdSafe()});});
 }
 function msgRender(list){
   const box=document.getElementById('msgList');
@@ -1159,9 +1198,14 @@ async function msgSend(){
 async function msgDel(id){if(!confirm('Supprimer ?'))return;await sb.from('messages').delete().eq('id',id);}
 function msgOnline(stt){
   const names=[];Object.values(stt).forEach(arr=>arr.forEach(p=>names.push(p)));
-  const uniq=[...new Map(names.map(n=>[n.pseudo,n])).values()];
+  const uniq=[...new Map(names.map(n=>[n.cid||n.pseudo,n])).values()];
+  lastOnline=uniq;
   const cnt=document.getElementById('msgCnt');if(cnt)cnt.textContent=uniq.length+' en ligne';
-  document.getElementById('msgOnline').innerHTML='<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700">En ligne ('+uniq.length+')</div>'+uniq.map(p=>`<div class="o"><span class="doton"></span>${esc(p.pseudo)}</div>`).join('');
+  const myCid=chatClientIdSafe();
+  document.getElementById('msgOnline').innerHTML='<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700">En ligne ('+uniq.length+')</div>'+uniq.map(p=>{
+    if(p.cid&&p.cid!==myCid)return `<div class="o" style="cursor:pointer" onclick="openDM('${p.cid}','${esc(p.pseudo)}')"><span class="doton"></span>${esc(p.pseudo)}<span style="margin-left:auto;font-size:10px;color:var(--orange);font-weight:700">privé ›</span></div>`;
+    return `<div class="o"><span class="doton"></span>${esc(p.pseudo)} <span style="color:var(--txt-mute);font-size:10px">(toi)</span></div>`;
+  }).join('');
 }
 
 /* ============ SETTINGS / DATA ============ */
