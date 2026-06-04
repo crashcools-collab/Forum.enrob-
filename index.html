@@ -1003,6 +1003,7 @@ async function msgSwitch(id){
     <div class="epk" id="epk">${MSG_EMOJIS.map(e=>`<span onclick="msgEmoji('${e}')">${e}</span>`).join('')}</div>
     <div class="msg-bar">
       <button class="em" onclick="document.getElementById('epk').classList.toggle('show')">😊</button>
+      <button class="em" id="micBtn" onclick="toggleDictation()" title="Dicter à la voix">🎤</button>
       <textarea id="msgInput" rows="1" placeholder="Message à l'équipe…" oninput="msgGrow(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();msgSend();}"></textarea>
       <button class="snd" onclick="msgSend()">Envoyer</button>
     </div>`;
@@ -1036,6 +1037,20 @@ function msgAppend(m,bulk){
 }
 function msgGrow(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,120)+'px';}
 function msgEmoji(e){const i=document.getElementById('msgInput');i.value+=e;i.focus();document.getElementById('epk').classList.remove('show');}
+let rec=null,recOn=false;
+function toggleDictation(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert("La dictée vocale n'est pas supportée par ce navigateur.\nUtilise Chrome (sur PC ou Android). Sur iPhone, utilise le micro du clavier du téléphone.");return;}
+  if(recOn){if(rec)rec.stop();return;}
+  rec=new SR();rec.lang='fr-FR';rec.interimResults=true;rec.continuous=true;
+  const inp=document.getElementById('msgInput');
+  const base=inp.value;
+  rec.onstart=()=>{recOn=true;const b=document.getElementById('micBtn');if(b){b.style.background='var(--orange)';b.style.color='#000';}};
+  rec.onend=()=>{recOn=false;const b=document.getElementById('micBtn');if(b){b.style.background='';b.style.color='';}};
+  rec.onerror=(ev)=>{recOn=false;const b=document.getElementById('micBtn');if(b){b.style.background='';b.style.color='';}if(ev.error==='not-allowed')alert('Micro refusé. Autorise le micro pour ce site.');};
+  rec.onresult=(ev)=>{let txt='';for(let i=0;i<ev.results.length;i++)txt+=ev.results[i][0].transcript;inp.value=(base?base+' ':'')+txt;msgGrow(inp);};
+  rec.start();
+}
 async function msgSend(){
   const i=document.getElementById('msgInput');const t=i.value.trim();if(!t)return;
   i.value='';i.style.height='auto';
