@@ -204,6 +204,16 @@ a{color:var(--jaune)}
 .mm .nm{font-size:12px;font-weight:800;margin-bottom:3px}
 .mm.mine .nm{display:none}
 .mm .tx{font-size:14.5px;line-height:1.45;white-space:pre-wrap;word-break:break-word}
+.msg-img{max-width:220px;max-height:240px;border-radius:10px;margin-top:4px;cursor:pointer;display:block}
+.msg-vid{max-width:240px;max-height:260px;border-radius:10px;margin-top:4px;display:block}
+.msg-aud{margin-top:6px;max-width:240px;width:240px}
+.attmenu{position:absolute;bottom:64px;left:8px;background:var(--anthra-2);border:1px solid var(--line);border-radius:12px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:20}
+.attmenu.show{display:flex}
+.attmenu button{background:none;border:none;color:var(--txt);text-align:left;padding:9px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-family:'Manrope';font-size:14px}
+.attmenu button:hover{background:var(--anthra-3)}
+.recbar{display:inline-flex;align-items:center;gap:10px;color:var(--warn);font-weight:700;font-size:13px}
+.recdot{width:10px;height:10px;border-radius:50%;background:var(--warn);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
 .mm .tm{font-size:10px;opacity:.6;margin-top:4px;display:flex;gap:8px;align-items:center}
 .mm .del{cursor:pointer}
 .msg-bar{padding:12px;border-top:1px solid var(--line);background:var(--anthra-2);display:flex;gap:8px;align-items:flex-end}
@@ -1001,9 +1011,17 @@ async function msgSwitch(id){
     <div class="msg-top"><h3>${MSG_CHANNELS.find(c=>c.id===id).name}</h3><span class="cnt" id="msgCnt"></span></div>
     <div class="msg-list" id="msgList"><div class="msg-empty">Chargement…</div></div>
     <div class="epk" id="epk">${MSG_EMOJIS.map(e=>`<span onclick="msgEmoji('${e}')">${e}</span>`).join('')}</div>
+    <div id="msgPend" style="padding:6px 12px 0"></div>
+    <div class="attmenu" id="attMenu">
+      <button onclick="pickMedia('image')">📷 Photo</button>
+      <button onclick="pickMedia('video')">🎬 Vidéo</button>
+      <button onclick="toggleVoice()">🎙️ Message vocal</button>
+    </div>
     <div class="msg-bar">
       <button class="em" onclick="document.getElementById('epk').classList.toggle('show')">😊</button>
-      <button class="em" id="micBtn" onclick="toggleDictation()" title="Dicter à la voix">🎤</button>
+      <button class="em" onclick="document.getElementById('attMenu').classList.toggle('show')" title="Joindre">➕</button>
+      <button class="em" id="micBtn" onclick="toggleDictation()" title="Dicter (parler → écrit)">🎤</button>
+      <input type="file" id="mediaPick" style="display:none" onchange="onMediaPick(event.target.files[0])">
       <textarea id="msgInput" rows="1" placeholder="Message à l'équipe…" oninput="msgGrow(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();msgSend();}"></textarea>
       <button class="snd" onclick="msgSend()">Envoyer</button>
     </div>`;
@@ -1031,12 +1049,56 @@ function msgAppend(m,bulk){
   const d=document.createElement('div');d.className='mm'+(mine?' mine':'');d.id='msg-'+m.id;
   d.innerHTML=`<div class="av" style="background:${m.color||'#FF6A00'}">${esc((m.pseudo||'?').slice(0,2).toUpperCase())}</div>
     <div class="bub"><div class="nm" style="color:${m.color||'#FF6A00'}">${esc(m.pseudo)}</div>
-    <div class="tx">${esc(m.text)}</div>
+    ${m.media?mediaHTML(m):''}
+    ${m.text?`<div class="tx">${esc(m.text)}</div>`:''}
     <div class="tm"><span>${new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span>${mine?`<span class="del" onclick="msgDel('${m.id}')">🗑</span>`:''}</div></div>`;
   box.appendChild(d);if(!bulk)box.scrollTop=box.scrollHeight;
 }
 function msgGrow(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,120)+'px';}
 function msgEmoji(e){const i=document.getElementById('msgInput');i.value+=e;i.focus();document.getElementById('epk').classList.remove('show');}
+function mediaHTML(m){
+  if(m.mtype==='image')return `<img class="msg-img" src="${m.media}" onclick="window.open('${m.media}','_blank')">`;
+  if(m.mtype==='video')return `<video class="msg-vid" src="${m.media}" controls></video>`;
+  if(m.mtype==='audio')return `<audio class="msg-aud" src="${m.media}" controls></audio>`;
+  return `<a href="${m.media}" target="_blank">📎 fichier</a>`;
+}
+let pendMedia=null;
+function pickMedia(type){
+  document.getElementById('attMenu').classList.remove('show');
+  const inp=document.getElementById('mediaPick');
+  inp.accept=type==='image'?'image/*':'video/*';
+  inp.value='';inp.click();
+}
+function onMediaPick(f){
+  if(!f)return;
+  const kind=(f.type||'').startsWith('video')?'video':'image';
+  pendMedia={file:f,type:kind};
+  showMediaPend(URL.createObjectURL(f),kind,f.name);
+}
+function showMediaPend(url,type,name){
+  const prev=type==='image'?`<img src="${url}" style="width:30px;height:30px;object-fit:cover;border-radius:5px;vertical-align:middle">`:(type==='video'?'🎬':'🎙️');
+  document.getElementById('msgPend').innerHTML=`<span class="filechip">${prev} ${esc(name||type)} <span class="x" onclick="cancelMedia()">✕</span></span>`;
+}
+function cancelMedia(){pendMedia=null;const p=document.getElementById('msgPend');if(p)p.innerHTML='';}
+let voiceRec=null,voiceState=false,voiceChunks=[];
+async function toggleVoice(){
+  document.getElementById('attMenu').classList.remove('show');
+  if(voiceState){voiceRec.stop();return;}
+  if(!navigator.mediaDevices||!window.MediaRecorder){alert("L'enregistrement vocal n'est pas supporté par ce navigateur.");return;}
+  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true});}catch(e){alert('Micro refusé.');return;}
+  voiceChunks=[];voiceRec=new MediaRecorder(stream);
+  voiceRec.ondataavailable=e=>{if(e.data.size)voiceChunks.push(e.data);};
+  voiceRec.onstop=()=>{voiceState=false;const blob=new Blob(voiceChunks,{type:voiceRec.mimeType||'audio/webm'});const ext=(voiceRec.mimeType||'').includes('mp4')?'m4a':'webm';const file=new File([blob],'vocal-'+Date.now()+'.'+ext,{type:blob.type});pendMedia={file,type:'audio'};showMediaPend(URL.createObjectURL(blob),'audio','message vocal');stream.getTracks().forEach(t=>t.stop());};
+  voiceRec.start();voiceState=true;
+  document.getElementById('msgPend').innerHTML='<span class="recbar"><span class="recdot"></span>Enregistrement…&nbsp;<button class="btn sm" onclick="toggleVoice()">Stop</button></span>';
+}
+async function uploadToStorage(file){
+  const db=ensureSB();if(!db)return null;
+  const id=uid();const safe=(file.name||'media').replace(/[^\w.\-]/g,'_');const path=id+'-'+safe;
+  const up=await db.storage.from('documents').upload(path,file,{upsert:true});
+  if(up.error){alert('Upload échoué : '+up.error.message);return null;}
+  return db.storage.from('documents').getPublicUrl(path).data.publicUrl;
+}
 let rec=null,recOn=false;
 function toggleDictation(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -1052,9 +1114,13 @@ function toggleDictation(){
   rec.start();
 }
 async function msgSend(){
-  const i=document.getElementById('msgInput');const t=i.value.trim();if(!t)return;
+  const i=document.getElementById('msgInput');const t=i.value.trim();
+  if(!t&&!pendMedia)return;
+  let media=null,mtype=null;
+  if(pendMedia){media=await uploadToStorage(pendMedia.file);if(!media)return;mtype=pendMedia.type;}
   i.value='';i.style.height='auto';
-  const {error}=await sb.from('messages').insert({channel:msgCur,client_id:chatClientId(),pseudo:state.settings.name,color:chatColor(state.settings.name),text:t});
+  pendMedia=null;const p=document.getElementById('msgPend');if(p)p.innerHTML='';
+  const {error}=await sb.from('messages').insert({channel:msgCur,client_id:chatClientId(),pseudo:state.settings.name,color:chatColor(state.settings.name),text:t,media,mtype});
   if(error)alert('Échec envoi : '+error.message);
 }
 async function msgDel(id){if(!confirm('Supprimer ?'))return;await sb.from('messages').delete().eq('id',id);}
