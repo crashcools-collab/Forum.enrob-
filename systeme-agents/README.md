@@ -100,7 +100,11 @@ Tout doit être `OK` avant de lancer une exécution. La ligne « Désactivation 
 
 ### Le cockpit (recommandé)
 
+**Double-cliquez sur `cockpit.bat`** dans le dossier `systeme-agents`. Il se place dans le bon dossier, utilise le bon Python (`.venv`), démarre les services Docker et ouvre le cockpit. Depuis PowerShell, l'équivalent est :
+
 ```powershell
+cd $HOME\forum-enrobe\systeme-agents
+.venv\Scripts\Activate.ps1
 python -m agents
 ```
 
