@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
+import threading
 import time
 import uuid
 from pathlib import Path
@@ -34,13 +36,50 @@ def _ask_approval(payload: dict, auto: str | None) -> bool | None:
     return input("Autoriser ? [o/N] ").strip().lower() in {"o", "oui", "y", "yes"}
 
 
+def _interruptible(fn, thread_id: str):
+    """Exécute `fn` dans un thread pour que Ctrl+C réponde tout de suite.
+
+    Sous Windows, Python ne traite Ctrl+C qu'au retour d'un appel bloquant : sans ça,
+    il faut attendre la fin de la génération en cours (plusieurs minutes). On quitte
+    brutalement : l'état est sauvegardé après chaque nœud, `resume` rejoue le nœud coupé.
+    """
+    result: dict = {}
+
+    def target():
+        try:
+            result["value"] = fn()
+        except BaseException as exc:  # transmis au thread principal
+            result["error"] = exc
+
+    worker = threading.Thread(target=target, daemon=True)
+    worker.start()
+    try:
+        while worker.is_alive():
+            worker.join(0.3)
+    except KeyboardInterrupt:
+        print(
+            f"\nInterrompu. L'état est sauvegardé. Pour reprendre :\n  python -m agents resume {thread_id}",
+            file=sys.stderr,
+            flush=True,
+        )
+        os._exit(EXIT_ERROR)
+    if "error" in result:
+        raise result["error"]
+    return result.get("value")
+
+
 def _drive(rt: Runtime, thread_id: str, inputs, auto_approve: str | None) -> int:
     config = {"configurable": {"thread_id": thread_id}, "recursion_limit": recursion_limit(rt.deps)}
-    while True:
+
+    def consume(stream_inputs):
         pending = None
-        for chunk in rt.graph.stream(inputs, config, stream_mode="updates"):
+        for chunk in rt.graph.stream(stream_inputs, config, stream_mode="updates"):
             if "__interrupt__" in chunk:
                 pending = chunk["__interrupt__"][0].value
+        return pending
+
+    while True:
+        pending = _interruptible(lambda: consume(inputs), thread_id)
         if pending is None:
             break
         decision = _ask_approval(pending, auto_approve)
