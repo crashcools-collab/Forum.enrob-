@@ -1,0 +1,6 @@
+# À copier dans %UserProfile%\.wslconfig puis : wsl --shutdown
+# Limite la RAM prise par Docker Desktop (WSL2) pour laisser la place au modèle dans LM Studio.
+[wsl2]
+memory=6GB
+swap=4GB
+processors=4

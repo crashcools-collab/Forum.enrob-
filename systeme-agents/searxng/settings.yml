@@ -1,0 +1,17 @@
+# Configuration minimale : l'API JSON doit être activée pour l'agent Recherche Web.
+use_default_settings: true
+
+server:
+  # Changez cette valeur (n'importe quelle chaîne aléatoire).
+  secret_key: "changez-moi-par-une-valeur-aleatoire"
+  limiter: false
+  image_proxy: false
+
+search:
+  safe_search: 0
+  formats:
+    - html
+    - json
+
+ui:
+  default_locale: fr
