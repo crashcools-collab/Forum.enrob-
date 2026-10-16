@@ -10,15 +10,22 @@ from agents.llm.client import estimate_tokens
 IGNORED_DIRS = {".deps", "__pycache__", ".pytest_cache", ".git", ".venv"}
 TEXT_SUFFIXES = {".py", ".txt", ".md", ".toml", ".cfg", ".ini", ".json", ".yaml", ".yml", ".csv", ".html", ".js", ".css"}
 
-# Blocs de fichiers produits par les agents :
+# Blocs de fichiers produits par les agents. Format demandé :
 #   ### FICHIER: chemin/relatif.py
 #   ```python
 #   ...
 #   ```
-_FILE_BLOCK_RE = re.compile(
-    r"^#{2,4}\s*(?:FICHIER|FILE)\s*:\s*`?([^\n`]+?)`?\s*\n```[\w.+-]*\n(.*?)\n```",
-    re.MULTILINE | re.DOTALL,
-)
+# Un modèle quantifié s'en écarte souvent ; on accepte aussi, pour chaque bloc de code :
+# un chemin dans l'en-tête du bloc (```python:fib.py), une ligne juste avant qui ne contient
+# que le chemin (**fib.py**, `fib.py` :, Fichier : fib.py), ou un commentaire en première
+# ligne (# fib.py). Une phrase qui mentionne un fichier ne suffit pas : un exemple
+# d'utilisation écraserait le vrai fichier.
+_SUFFIXES = "|".join(sorted(s[1:] for s in TEXT_SUFFIXES))
+_PATH = rf"(?:[\w.-]+/)*[\w-][\w.-]*\.(?:{_SUFFIXES})"
+_PATH_IN_TEXT_RE = re.compile(rf"(?<![\w/.-])({_PATH})(?![\w/-])")
+_FENCE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,})([^\n]*)\n(.*?)\n[ \t]*\1[ \t]*$", re.MULTILINE | re.DOTALL)
+_HEADER_RE = re.compile(rf"(?:(?:fichier|file)\s*:?\s*)?`?({_PATH})`?\s*:?", re.IGNORECASE)
+_FIRST_LINE_RE = re.compile(rf"\s*(?:#|//)\s*(?:(?:fichier|file)\s*:\s*)?`?({_PATH})`?\s*", re.IGNORECASE)
 
 
 class WorkspaceError(ValueError):
@@ -92,6 +99,38 @@ class Workspace:
         return "\n\n".join(parts) if parts else "(workspace vide)"
 
 
+def _path_from_header_line(text_before: str) -> str | None:
+    lines = [l for l in text_before.splitlines() if l.strip()]
+    if not lines:
+        return None
+    line = lines[-1].strip().replace("\\", "/")
+    line = re.sub(r"^\d+[.)]\s+", "", line)
+    line = line.lstrip("#>-* \t").strip().strip("*_").strip()
+    m = _HEADER_RE.fullmatch(line)
+    return m.group(1) if m else None
+
+
 def parse_file_blocks(text: str) -> list[tuple[str, str]]:
     """Extrait les paires (chemin, contenu) d'une réponse d'agent."""
-    return [(path.strip(), content) for path, content in _FILE_BLOCK_RE.findall(text)]
+    blocks: list[tuple[str, str]] = []
+    previous_end = 0
+    for m in _FENCE_RE.finditer(text):
+        info, content = m.group(2), m.group(3)
+        path = None
+        found = _PATH_IN_TEXT_RE.search(info.replace("\\", "/"))
+        if found:
+            path = found.group(1)
+        if path is None:
+            path = _path_from_header_line(text[previous_end : m.start()])
+        if path is None:
+            first = _FIRST_LINE_RE.fullmatch(content.split("\n", 1)[0].replace("\\", "/"))
+            path = first.group(1) if first else None
+        previous_end = m.end()
+        if path:
+            blocks.append((path, content))
+    return blocks
+
+
+def unnamed_code_blocks(text: str) -> list[str]:
+    """Contenu de tous les blocs de code, avec ou sans chemin."""
+    return [m.group(3) for m in _FENCE_RE.finditer(text)]

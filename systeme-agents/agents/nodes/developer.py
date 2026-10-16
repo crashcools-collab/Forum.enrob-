@@ -52,9 +52,13 @@ def make_developer_node(deps: Deps):
         user = f"{fixed}\n\nÉtat actuel du workspace :\n\n{ws.snapshot(budget, priority=priority)}"
 
         answer = deps.llm.text(agent="developpeur", system=prompts.DEVELOPER, user=user, thinking=True)
+        blocks = parse_file_blocks(answer)
+        if not blocks and deps.llm.last_reasoning:
+            # Le modèle a parfois écrit le code dans son raisonnement puis répondu à vide ou en prose.
+            blocks = parse_file_blocks(deps.llm.last_reasoning)
 
         written, refused = [], []
-        for path, content in parse_file_blocks(answer):
+        for path, content in blocks:
             norm = path.strip().replace("\\", "/").removeprefix("./")
             if norm.startswith("tests/") or norm == "REPORT.md":
                 refused.append(f"{path} (réservé)")
@@ -72,6 +76,7 @@ def make_developer_node(deps: Deps):
             )
             updated = _after_failure(deps, task, feedback)
             log_event("developer_done", message=f"tâche {task['id']} : aucun fichier exploitable")
+            log_event("developer_unparsed", answer=answer[:6000], reasoning_tail=deps.llm.last_reasoning[-2000:])
         else:
             next_phase = "test"
             if ws.exists(REQUIREMENTS) and requirements_hash(ws.read_file(REQUIREMENTS)) != state.get("approved_requirements"):

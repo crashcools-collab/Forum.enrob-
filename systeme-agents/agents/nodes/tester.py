@@ -17,7 +17,7 @@ from agents.logs import log_event
 from agents.nodes.common import add_history, context_block, task_brief, workspace_for
 from agents.schemas import FailureAnalysis
 from agents.state import AgentState, Deps, Task, find_task, replace_task
-from agents.tools.workspace import parse_file_blocks
+from agents.tools.workspace import parse_file_blocks, unnamed_code_blocks
 
 PYTEST_NO_TESTS = 5
 MAX_TEST_REWRITES = 1
@@ -43,6 +43,10 @@ def make_tester_node(deps: Deps):
         answer = deps.llm.text(agent="testeur", system=prompts.TESTER_WRITE, user=user, thinking=True)
         blocks = [c for p, c in parse_file_blocks(answer) if "test" in p]
         if not blocks:
+            # Le chemin cible est connu : un bloc sans nom qui contient des tests suffit.
+            blocks = [c for c in unnamed_code_blocks(answer) if "def test" in c]
+        if not blocks:
+            log_event("tester_unparsed", answer=answer[:6000])
             return None
         return ws.write_file(target, blocks[0])
 

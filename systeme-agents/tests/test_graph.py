@@ -198,3 +198,19 @@ def test_research_unavailable_does_not_stop_run(settings, make_llm):
     final = graph.invoke(initial_state("fib"), config)
     assert final["final_status"] == "SUCCESS"
     assert "indisponible" in final["research_notes"]["1"]
+
+
+def test_code_in_reasoning_and_unnamed_test_block(settings, make_llm):
+    unnamed_tests = "```python\n" + FIB_TESTS.split("```python\n")[1]
+    llm, _ = make_llm(
+        {
+            "plan": [{"tasks": [FIB_TASK]}],
+            # Le code est dans le raisonnement, la réponse finale n'est que de la prose.
+            "dev": [("J'ai écrit fib.py.", "Brouillon :\n" + FIB_OK)],
+            "test_write": [unnamed_tests],
+        }
+    )
+    graph, config, _ = make_graph(settings, llm)
+    final = graph.invoke(initial_state("fib"), config)
+    assert final["final_status"] == "SUCCESS"
+    assert final["tasks"][0]["attempts"] == 0

@@ -14,6 +14,7 @@ _console = True
 _CONSOLE_EVENTS = {
     "run_start",
     "plan",
+    "llm_call",
     "manager_decision",
     "research_done",
     "developer_done",

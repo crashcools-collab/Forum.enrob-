@@ -56,8 +56,11 @@ class ScriptedBackend:
             raise AssertionError(f"Aucune réponse prévue pour le rôle {role}")
         reply = queue.pop(0) if len(queue) > 1 else queue[0]
         self.count[role] += 1
+        reasoning = ""
+        if isinstance(reply, tuple):  # (contenu, raisonnement)
+            reply, reasoning = reply
         content = reply if isinstance(reply, str) else json.dumps(reply, ensure_ascii=False)
-        return RawResponse(content=content, reasoning="", prompt_tokens=100, completion_tokens=50)
+        return RawResponse(content=content, reasoning=reasoning, prompt_tokens=100, completion_tokens=50)
 
     def embed(self, texts):
         return fake_embed(texts)

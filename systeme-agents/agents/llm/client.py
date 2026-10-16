@@ -108,6 +108,7 @@ class LLMClient:
         self.settings = settings
         self.backend = backend or OpenAIBackend(settings)
         self._metrics: list[dict] = []
+        self.last_reasoning = ""
 
     # ------------------------------------------------------------------ appels bruts
 
@@ -133,22 +134,29 @@ class LLMClient:
             start = time.monotonic()
             raw = self.backend.chat(messages, **params)
             duration = time.monotonic() - start
+        self.last_reasoning = raw.reasoning
         if raw.reasoning:
             log_event("llm_reasoning", agent=agent, chars=len(raw.reasoning), text=raw.reasoning[:4000])
         return raw, duration
 
     def _record(self, agent: str, kind: str, thinking: bool, raw: RawResponse, duration: float, json_status: str | None):
-        self._metrics.append(
-            {
-                "agent": agent,
-                "kind": kind,
-                "thinking": thinking,
-                "duration_s": round(duration, 2),
-                "prompt_tokens": raw.prompt_tokens,
-                "completion_tokens": raw.completion_tokens,
-                "tokens_per_s": round(raw.completion_tokens / duration, 1) if duration > 0 else 0.0,
-                "json": json_status,
-            }
+        metric = {
+            "agent": agent,
+            "kind": kind,
+            "thinking": thinking,
+            "duration_s": round(duration, 2),
+            "prompt_tokens": raw.prompt_tokens,
+            "completion_tokens": raw.completion_tokens,
+            "tokens_per_s": round(raw.completion_tokens / duration, 1) if duration > 0 else 0.0,
+            "json": json_status,
+        }
+        self._metrics.append(metric)
+        log_event(
+            "llm_call",
+            message=f"{agent} {duration:.0f} s, {raw.completion_tokens} tokens ({metric['tokens_per_s']} t/s)"
+            + (f", JSON {json_status}" if json_status else "")
+            + (", réponse vide" if not raw.content.strip() else ""),
+            **metric,
         )
 
     def drain_metrics(self) -> list[dict]:

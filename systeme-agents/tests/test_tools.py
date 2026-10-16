@@ -51,3 +51,43 @@ def test_local_sandbox_runs_pytest(settings, tmp_path):
     ws.write_file("tests/test_m.py", "from m import f\n\ndef test_f():\n    assert f() == 2")
     res = Sandbox(settings).run_tests(ws.root)
     assert not res.ok and "assert 1 == 2" in res.output
+
+
+CODE = "def fib(n):\n    return n"
+
+
+@pytest.mark.parametrize(
+    "answer",
+    [
+        f"### FICHIER : fib.py\n\n```python\n{CODE}\n```",
+        f"**fib.py**\n```python\n{CODE}\n```",
+        f"`fib.py` :\n```python\n{CODE}\n```",
+        f"Fichier : fib.py\n```py\n{CODE}\n```",
+        f"1. `fib.py`\n```python\n{CODE}\n```",
+        f"Voici le code.\n```python:fib.py\n{CODE}\n```",
+        f'```python title="fib.py"\n{CODE}\n```',
+        f"```python\n# fib.py\n{CODE}\n```",
+        f"<think>réflexion</think>\n#### File: fib.py\n```\n{CODE}\n```\nC'est tout.",
+    ],
+)
+def test_parse_file_blocks_tolerant(answer):
+    blocks = parse_file_blocks(answer)
+    assert len(blocks) == 1 and blocks[0][0] == "fib.py" and "return n" in blocks[0][1]
+
+
+def test_parse_ignores_prose_mentions_and_unnamed_blocks():
+    # Une phrase qui cite le fichier ne doit pas transformer un exemple en contenu du fichier.
+    answer = (
+        f"### FICHIER: fib.py\n```python\n{CODE}\n```\n\n"
+        "Exemple d'utilisation de fib.py :\n```python\nprint(fib(3))\n```\n\n"
+        "```bash\npython -m pytest\n```"
+    )
+    assert parse_file_blocks(answer) == [("fib.py", CODE)]
+
+
+def test_parse_windows_paths_and_multiple_files():
+    answer = (
+        "### FICHIER: pkg\\util.py\n```python\nX = 1\n```\n"
+        "### FICHIER: requirements.txt\n```\nrequests==2.32.3\n```"
+    )
+    assert parse_file_blocks(answer) == [("pkg/util.py", "X = 1"), ("requirements.txt", "requests==2.32.3")]
