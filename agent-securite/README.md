@@ -1,0 +1,111 @@
+# Sentinelle — agent de sécurité local avec LM Studio
+
+Agent qui surveille ton PC (Windows en priorité, Linux et macOS pris en charge) et utilise un modèle local
+LM Studio pour **expliquer** les alertes. Aucune donnée ne quitte la machine.
+
+## Ce que ce n'est pas
+
+Ce n'est **pas** un antivirus et ça ne remplace ni Microsoft Defender ni le pare-feu Windows. Garde-les actifs :
+Sentinelle vérifie justement qu'ils le sont. C'est une couche de surveillance et d'explication en plus.
+
+## Conception : pourquoi le LLM n'a aucun pouvoir
+
+Les guides CISA/NSA et le retour d'expérience d'Anthropic convergent sur un point : l'injection de prompt n'a pas
+de solution de fond. Un agent IA qui lit les données de ton PC (des noms de processus et des tâches planifiées
+qu'un attaquant peut avoir écrits) **et** qui peut agir sur le système réunit la « triade létale ». Sentinelle casse
+donc cette triade :
+
+| Couche | Qui décide | Peut être trompée par une injection ? |
+|---|---|---|
+| Collecte (ports, processus, démarrage, pare-feu, antivirus) | Code fixe, lecture seule | Non |
+| Règles et gravité des alertes | Code fixe | Non |
+| Explication et priorisation | LM Studio | Oui, d'où son rôle **uniquement consultatif** |
+| Actions (bloquer un port, arrêter un processus) | Liste blanche dans le code + ta confirmation `OUI` | Non |
+
+Protections concrètes :
+- Le LLM **ne peut ni baisser une gravité, ni créer une alerte, ni lancer une action**. Sa réponse est validée :
+  identifiants inconnus et champs en trop sont jetés, et les textes sont tronqués.
+- Les données envoyées au LLM sont **expurgées** (`password=…`, jetons, longues clés → `[MASQUÉ]`).
+- Une URL LM Studio non locale est **refusée** par défaut, et les requêtes ignorent les proxys système.
+- Une règle fixe détecte le **texte d'injection de prompt** caché dans les processus et tâches de démarrage.
+- Avant d'arrêter un processus, l'agent vérifie que le PID désigne toujours le même programme
+  (protection contre la réutilisation de PID).
+- Chaque scan, requête LLM et action est tracé dans `~/.sentinelle/audit.jsonl`.
+
+## Ce qui est contrôlé
+
+- **Ton API LM Studio** : écoute-t-elle sur le réseau (`0.0.0.0`) ? Répond-elle sans authentification ?
+  Si les deux sont vrais, l'alerte est **CRITIQUE**.
+- Ports dangereux ouverts au réseau : RDP, SMB, VNC, Telnet, WinRM, Jupyter, Ollama, Marimo…
+- Programmes lancés depuis Temp/Téléchargements, surtout s'ils écoutent sur le réseau.
+- Faux processus système (`svchost.exe` hors de `C:\Windows`, sosies du type `scvhost.exe`).
+- Lignes de commande d'attaque : PowerShell encodé ou masqué, `certutil -urlcache`, `mshta http…`,
+  `curl | sh`, reverse shells…
+- Persistance : clés registre Run/RunOnce, dossier Démarrage, tâches planifiées (et équivalents Linux/macOS).
+- Pare-feu Windows et Defender (temps réel, âge des signatures).
+- Nouveaux ports ou programmes de démarrage apparus depuis ta **référence**.
+- Versions vulnérables de `starlette` / `marimo`, d'après les CVE citées dans l'article.
+
+## Installation (Windows)
+
+1. Installer Python 3.9+ depuis python.org (cocher « Add to PATH »).
+2. Dans ce dossier : `pip install -r requirements.txt`
+3. Dans LM Studio : charger un modèle (un modèle instruct de 7-8 B suffit, par exemple Qwen 2.5 7B Instruct),
+   puis **Developer → Start Server**.
+4. Ouvrir un terminal **en administrateur** : sans ça, Windows masque une partie des processus et connexions,
+   et les actions de pare-feu échouent.
+
+## Utilisation
+
+```bat
+:: 1. Sur un PC que tu considères sain : enregistrer la référence
+python sentinelle.py reference
+
+:: 2. Scan avec analyse IA
+python sentinelle.py scan
+
+:: 3. Scan + propositions de correction (chaque action demande OUI)
+python sentinelle.py scan --interactif
+
+:: 4. Surveillance continue (toutes les 5 min, fenêtre d'alerte si grave)
+python sentinelle.py surveiller --intervalle 300 --popup
+
+:: Sans IA (règles seules), ou avec un autre modèle ou port
+python sentinelle.py --sans-llm scan
+python sentinelle.py --modele qwen2.5-7b-instruct --url-lmstudio http://127.0.0.1:1234/v1 scan
+```
+
+Code de sortie de `scan` : `2` s'il existe une alerte ÉLEVÉE ou CRITIQUE, `0` sinon (utile pour l'automatisation).
+Les rapports sont enregistrés dans `%USERPROFILE%\.sentinelle\rapports\`.
+
+Si tu as activé l'authentification par jeton dans LM Studio, définis la variable `LMSTUDIO_API_KEY`.
+
+### Lancement automatique à l'ouverture de session
+
+`lancer-sentinelle.bat` démarre la surveillance. Pour l'exécuter à chaque connexion avec les droits
+administrateur (dans un terminal admin) :
+
+```bat
+schtasks /create /tn "Sentinelle" /sc onlogon /rl highest /tr "\"%CD%\lancer-sentinelle.bat\""
+```
+
+## Sécuriser LM Studio lui-même (à faire en priorité)
+
+1. **LM Studio → Developer → Settings** : désactiver **« Serve on Local Network »**. L'API n'écoute alors
+   que sur `127.0.0.1`.
+2. Si ta version le propose, activer l'**authentification par jeton** de l'API.
+3. Bloquer en plus le port dans le pare-feu (Windows ne filtre pas le trafic local, donc LM Studio reste
+   utilisable sur ton PC) :
+   `netsh advfirewall firewall add rule name=Sentinelle-bloque-1234 dir=in action=block protocol=TCP localport=1234`
+   Pour annuler : `netsh advfirewall firewall delete rule name=Sentinelle-bloque-1234`
+4. Ne télécharger des modèles que depuis des sources reconnues, et ne pas donner à un agent branché sur
+   LM Studio un accès en écriture à tes fichiers ou à un shell sans confirmation.
+
+## Limites (honnêtement)
+
+- Les règles détectent des **schémas connus**, pas un malware sophistiqué conçu pour se fondre dans le système.
+- Les faux positifs existent (un installeur dans Téléchargements, un outil de dev qui écoute sur `0.0.0.0`).
+  Rien n'est jamais fait sans ton `OUI`.
+- Le contrôle des paquets Python ne couvre que l'environnement qui exécute Sentinelle.
+- Les numéros de CVE viennent de l'article fourni : vérifie-les sur nvd.nist.gov avant de t'y fier.
+- Un attaquant déjà administrateur sur la machine peut neutraliser n'importe quel outil local, celui-ci compris.
