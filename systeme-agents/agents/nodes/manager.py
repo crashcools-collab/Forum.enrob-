@@ -7,6 +7,7 @@ apporter. Le LLM sert là où il faut du jugement : découper l'objectif et réa
 
 from __future__ import annotations
 
+import re
 import time
 
 from agents import prompts
@@ -19,6 +20,15 @@ from agents.schemas import Plan, Replan
 from agents.state import AgentState, Deps, Task, find_task, new_task, replace_task
 
 HISTORY_TOKEN_LIMIT = 2500
+_TESTS_ONLY_RE = re.compile(
+    r"^\s*(?:(?:écrire|ecrire|rédiger|rediger|ajouter|créer|creer|implémenter|implementer)\s+)?"
+    r"(?:les\s+|des\s+)?(?:tests?|suite\s+de\s+tests)(?:\s+unitaires)?(?:\s+(?:pytest|automatisés))?\b",
+    re.IGNORECASE,
+)
+
+
+def is_tests_only_task(title: str) -> bool:
+    return bool(_TESTS_ONLY_RE.match(title))
 
 
 def make_plan_node(deps: Deps):
@@ -41,10 +51,17 @@ def make_plan_node(deps: Deps):
                 "metrics": deps.llm.drain_metrics(),
             }
 
+        # Une tâche « écrire les tests » ferait doublon avec le Testeur, qui teste déjà chaque
+        # tâche : on la retire malgré la consigne du prompt, que le modèle ne respecte pas toujours.
+        kept = [(i, p) for i, p in enumerate(result.tasks, start=1) if not is_tests_only_task(p.title)]
+        if not kept:
+            kept = list(enumerate(result.tasks, start=1))
+        new_ids = {old: new for new, (old, _) in enumerate(kept, start=1)}
         tasks: list[Task] = []
-        for i, planned in enumerate(result.tasks, start=1):
+        for old, planned in kept:
             # Seules les dépendances vers des tâches antérieures sont gardées : pas de cycle possible.
-            tasks.append(new_task(i, planned, sorted({d for d in planned.depends_on if 0 < d < i})))
+            depends = sorted({new_ids[d] for d in planned.depends_on if d in new_ids and 0 < d < old})
+            tasks.append(new_task(new_ids[old], planned, depends))
         log_event("plan", message=f"{len(tasks)} tâche(s)", tasks=[t["title"] for t in tasks])
         return {
             "tasks": tasks,

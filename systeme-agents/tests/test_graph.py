@@ -216,18 +216,45 @@ def test_code_in_reasoning_and_unnamed_test_block(settings, make_llm):
     assert final["tasks"][0]["attempts"] == 0
 
 
-def test_tests_only_task_goes_to_tester(settings, make_llm):
+def test_tests_only_task_is_removed_from_plan(settings, make_llm):
     tests_task = {**FIB_TASK, "title": "Tests unitaires pytest", "depends_on": [1]}
+    third = {**FIB_TASK, "title": "Utilise fib", "depends_on": [1, 2]}
     llm, backend = make_llm(
-        {
-            "plan": [{"tasks": [FIB_TASK, tests_task]}],
-            # Tâche 2 : le Développeur ne produit que des tests (refusés) → passage direct au Testeur.
-            "dev": [FIB_OK, FIB_TESTS],
-            "test_write": [FIB_TESTS],
-        }
+        {"plan": [{"tasks": [FIB_TASK, tests_task, third]}], "dev": [FIB_OK], "test_write": [FIB_TESTS]}
     )
     graph, config, _ = make_graph(settings, llm)
     final = graph.invoke(initial_state("fib"), config)
     assert final["final_status"] == "SUCCESS"
-    assert [t["attempts"] for t in final["tasks"]] == [0, 0]
-    assert backend.count["dev"] == 2
+    assert [(t["id"], t["title"], t["depends_on"]) for t in final["tasks"]] == [
+        (1, "Fonction fibonacci", []),
+        (2, "Utilise fib", [1]),
+    ]
+
+
+def test_existing_tests_only_task_skips_developer(settings, make_llm):
+    """Une tâche de tests déjà planifiée (ancien plan, replanification) va droit au Testeur."""
+    from agents.nodes.developer import make_developer_node
+    from agents.state import new_task
+    from agents.schemas import PlannedTask
+
+    llm, backend = make_llm({"dev": [FIB_OK]})
+    _, _, deps = make_graph(settings, llm)
+    task = {**new_task(2, PlannedTask(**{**FIB_TASK, "title": "Tests unitaires pytest"}), []), "status": "in_progress"}
+    state = {**initial_state("fib"), "tasks": [task], "current_task_id": 2}
+    update = make_developer_node(deps)(state)
+    assert update["tasks"][0]["phase"] == "test" and update["tasks"][0]["attempts"] == 0
+    assert backend.count["dev"] == 0
+
+
+def test_unnamed_test_blocks_go_to_tester(settings, make_llm):
+    unnamed = "```python\nimport pytest\nfrom fib import fib\n\ndef test_x():\n    assert fib(1) == 1\n```"
+    llm, _ = make_llm({"plan": [{"tasks": [FIB_TASK]}], "dev": [FIB_OK, unnamed], "test_write": [FIB_TESTS]})
+    graph, config, deps = make_graph(settings, llm)
+    from agents.nodes.developer import make_developer_node
+
+    final = graph.invoke(initial_state("fib"), config)
+    assert final["final_status"] == "SUCCESS"
+    # Second passage direct du nœud : réponse sans nom ne contenant que des tests → Testeur, sans échec.
+    state = {**final, "tasks": [{**final["tasks"][0], "status": "in_progress", "phase": "develop"}], "current_task_id": 1}
+    update = make_developer_node(deps)(state)
+    assert update["tasks"][0]["phase"] == "test" and update["tasks"][0]["attempts"] == 0

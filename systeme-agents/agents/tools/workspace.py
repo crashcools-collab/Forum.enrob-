@@ -134,3 +134,7 @@ def parse_file_blocks(text: str) -> list[tuple[str, str]]:
 def unnamed_code_blocks(text: str) -> list[str]:
     """Contenu de tous les blocs de code, avec ou sans chemin."""
     return [m.group(3) for m in _FENCE_RE.finditer(text)]
+
+
+def looks_like_tests(code: str) -> bool:
+    return "import pytest" in code or re.search(r"^\s*def test_\w*\(", code, re.MULTILINE) is not None

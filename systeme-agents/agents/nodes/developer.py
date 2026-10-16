@@ -15,8 +15,9 @@ from agents.llm.client import estimate_tokens
 from agents.logs import log_event
 from agents.memory import format_recall
 from agents.nodes.common import add_history, context_block, task_brief, workspace_for
+from agents.nodes.manager import is_tests_only_task
 from agents.state import AgentState, Deps, Task, find_task, replace_task
-from agents.tools.workspace import WorkspaceError, parse_file_blocks
+from agents.tools.workspace import WorkspaceError, looks_like_tests, parse_file_blocks, unnamed_code_blocks
 
 REQUIREMENTS = "requirements.txt"
 
@@ -37,6 +38,14 @@ def make_developer_node(deps: Deps):
         task = find_task(state, state["current_task_id"])
         assert task is not None
         ws = workspace_for(deps, state)
+
+        if is_tests_only_task(task["title"]):
+            # Rien à coder : le Testeur écrit et exécute les tests de cette tâche.
+            log_event("developer_done", message=f"tâche {task['id']} : tâche de tests, passage direct au Testeur")
+            return {
+                "tasks": replace_task(state["tasks"], {**task, "phase": "test"}),
+                "history": add_history(state, f"Tâche {task['id']} confiée directement au Testeur"),
+            }
 
         fixed = "\n\n".join(
             [
@@ -69,6 +78,11 @@ def make_developer_node(deps: Deps):
                 refused.append(f"{path} ({exc})")
 
         only_tests = bool(refused) and all(r.replace("\\", "/").lstrip("./").startswith("tests/") for r in refused)
+        unnamed = unnamed_code_blocks(answer) or unnamed_code_blocks(deps.llm.last_reasoning)
+        if not written and not blocks and unnamed:
+            # Blocs de code sans nom de fichier : s'ils ne contiennent que des tests, la tâche
+            # relève du Testeur.
+            only_tests = all(looks_like_tests(c) for c in unnamed)
         if not written and (only_tests or "AUCUN CODE" in answer.upper()):
             # Tâche de tests uniquement : c'est le travail du Testeur, on lui passe la main
             # sans compter d'échec (il écrira et exécutera les tests de cette tâche).
@@ -81,7 +95,11 @@ def make_developer_node(deps: Deps):
                 + (f" Refusés : {', '.join(refused)}" if refused else "")
             )
             updated = _after_failure(deps, task, feedback)
-            log_event("developer_done", message=f"tâche {task['id']} : aucun fichier exploitable")
+            excerpt = " ".join((answer.strip() or deps.llm.last_reasoning.strip())[:160].split())
+            log_event(
+                "developer_done",
+                message=f"tâche {task['id']} : aucun fichier exploitable. Début de la réponse : « {excerpt} »",
+            )
             log_event("developer_unparsed", answer=answer[:6000], reasoning_tail=deps.llm.last_reasoning[-2000:])
         else:
             next_phase = "test"
