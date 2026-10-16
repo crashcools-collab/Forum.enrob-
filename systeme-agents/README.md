@@ -40,6 +40,18 @@ Les règles qui empêchent le système de « tricher » ou de tourner en rond :
 
 ## Installation (Windows, RTX 4070 Ti 12 Go, 32 Go de RAM)
 
+### 0. Récupérer le code
+
+Toutes les commandes qui suivent se lancent **dans le dossier `systeme-agents`**, pas dans votre dossier utilisateur.
+
+```powershell
+cd $HOME
+git clone -b claude/adoring-goodall-b0yn8n https://github.com/crashcools-collab/Forum.enrob-.git forum-enrobe
+cd forum-enrobe\systeme-agents
+```
+
+Sans Git : sur GitHub, choisissez la branche `claude/adoring-goodall-b0yn8n`, puis Code → Download ZIP, décompressez, et placez-vous dans le dossier `systeme-agents` avec `cd`.
+
 ### 1. LM Studio
 
 1. Chargez **Qwen3.6-35B-A3B** (votre GGUF ~3 bits, ~15 Go) avec ces réglages :
@@ -52,24 +64,29 @@ Les règles qui empêchent le système de « tricher » ou de tourner en rond :
 
 ### 2. Docker Desktop
 
-1. Copiez `wslconfig.example` vers `%UserProfile%\.wslconfig`, puis lancez `wsl --shutdown`. Sans ça, Docker peut réserver jusqu'à la moitié de votre RAM et pousser le modèle dans le swap.
-2. Dans ce dossier :
+1. **Lancez Docker Desktop** et attendez « Engine running » en bas à gauche. Si `docker` répond `failed to connect to the docker API ... dockerDesktopLinuxEngine`, c'est que Docker Desktop n'est pas démarré.
+2. Copiez `wslconfig.example` vers `%UserProfile%\.wslconfig`, puis lancez `wsl --shutdown`. Sans ça, Docker peut réserver jusqu'à la moitié de votre RAM et pousser le modèle dans le swap.
+3. Dans le dossier `systeme-agents` :
 
 ```powershell
 docker compose up -d
 docker build -t agents-sandbox:latest sandbox/
 ```
 
-3. Remplacez `secret_key` dans `searxng/settings.yml` par une valeur aléatoire.
+4. Remplacez `secret_key` dans `searxng/settings.yml` par une valeur aléatoire.
 
-### 3. Python (3.11 ou plus récent)
+### 3. Python (3.10 ou plus récent)
+
+Créez un environnement propre au projet avec le lanceur `py`. Il évite d'utiliser par erreur le Python d'un autre outil présent dans le PATH.
 
 ```powershell
-python -m venv .venv
-.venv\Scripts\activate
-pip install -e ".[dev]"
+py -3.10 -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
 copy .env.example .env
 ```
+
+Si PowerShell refuse `Activate.ps1` (« l'exécution de scripts est désactivée »), lancez une fois `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`. Une fois l'environnement activé, l'invite commence par `(.venv)` : toutes les commandes `python` suivantes doivent être lancées dans cette fenêtre.
 
 Dans `.env`, mettez dans `LLM_MODEL` et `EMBED_MODEL` les identifiants **exacts** de vos modèles dans LM Studio. La commande suivante les liste :
 

@@ -2,7 +2,7 @@
 name = "systeme-agents"
 version = "0.1.0"
 description = "Système multi-agents autonome : LangGraph + LM Studio + PostgreSQL"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
     "langgraph>=1.0,<2",
     "langgraph-checkpoint-postgres>=3.0,<4",
