@@ -169,7 +169,8 @@ def test_invalid_plan_fails_cleanly(settings, make_llm):
     graph, config, _ = make_graph(settings, llm)
     final = graph.invoke(initial_state("objectif flou"), config)
     assert final["final_status"] == "FAILED"
-    assert "Alertes" in final["report"]  # 100 % de JSON invalides → alerte
+    assert "100% ont échoué" in final["report"]
+    assert "Alertes" not in final["report"]  # 1 seul appel : échantillon trop petit pour alerter
 
 
 def test_blocked_task_blocks_dependants(settings, make_llm):
@@ -258,3 +259,18 @@ def test_unnamed_test_blocks_go_to_tester(settings, make_llm):
     state = {**final, "tasks": [{**final["tasks"][0], "status": "in_progress", "phase": "develop"}], "current_task_id": 1}
     update = make_developer_node(deps)(state)
     assert update["tasks"][0]["phase"] == "test" and update["tasks"][0]["attempts"] == 0
+
+
+def test_metrics_alerts_need_enough_samples(settings):
+    from agents.report import compute_metrics
+
+    def call(status):
+        return {"agent": "a", "kind": "structured", "json": status, "duration_s": 1.0,
+                "prompt_tokens": 1, "completion_tokens": 10}
+
+    state = {"metrics": [call("repaired")] * 6, "tasks": [], "started_at": time.time()}
+    m = compute_metrics(state, settings)
+    assert m["json_invalid_rate_before_repair"] == 0 and m["json_cleaned_rate"] == 1 and not m["alerts"]
+
+    state["metrics"] = [call("invalid")] * 2 + [call("valid")] * 4
+    assert any("second appel" in a for a in compute_metrics(state, settings)["alerts"])
