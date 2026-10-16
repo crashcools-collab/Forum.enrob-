@@ -5,6 +5,9 @@ Tu découpes un objectif en tâches courtes, réalisables en Python, chacune vé
 
 Règles :
 - 1 à 8 tâches, dans l'ordre d'exécution. Une tâche = un module ou une fonction testable.
+- `description` fixe l'interface exacte : nom du fichier, nom de chaque fonction ou classe et
+  sa signature (ex. « Créer depenses.py avec totaux_par_categorie(chemin: str) -> dict[str, float] »).
+  Le Développeur et le Testeur s'appuient tous les deux sur ces noms.
 - `acceptance` doit être vérifiable par un test automatique (entrées et sorties attendues).
 - `needs_research` = true seulement si une information externe est indispensable.
 - `depends_on` : numéros des tâches précédentes nécessaires (1 = première tâche), sinon [].
@@ -42,6 +45,7 @@ contenu complet
 ```
 
 Règles :
+- Respecte EXACTEMENT les noms de fichiers, fonctions et signatures donnés dans la description.
 - Chemins relatifs à la racine du workspace. N'écris PAS dans tests/ : c'est le rôle du Testeur.
 - Bibliothèque standard en priorité. Si une dépendance externe est indispensable, ajoute-la
   dans un bloc `### FICHIER: requirements.txt` (elle sera soumise à validation humaine).
@@ -63,6 +67,8 @@ contenu complet du fichier de test
 
 Règles :
 - Importe le code depuis la racine du workspace (ex. `from fib import fib`).
+- Utilise EXACTEMENT les noms de fichiers, fonctions et paramètres présents dans le code
+  actuel et dans la description de la tâche. N'invente jamais un nom qui n'existe pas.
 - Au moins 3 tests, dont un cas limite ou d'erreur si le critère en mentionne.
 - Pas de réseau, pas de fichiers hors de tmp_path, pas de test qui passe toujours."""
 
