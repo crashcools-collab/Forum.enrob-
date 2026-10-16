@@ -150,15 +150,15 @@ class Etat:
                 if a.action:
                     libelle, cmd = S.decrire_action(a.action)
                     d["action_libelle"], d["action_commande"] = libelle, " ".join(cmd) if cmd else None
-                    d["action_executable"] = bool(cmd) or a.action["type"] == "arreter_processus"
+                    d["action_executable"] = not S.MODE_LEGER and (bool(cmd) or a.action["type"] == "arreter_processus")
                 d["action_resultat"] = faites.get(a.id, {}).get("resultat")
                 alertes.append(d)
             ref = S.charger_reference()
             sv = dict(self.surveillance)
             sv["dans"] = max(0, int(sv["prochain"] - time.time())) if sv["active"] and sv["prochain"] else None
             return {
-                "version": S.VERSION, "machine": S.platform.node(), "os": S.platform.platform(),
-                "admin": est_admin(), "scan_en_cours": self.scan_en_cours, "phase": self.phase,
+                "version": S.VERSION, "machine": S.platform.node(), "os": f"{S.platform.system()} {S.platform.release()}",
+                "admin": est_admin(), "mode_leger": S.MODE_LEGER, "scan_en_cours": self.scan_en_cours, "phase": self.phase,
                 "scan_depuis": round(time.time() - self.debut_scan) if self.scan_en_cours else None,
                 "dernier_scan": self.dernier_scan, "duree_scan": self.duree_scan,
                 "alertes": alertes, "analyse": self.analyse, "erreur_ia": self.erreur_ia,
@@ -326,6 +326,8 @@ class Gestionnaire(BaseHTTPRequestHandler):
             return self._json(200, {"ok": True})
 
         if chemin == "/api/action":
+            if S.MODE_LEGER:
+                return self._json(403, {"erreur": "mode léger : aucune action automatique"})
             # Double confirmation : le client doit renvoyer « OUI » tapé par l'utilisateur.
             if corps.get("confirmation") != "OUI":
                 return self._json(400, {"erreur": "confirmation « OUI » manquante"})
@@ -356,8 +358,11 @@ def main() -> int:
     p.add_argument("--autoriser-llm-distant", action="store_true")
     p.add_argument("--timeout-llm", type=int, default=180)
     p.add_argument("--sans-navigateur", action="store_true", help="ne pas ouvrir le navigateur automatiquement")
+    p.add_argument("--leger", action="store_true",
+                   help="mode léger, compatible antivirus comportemental : lecture seule, sans PowerShell ni admin")
     args = p.parse_args()
     args.sans_llm = False
+    S.MODE_LEGER = args.leger
 
     if S.psutil is None:
         print("Module manquant : pip install psutil")
@@ -382,7 +387,8 @@ def main() -> int:
     print(f"Tableau de bord Sentinelle : {url}\n"
           "Si le navigateur ne s'ouvre pas, copie ce lien dans la barre d'adresse.\n"
           "Ce lien contient un jeton secret valable jusqu'à l'arrêt du serveur : ne le partage pas.\n"
-          + ("" if est_admin() else "⚠ Pas lancé en administrateur : visibilité réduite et actions de pare-feu impossibles.\n")
+          + ("Mode léger : lecture seule, aucune action sur le PC.\n" if S.MODE_LEGER else "")
+          + ("" if est_admin() or S.MODE_LEGER else "⚠ Pas lancé en administrateur : visibilité réduite et actions de pare-feu impossibles.\n")
           + "Ctrl+C pour arrêter.")
     if not args.sans_navigateur:
         ouvrir_navigateur(url)

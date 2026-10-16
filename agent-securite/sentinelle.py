@@ -47,6 +47,10 @@ except ImportError:  # vérifié dans main()
 VERSION = "1.0.0"
 IS_WIN = os.name == "nt"
 IS_MAC = sys.platform == "darwin"
+# Mode léger (--leger) : à côté d'un antivirus qui surveille les comportements (Bitdefender, Kaspersky...).
+# Ni droits admin, ni PowerShell, ni tâches planifiées, ni lecture de la mémoire des autres programmes
+# (lignes de commande), ni action corrective : Sentinelle se limite à signaler.
+MODE_LEGER = False
 
 
 def _dossier_donnees() -> Path:
@@ -262,13 +266,15 @@ def collecter_sockets() -> tuple[list[dict], Optional[str]]:
 def collecter_processus() -> list[dict]:
     res = []
     moi = os.getpid()
-    for p in psutil.process_iter(["pid", "name", "exe", "cmdline", "username", "create_time"]):
+    # Lire la ligne de commande ou le propriétaire d'un autre programme oblige à lire sa mémoire : évité en mode léger.
+    champs = ["pid", "name", "exe", "create_time"] if MODE_LEGER else ["pid", "name", "exe", "cmdline", "username", "create_time"]
+    for p in psutil.process_iter(champs):
         if p.info["pid"] == moi:
             continue
         i = p.info
         res.append({
             "pid": i["pid"], "nom": i["name"] or "", "exe": i["exe"] or "",
-            "cmdline": " ".join(i["cmdline"] or []), "utilisateur": i["username"] or "",
+            "cmdline": " ".join(i.get("cmdline") or []), "utilisateur": i.get("username") or "",
             "create_time": i["create_time"],
         })
     return res
@@ -308,7 +314,7 @@ def collecter_demarrage() -> list[dict]:
                     if f.name.lower() != "desktop.ini":
                         entrees.append({"source": "Dossier Démarrage", "nom": f.name, "commande": str(f)})
         # Tâches planifiées hors \Microsoft\ (colonnes : 1 = nom, 8 = « Tâche à exécuter », ordre indépendant de la langue)
-        sortie = run(["schtasks", "/query", "/fo", "csv", "/v", "/nh"], timeout=90)
+        sortie = "" if MODE_LEGER else run(["schtasks", "/query", "/fo", "csv", "/v", "/nh"], timeout=90)
         vus = set()
         for ligne in csv.reader(io.StringIO(sortie)):
             if len(ligne) > 8 and not ligne[1].startswith("\\Microsoft\\") and ligne[1] not in vus:
@@ -486,6 +492,8 @@ def regle_nouvelles_ecoutes(sockets: list[dict], base: Optional[dict]) -> list[A
 
 def regle_protections() -> list[Alerte]:
     alertes = []
+    if MODE_LEGER:
+        return alertes  # l'antivirus installé gère déjà son pare-feu et sa protection
     if IS_WIN:
         profils = powershell_json("Get-NetFirewallProfile | Select-Object Name,Enabled")
         if isinstance(profils, dict):
@@ -817,7 +825,8 @@ def rapport(alertes: list[Alerte], analyse: Optional[dict]) -> str:
         for k, v in a.preuves.items():
             lignes.append(f"- {k} : `{nettoyer(v, 250)}`")
         if a.action:
-            lignes.append(f"- Action possible (mode --interactif) : {decrire_action(a.action)[0]}")
+            lignes.append(f"- Correction conseillée (à faire toi-même) : {decrire_action(a.action)[0]}" if MODE_LEGER
+                          else f"- Action possible (mode --interactif) : {decrire_action(a.action)[0]}")
         if a.id in par_id:
             p = par_id[a.id]
             lignes.append(f"- **IA** : {p['explication']}")
@@ -845,7 +854,9 @@ def cmd_scan(args, audit: Audit) -> int:
     fichier.write_text(texte, encoding="utf-8")
     print(texte)
     print(f"Rapport enregistré : {fichier}")
-    if args.interactif:
+    if args.interactif and MODE_LEGER:
+        print("Mode léger : aucune action automatique. Applique toi-même les corrections indiquées dans le rapport.")
+    elif args.interactif:
         proposer_actions(alertes, audit)
     return 2 if any(RANG[a.gravite] <= RANG["ELEVE"] for a in alertes) else 0
 
@@ -880,6 +891,8 @@ def main() -> int:
     parser.add_argument("--port-lmstudio", type=int, default=1234, help="port du serveur LM Studio à contrôler")
     parser.add_argument("--modele", help="identifiant du modèle LM Studio (défaut : premier modèle chargé)")
     parser.add_argument("--sans-llm", action="store_true", help="règles seules, sans analyse IA")
+    parser.add_argument("--leger", action="store_true",
+                        help="mode léger, compatible antivirus comportemental : lecture seule, sans PowerShell ni admin")
     parser.add_argument("--autoriser-llm-distant", action="store_true", help="autorise un LM Studio hors de ce PC")
     parser.add_argument("--timeout-llm", type=int, default=180)
     sous = parser.add_subparsers(dest="commande", required=True)
@@ -890,12 +903,14 @@ def main() -> int:
     w.add_argument("--intervalle", type=int, default=300)
     w.add_argument("--popup", action="store_true", help="fenêtre d'alerte Windows pour les alertes graves")
     args = parser.parse_args()
+    global MODE_LEGER
+    MODE_LEGER = args.leger
 
     if psutil is None:
         print("Module manquant : pip install psutil")
         return 1
     audit = Audit(HOME_DIR)
-    audit.log("demarrage", version=VERSION, commande=args.commande, os=platform.platform())
+    audit.log("demarrage", version=VERSION, commande=args.commande, os=f"{platform.system()} {platform.release()}")
     try:
         if args.commande == "reference":
             creer_reference(audit)

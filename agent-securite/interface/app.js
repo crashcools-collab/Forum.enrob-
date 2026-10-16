@@ -105,7 +105,9 @@ function rendreEntete() {
 
 function rendreBannieres() {
   const b = vider($("#bannieres"));
-  if (!etat.admin) b.append(el("div", { class: "banniere MOYEN" }, el("b", {}, "Pas lancé en administrateur. "),
+  if (etat.mode_leger) b.append(el("div", { class: "banniere" }, el("b", {}, "Mode léger. "),
+    "Lecture seule : Sentinelle signale, ton antivirus protège, et c'est toi qui appliques les corrections conseillées."));
+  else if (!etat.admin) b.append(el("div", { class: "banniere MOYEN" }, el("b", {}, "Pas lancé en administrateur. "),
     "Une partie des processus et des connexions est invisible, et le blocage de ports échouera. Relance le tableau de bord en administrateur."));
   if (!etat.reference.existe) b.append(el("div", { class: "banniere" }, el("b", {}, "Aucune référence. "),
     "Sur un PC que tu considères sain, clique sur « Référence » : les scans signaleront ensuite tout nouveau port ou programme de démarrage."));
@@ -182,7 +184,7 @@ function carteAlerte(a, avis) {
         ? el("span", { class: "resultat-action" }, `Action exécutée : ${a.action_resultat}`)
         : a.action_executable
           ? el("button", { class: "danger", onclick: () => demanderAction(a) }, a.action_libelle)
-          : el("span", { class: "discret" }, a.action_libelle))
+          : el("span", { class: "discret" }, etat.mode_leger ? `Correction conseillée (à faire toi-même) : ${a.action_libelle}` : a.action_libelle))
       : null,
     el("span", { class: "id-alerte" }, a.id));
 

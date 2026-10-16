@@ -46,7 +46,21 @@ Protections concrètes :
 - Nouveaux ports ou programmes de démarrage apparus depuis ta **référence**.
 - Versions vulnérables de `starlette` / `marimo`, d'après les CVE citées dans l'article.
 
-## Installation (Windows) — recommandé
+## Avec un antivirus comportemental (Bitdefender, Kaspersky…) : mode léger
+
+L'installeur complet enchaîne des actions qu'un malware ferait aussi : script PowerShell en `Bypass`, élévation
+admin, tâche planifiée au plus haut niveau de privilège, changement de droits sur un dossier. Bitdefender
+« Défense contre les menaces avancées » le bloque (`SuspiciousBehavior`) et met les scripts en quarantaine.
+C'est son rôle : ne désactive pas l'antivirus et n'ajoute pas d'exception pour `powershell.exe`.
+
+Ces antivirus surveillent déjà les processus et le pare-feu. Utilise alors `dist/Sentinelle-Leger.zip` :
+décompresser, puis double-clic sur `Sentinelle.bat`, sans droits administrateur (Python doit être installé).
+Le mode léger (`--leger`) ne lance aucun sous-programme, ne lit pas la mémoire des autres programmes (pas de
+lignes de commande) et n'exécute aucune action : il signale, et tu appliques les corrections conseillées.
+Il garde l'essentiel : exposition de LM Studio, ports ouverts, programmes lancés depuis Temp, faux processus
+système, programmes au démarrage (registre et dossier Démarrage), nouveautés depuis la référence, analyse IA.
+
+## Installation (Windows) — version complète
 
 1. Télécharger et **décompresser** `Sentinelle-Windows.zip` (clic droit → « Extraire tout »).
 2. Double-cliquer sur **`INSTALLER.bat`** et accepter la demande de droits administrateur.
