@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentinelle · Contrôle</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2322c55e' d='M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="barre">
+  <div class="marque">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5z"/><path class="coche" d="m8.5 12 2.5 2.5 4.5-5"/></svg>
+    <div>
+      <h1>Sentinelle</h1>
+      <p id="meta" class="discret">Connexion…</p>
+    </div>
+  </div>
+  <div id="statut-global" class="statut" data-niveau="inconnu">—</div>
+  <div class="commandes">
+    <label class="interrupteur" title="Faire expliquer les alertes par LM Studio">
+      <input type="checkbox" id="opt-ia" checked><span></span>Analyse IA
+    </label>
+    <button id="btn-scan" class="principal">Scanner maintenant</button>
+    <button id="btn-ref" class="secondaire" title="Enregistrer l'état actuel comme état sain de référence">Référence</button>
+    <button id="btn-export" class="secondaire" title="Télécharger le rapport Markdown">Exporter</button>
+  </div>
+</header>
+<div id="barre-scan" class="progression" hidden><div></div><span id="phase-scan"></span></div>
+
+<main class="page">
+  <div id="bannieres"></div>
+
+  <section class="tuiles" aria-label="Résumé">
+    <button class="tuile" data-filtre="CRITIQUE"><span class="etiquette">Critique</span><strong id="n-CRITIQUE">–</strong></button>
+    <button class="tuile" data-filtre="ELEVE"><span class="etiquette">Élevé</span><strong id="n-ELEVE">–</strong></button>
+    <button class="tuile" data-filtre="MOYEN"><span class="etiquette">Moyen</span><strong id="n-MOYEN">–</strong></button>
+    <button class="tuile" data-filtre="INFO"><span class="etiquette">Info</span><strong id="n-INFO">–</strong></button>
+    <div class="tuile lms" id="tuile-lms">
+      <span class="etiquette">LM Studio</span>
+      <strong id="lms-etat">–</strong>
+      <ul id="lms-details" class="discret"></ul>
+    </div>
+  </section>
+
+  <div class="grille">
+    <section class="carte" aria-labelledby="titre-alertes">
+      <div class="entete-carte">
+        <h2 id="titre-alertes">Alertes</h2>
+        <div class="filtres" id="filtres">
+          <button data-filtre="TOUT" class="actif">Toutes</button>
+          <button data-filtre="CRITIQUE">Critique</button>
+          <button data-filtre="ELEVE">Élevé</button>
+          <button data-filtre="MOYEN">Moyen</button>
+          <button data-filtre="INFO">Info</button>
+        </div>
+        <input type="search" id="recherche" placeholder="Filtrer (processus, port…)" aria-label="Filtrer les alertes">
+      </div>
+      <div id="liste-alertes" class="liste"></div>
+    </section>
+
+    <aside class="laterale">
+      <section class="carte" aria-labelledby="titre-ia">
+        <div class="entete-carte"><h2 id="titre-ia">Analyse IA</h2><span class="discret">consultative</span></div>
+        <div id="analyse" class="corps-carte"></div>
+      </section>
+
+      <section class="carte" aria-labelledby="titre-surv">
+        <div class="entete-carte"><h2 id="titre-surv">Surveillance automatique</h2></div>
+        <div class="corps-carte surveillance">
+          <label class="interrupteur"><input type="checkbox" id="surv-active"><span></span>Activée</label>
+          <label>Toutes les
+            <select id="surv-intervalle">
+              <option value="60">1 min</option><option value="300" selected>5 min</option>
+              <option value="900">15 min</option><option value="1800">30 min</option><option value="3600">1 h</option>
+            </select>
+          </label>
+          <label class="interrupteur"><input type="checkbox" id="surv-notif"><span></span>Notifications</label>
+          <p id="surv-info" class="discret"></p>
+        </div>
+      </section>
+
+      <section class="carte" aria-labelledby="titre-histo">
+        <div class="entete-carte"><h2 id="titre-histo">Historique des scans</h2></div>
+        <div class="corps-carte">
+          <svg id="historique" viewBox="0 0 320 120" role="img" aria-label="Alertes graves par scan"></svg>
+          <div class="legende">
+            <span><i class="pastille CRITIQUE"></i>Critique</span><span><i class="pastille ELEVE"></i>Élevé</span><span><i class="pastille MOYEN"></i>Moyen</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="carte" aria-labelledby="titre-actions">
+        <div class="entete-carte"><h2 id="titre-actions">Actions exécutées</h2></div>
+        <ul id="actions" class="corps-carte liste-simple"></ul>
+      </section>
+    </aside>
+  </div>
+
+  <section class="carte" aria-labelledby="titre-journal">
+    <div class="entete-carte">
+      <h2 id="titre-journal">Journal d'audit</h2>
+      <span class="discret" id="journal-chemin"></span>
+    </div>
+    <div class="defilant">
+      <table id="journal"><thead><tr><th>Heure</th><th>Événement</th><th>Détail</th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+</main>
+
+<dialog id="modale">
+  <div class="contenu-modale">
+    <h3 id="modale-titre">Confirmer l'action</h3>
+    <p id="modale-libelle"></p>
+    <pre id="modale-commande"></pre>
+    <p class="discret">Cette action est exécutée par Sentinelle sur ton PC. Tape <b>OUI</b> pour confirmer.</p>
+    <input id="modale-saisie" autocomplete="off" aria-label="Confirmation">
+    <div class="boutons">
+      <button type="button" id="modale-annuler" class="secondaire">Annuler</button>
+      <button type="button" id="modale-ok" class="danger" disabled>Exécuter</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="toasts" aria-live="polite"></div>
+<script src="/app.js"></script>
+</body>
+</html>

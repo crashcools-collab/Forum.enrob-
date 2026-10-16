@@ -761,7 +761,7 @@ def scanner(args, audit: Audit) -> list[Alerte]:
     return res
 
 
-def analyser_llm(args, alertes: list[Alerte], audit: Audit) -> Optional[dict]:
+def analyser_llm(args, alertes: list[Alerte], audit: Audit, erreurs: Optional[list] = None) -> Optional[dict]:
     if args.sans_llm:
         return None
     a_analyser = [a for a in alertes if a.gravite != "INFO"] or alertes
@@ -774,11 +774,14 @@ def analyser_llm(args, alertes: list[Alerte], audit: Audit) -> Optional[dict]:
         audit.log("llm_reponse", **analyse)
         return analyse
     except ValueError as e:
-        print(f"⚠ {e}")
+        message = str(e)
     except (urllib.error.URLError, OSError, RuntimeError, KeyError, json.JSONDecodeError) as e:
-        print(f"⚠ Analyse LM Studio indisponible ({e}). Le rapport des règles reste complet.\n"
-              "  Vérifie que le serveur est démarré (LM Studio > Developer > Start Server) et qu'un modèle est chargé.")
+        message = (f"Analyse LM Studio indisponible ({e}). Le rapport des règles reste complet. "
+                   "Vérifie que le serveur est démarré (LM Studio > Developer > Start Server) et qu'un modèle est chargé.")
         audit.log("llm_erreur", erreur=str(e))
+    print(f"⚠ {message}")
+    if erreurs is not None:
+        erreurs.append(message)
     return None
 
 

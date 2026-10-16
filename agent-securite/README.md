@@ -89,6 +89,36 @@ administrateur (dans un terminal admin) :
 schtasks /create /tn "Sentinelle" /sc onlogon /rl highest /tr "\"%CD%\lancer-sentinelle.bat\""
 ```
 
+## Tableau de bord de contrôle
+
+```bat
+python tableau_de_bord.py
+```
+
+Ou double-clic sur `ouvrir-tableau-de-bord.bat` (clic droit → « Exécuter en tant qu'administrateur » pour avoir
+une visibilité complète et pouvoir bloquer des ports). Le navigateur s'ouvre sur `http://127.0.0.1:8765`.
+
+Fonctions :
+- état global du PC, compteurs par gravité (cliquables pour filtrer) et état de l'API LM Studio
+  (arrêtée, locale ou **exposée au réseau**, avec ou sans authentification, modèle chargé) ;
+- scan à la demande, avec ou sans analyse IA, et enregistrement de la référence ;
+- alertes détaillées : preuves, avis de l'IA, bouton d'action corrective avec la commande exacte affichée,
+  à confirmer en tapant `OUI` ;
+- surveillance automatique (1 min à 1 h) avec notifications du navigateur pour les nouvelles alertes graves ;
+  l'IA n'est réinterrogée que si les alertes changent ;
+- historique des scans, actions exécutées, journal d'audit, export du rapport en Markdown.
+
+Sécurité du tableau de bord (il peut arrêter des processus, donc c'est une cible) :
+- écoute **uniquement sur 127.0.0.1**, jamais sur le réseau ;
+- **jeton secret** généré à chaque démarrage, présent dans le lien ouvert par la console et exigé sur chaque
+  appel : un site web malveillant ouvert dans ton navigateur ne peut pas piloter le tableau de bord ;
+- contrôle des en-têtes `Host`, `Origin` et `Sec-Fetch-Site` (contre le DNS rebinding et le CSRF) ;
+- CSP stricte, aucune ressource externe (fonctionne hors ligne), données toujours affichées comme du texte :
+  un malware qui met du HTML dans son nom de processus ne peut pas injecter de script ;
+- le navigateur n'envoie qu'un identifiant d'alerte : la commande exécutée vient toujours du code de Sentinelle.
+
+Si tu fermes l'onglet, relance le lien complet affiché dans la console (il contient `#jeton=…`).
+
 ## Sécuriser LM Studio lui-même (à faire en priorité)
 
 1. **LM Studio → Developer → Settings** : désactiver **« Serve on Local Network »**. L'API n'écoute alors
