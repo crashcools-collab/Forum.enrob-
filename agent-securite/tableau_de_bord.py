@@ -19,6 +19,7 @@ import hmac
 import json
 import os
 import secrets
+import subprocess
 import sys
 import threading
 import time
@@ -175,6 +176,14 @@ def est_admin() -> bool:
         return os.geteuid() == 0
     except (AttributeError, OSError):
         return False
+
+
+def ouvrir_navigateur(url: str) -> None:
+    if S.IS_WIN and est_admin():
+        # Passer par explorer.exe ouvre le navigateur SANS les droits administrateur de ce serveur.
+        subprocess.Popen(["explorer.exe", url])
+    else:
+        webbrowser.open(url)
 
 
 def lire_fin_journal(fichier: Path, n: int) -> list[dict]:
@@ -368,14 +377,15 @@ def main() -> int:
     serveur.origines_valides = {f"http://{h}" for h in serveur.hotes_valides}
     threading.Thread(target=etat.boucle_surveillance, daemon=True).start()
 
-    url = f"http://127.0.0.1:{port}/#jeton={serveur.jeton}"
+    url = f"http://127.0.0.1:{port}/?jeton={serveur.jeton}"
     audit.log("tableau_de_bord_demarre", port=port, admin=est_admin())
     print(f"Tableau de bord Sentinelle : {url}\n"
+          "Si le navigateur ne s'ouvre pas, copie ce lien dans la barre d'adresse.\n"
           "Ce lien contient un jeton secret valable jusqu'à l'arrêt du serveur : ne le partage pas.\n"
           + ("" if est_admin() else "⚠ Pas lancé en administrateur : visibilité réduite et actions de pare-feu impossibles.\n")
           + "Ctrl+C pour arrêter.")
     if not args.sans_navigateur:
-        webbrowser.open(url)
+        ouvrir_navigateur(url)
     etat.lancer_scan(True, "manuel")
     try:
         serveur.serve_forever()

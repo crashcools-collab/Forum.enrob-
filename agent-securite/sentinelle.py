@@ -47,7 +47,20 @@ except ImportError:  # vérifié dans main()
 VERSION = "1.0.0"
 IS_WIN = os.name == "nt"
 IS_MAC = sys.platform == "darwin"
-HOME_DIR = Path(os.environ.get("SENTINELLE_HOME", str(Path.home() / ".sentinelle")))
+
+
+def _dossier_donnees() -> Path:
+    """Variable SENTINELLE_HOME, sinon dossier protégé choisi par l'installeur Windows, sinon ~/.sentinelle."""
+    if os.environ.get("SENTINELLE_HOME"):
+        return Path(os.environ["SENTINELLE_HOME"])
+    try:
+        installe = json.loads((Path(__file__).resolve().parent / "installe.json").read_text(encoding="utf-8-sig"))
+        return Path(installe["donnees"])
+    except (OSError, ValueError, KeyError, TypeError):
+        return Path.home() / ".sentinelle"
+
+
+HOME_DIR = _dossier_donnees()
 
 GRAVITES = ["CRITIQUE", "ELEVE", "MOYEN", "INFO"]
 RANG = {g: i for i, g in enumerate(GRAVITES)}
@@ -842,17 +855,20 @@ def cmd_surveiller(args, audit: Audit) -> int:
     deja_vues: set = set()
     premier = True
     while True:
-        alertes = scanner(args, audit)
-        nouvelles = [a for a in alertes if a.id not in deja_vues and a.gravite != "INFO"]
-        deja_vues |= {a.id for a in alertes}
-        if nouvelles:
-            analyse = analyser_llm(args, nouvelles, audit)  # le LLM ne tourne que s'il y a du nouveau
-            texte = rapport(nouvelles, analyse)
-            print(("\n=== État initial ===\n" if premier else f"\n=== NOUVELLES ALERTES {maintenant()} ===\a\n") + texte)
-            graves = [a for a in nouvelles if RANG[a.gravite] <= RANG["ELEVE"]]
-            if graves and args.popup:
-                popup("Sentinelle — alerte sécurité", "\n".join(f"[{a.gravite}] {a.titre}" for a in graves[:8]))
-        premier = False
+        try:
+            alertes = scanner(args, audit)
+            nouvelles = [a for a in alertes if a.id not in deja_vues and a.gravite != "INFO"]
+            deja_vues |= {a.id for a in alertes}
+            if nouvelles:
+                analyse = analyser_llm(args, nouvelles, audit)  # le LLM ne tourne que s'il y a du nouveau
+                texte = rapport(nouvelles, analyse)
+                print(("\n=== État initial ===\n" if premier else f"\n=== NOUVELLES ALERTES {maintenant()} ===\a\n") + texte)
+                graves = [a for a in nouvelles if RANG[a.gravite] <= RANG["ELEVE"]]
+                if graves and args.popup:
+                    popup("Sentinelle — alerte sécurité", "\n".join(f"[{a.gravite}] {a.titre}" for a in graves[:8]))
+            premier = False
+        except Exception as e:  # en tâche de fond sans fenêtre, une erreur ponctuelle ne doit pas arrêter la surveillance
+            audit.log("surveillance_erreur", erreur=repr(e))
         time.sleep(args.intervalle)
 
 

@@ -397,7 +397,7 @@ async function confirmerAction() {
 }
 
 function demarrer() {
-  const m = location.hash.match(/jeton=([\w-]+)/);
+  const m = (location.search + location.hash).match(/jeton=([\w-]+)/);
   if (m) {
     jeton = m[1];
     ecrireStockage("sentinelle-jeton", jeton);
@@ -407,7 +407,7 @@ function demarrer() {
   }
   if (!jeton) {
     $("#statut-global").textContent = "JETON MANQUANT";
-    $("#meta").textContent = "Ouvre le lien complet affiché dans la console (il contient #jeton=…).";
+    $("#meta").textContent = "Ouvre le lien complet affiché dans la console (il contient jeton=…).";
     return;
   }
   $("#opt-ia").checked = lireLocal("sentinelle-ia") !== "0";

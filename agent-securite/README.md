@@ -46,14 +46,35 @@ Protections concrètes :
 - Nouveaux ports ou programmes de démarrage apparus depuis ta **référence**.
 - Versions vulnérables de `starlette` / `marimo`, d'après les CVE citées dans l'article.
 
-## Installation (Windows)
+## Installation (Windows) — recommandé
 
-1. Installer Python 3.9+ depuis python.org (cocher « Add to PATH »).
-2. Dans ce dossier : `pip install -r requirements.txt`
-3. Dans LM Studio : charger un modèle (un modèle instruct de 7-8 B suffit, par exemple Qwen 2.5 7B Instruct),
+1. Télécharger et **décompresser** `Sentinelle-Windows.zip` (clic droit → « Extraire tout »).
+2. Double-cliquer sur **`INSTALLER.bat`** et accepter la demande de droits administrateur.
+   Si Windows affiche « Windows a protégé votre ordinateur » : « Informations complémentaires » → « Exécuter quand même ».
+3. Répondre aux questions (Entrée = oui). L'installeur :
+   - installe Python 3.12 pour tous les utilisateurs via `winget` s'il manque, ou si le Python existant est
+     dans un dossier modifiable par ton compte ;
+   - copie Sentinelle dans `C:\Program Files\Sentinelle`, dans un environnement Python isolé (`venv` + `psutil`) ;
+   - crée `C:\ProgramData\Sentinelle` pour les rapports et le journal, en lecture seule pour les utilisateurs ;
+   - crée le raccourci **Sentinelle** sur le Bureau (tableau de bord) et un dossier dans le menu Démarrer
+     (tableau de bord, scan rapide, désinstallation) ;
+   - propose la **surveillance automatique** à chaque ouverture de session (tâche planifiée, toutes les 5 min,
+     fenêtre d'alerte si grave).
+4. Dans LM Studio : charger un modèle (un modèle instruct de 7-8 B suffit, par exemple Qwen 2.5 7B Instruct),
    puis **Developer → Start Server**.
-4. Ouvrir un terminal **en administrateur** : sans ça, Windows masque une partie des processus et connexions,
-   et les actions de pare-feu échouent.
+
+Pourquoi ces emplacements : Sentinelle tourne **en administrateur**. Si son code était dans un dossier modifiable
+par ton compte, un malware lancé sans droits particuliers pourrait le remplacer et obtenir les droits admin au
+prochain démarrage. Dans `Program Files`, seul un administrateur peut le modifier.
+
+Réinstaller par-dessus (mise à jour) : relancer `INSTALLER.bat`. Les rapports et la référence sont conservés.
+Désinstaller : menu Démarrer → Sentinelle → **Désinstaller Sentinelle**.
+
+### Installation manuelle (Linux, macOS ou développement)
+
+1. Python 3.9+, puis dans ce dossier : `pip install -r requirements.txt`
+2. Lancer les commandes ci-dessous dans un terminal administrateur (ou avec `sudo`) : sans ça, une partie des
+   processus et connexions est invisible et les actions de pare-feu échouent.
 
 ## Utilisation
 
@@ -117,7 +138,7 @@ Sécurité du tableau de bord (il peut arrêter des processus, donc c'est une ci
   un malware qui met du HTML dans son nom de processus ne peut pas injecter de script ;
 - le navigateur n'envoie qu'un identifiant d'alerte : la commande exécutée vient toujours du code de Sentinelle.
 
-Si tu fermes l'onglet, relance le lien complet affiché dans la console (il contient `#jeton=…`).
+Si tu fermes l'onglet, relance le lien complet affiché dans la console (il contient `jeton=…`).
 
 ## Sécuriser LM Studio lui-même (à faire en priorité)
 
