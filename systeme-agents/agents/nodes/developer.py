@@ -68,7 +68,13 @@ def make_developer_node(deps: Deps):
             except WorkspaceError as exc:
                 refused.append(f"{path} ({exc})")
 
-        if not written:
+        only_tests = bool(refused) and all(r.replace("\\", "/").lstrip("./").startswith("tests/") for r in refused)
+        if not written and (only_tests or "AUCUN CODE" in answer.upper()):
+            # Tâche de tests uniquement : c'est le travail du Testeur, on lui passe la main
+            # sans compter d'échec (il écrira et exécutera les tests de cette tâche).
+            updated = {**task, "phase": "test"}
+            log_event("developer_done", message=f"tâche {task['id']} : rien à coder, passage au Testeur")
+        elif not written:
             feedback = (
                 "Ta réponse ne contenait aucun fichier valide. Respecte exactement le format "
                 "« ### FICHIER: chemin » suivi d'un bloc ```python complet."

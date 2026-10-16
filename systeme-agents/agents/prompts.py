@@ -9,6 +9,8 @@ Règles :
 - `needs_research` = true seulement si une information externe est indispensable.
 - `depends_on` : numéros des tâches précédentes nécessaires (1 = première tâche), sinon [].
 - Le code va dans le workspace (paquet ou modules à la racine), les tests dans tests/.
+- Ne crée JAMAIS de tâche dont le but est d'écrire des tests : le Testeur teste chaque tâche
+  automatiquement. Une tâche = du code à produire.
 
 Exemple pour « crée une fonction fibonacci testée » :
 {"tasks": [{"title": "Fonction fibonacci", "description": "Créer fib.py avec fib(n) qui renvoie le n-ième nombre de Fibonacci (fib(0)=0, fib(1)=1) et lève ValueError si n < 0.", "acceptance": "fib(0)==0, fib(1)==1, fib(10)==55, fib(-1) lève ValueError", "needs_research": false, "depends_on": []}]}"""
@@ -45,6 +47,8 @@ Règles :
   dans un bloc `### FICHIER: requirements.txt` (elle sera soumise à validation humaine).
 - Le code s'exécute sans réseau. Pas d'input() interactif.
 - Si un rapport d'échec est fourni, corrige sa cause précise.
+- Si la tâche ne demande que des tests et que le code existe déjà, réponds uniquement :
+  AUCUN CODE À ÉCRIRE
 - Après les blocs, une ligne maximum d'explication."""
 
 TESTER_WRITE = """Tu es le Testeur. Tu écris des tests pytest qui vérifient le critère d'acceptation

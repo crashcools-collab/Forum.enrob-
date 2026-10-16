@@ -214,3 +214,20 @@ def test_code_in_reasoning_and_unnamed_test_block(settings, make_llm):
     final = graph.invoke(initial_state("fib"), config)
     assert final["final_status"] == "SUCCESS"
     assert final["tasks"][0]["attempts"] == 0
+
+
+def test_tests_only_task_goes_to_tester(settings, make_llm):
+    tests_task = {**FIB_TASK, "title": "Tests unitaires pytest", "depends_on": [1]}
+    llm, backend = make_llm(
+        {
+            "plan": [{"tasks": [FIB_TASK, tests_task]}],
+            # Tâche 2 : le Développeur ne produit que des tests (refusés) → passage direct au Testeur.
+            "dev": [FIB_OK, FIB_TESTS],
+            "test_write": [FIB_TESTS],
+        }
+    )
+    graph, config, _ = make_graph(settings, llm)
+    final = graph.invoke(initial_state("fib"), config)
+    assert final["final_status"] == "SUCCESS"
+    assert [t["attempts"] for t in final["tasks"]] == [0, 0]
+    assert backend.count["dev"] == 2
