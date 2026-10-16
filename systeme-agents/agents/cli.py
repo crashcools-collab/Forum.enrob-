@@ -1,4 +1,4 @@
-"""Ligne de commande : run, resume, check."""
+"""Ligne de commande : cockpit (par défaut), run, resume, check."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def _ask_approval(payload: dict, auto: str | None) -> bool | None:
     return input("Autoriser ? [o/N] ").strip().lower() in {"o", "oui", "y", "yes"}
 
 
-def _interruptible(fn, thread_id: str):
+def _interruptible(fn, thread_id: str, on_tick=None):
     """Exécute `fn` dans un thread pour que Ctrl+C réponde tout de suite.
 
     Sous Windows, Python ne traite Ctrl+C qu'au retour d'un appel bloquant : sans ça,
@@ -56,6 +56,8 @@ def _interruptible(fn, thread_id: str):
     try:
         while worker.is_alive():
             worker.join(0.3)
+            if on_tick:
+                on_tick()
     except KeyboardInterrupt:
         print(
             f"\nInterrompu. L'état est sauvegardé. Pour reprendre :\n  python -m agents resume {thread_id}",
@@ -68,7 +70,33 @@ def _interruptible(fn, thread_id: str):
     return result.get("value")
 
 
-def _drive(rt: Runtime, thread_id: str, inputs, auto_approve: str | None) -> int:
+def new_thread_id() -> str:
+    return time.strftime("%Y%m%d-%H%M%S-") + uuid.uuid4().hex[:6]
+
+
+def initial_state(objective: str, thread_id: str, project: str = "") -> dict:
+    return {
+        "objective": objective,
+        "thread_id": thread_id,
+        "project": project,
+        "tasks": [],
+        "current_task_id": None,
+        "research_notes": {},
+        "history": [],
+        "history_summary": "",
+        "iteration": 0,
+        "started_at": time.time(),
+        "approved_requirements": "",
+        "final_status": None,
+        "final_reason": "",
+    }
+
+
+def drive(rt: Runtime, thread_id: str, inputs, ask, on_tick=None) -> dict | None:
+    """Fait tourner le graphe jusqu'à la fin, en relayant les validations humaines à `ask`.
+
+    Renvoie l'état final, ou None si `ask` n'a pas pu répondre (exécution laissée en pause).
+    """
     config = {"configurable": {"thread_id": thread_id}, "recursion_limit": recursion_limit(rt.deps)}
 
     def consume(stream_inputs):
@@ -79,47 +107,37 @@ def _drive(rt: Runtime, thread_id: str, inputs, auto_approve: str | None) -> int
         return pending
 
     while True:
-        pending = _interruptible(lambda: consume(inputs), thread_id)
+        pending = _interruptible(lambda: consume(inputs), thread_id, on_tick)
         if pending is None:
-            break
-        decision = _ask_approval(pending, auto_approve)
+            return rt.graph.get_state(config).values
+        decision = ask(pending)
         if decision is None:
-            print(
-                f"\nExécution en pause. Reprenez avec :\n  python -m agents resume {thread_id} --approve-deps yes|no",
-                file=sys.stderr,
-            )
-            return EXIT_WAITING_HUMAN
+            return None
         inputs = Command(resume=decision)
 
-    values = rt.graph.get_state(config).values
+
+def _drive(rt: Runtime, thread_id: str, inputs, auto_approve: str | None) -> int:
+    values = drive(rt, thread_id, inputs, lambda payload: _ask_approval(payload, auto_approve))
+    if values is None:
+        print(
+            f"\nExécution en pause. Reprenez avec :\n  python -m agents resume {thread_id} --approve-deps yes|no",
+            file=sys.stderr,
+        )
+        return EXIT_WAITING_HUMAN
     print(values.get("report", "(pas de rapport)"))
-    workspace = Path(rt.deps.settings.workspaces_dir) / thread_id
+    workspace = Path(rt.deps.settings.workspaces_dir) / (values.get("project") or thread_id)
     print(f"\nWorkspace : {workspace.resolve()}\nJournal : {(Path(rt.deps.settings.logs_dir) / f'{thread_id}.jsonl').resolve()}")
     return EXIT_OK if values.get("final_status") == "SUCCESS" else EXIT_FAILED
 
 
 def cmd_run(settings: Settings, objective: str, thread_id: str | None, auto_approve: str | None) -> int:
-    thread_id = thread_id or time.strftime("%Y%m%d-%H%M%S-") + uuid.uuid4().hex[:6]
+    thread_id = thread_id or new_thread_id()
     logs.configure(Path(settings.logs_dir) / f"{thread_id}.jsonl")
     log_event("run_start", message=f"thread {thread_id} : {objective}")
     with open_runtime(settings) as rt:
         if not rt.persistent:
             log_event("warning", message="DATABASE_URL vide : mode mémoire, reprise impossible après arrêt")
-        initial = {
-            "objective": objective,
-            "thread_id": thread_id,
-            "tasks": [],
-            "current_task_id": None,
-            "research_notes": {},
-            "history": [],
-            "history_summary": "",
-            "iteration": 0,
-            "started_at": time.time(),
-            "approved_requirements": "",
-            "final_status": None,
-            "final_reason": "",
-        }
-        return _drive(rt, thread_id, initial, auto_approve)
+        return _drive(rt, thread_id, initial_state(objective, thread_id), auto_approve)
 
 
 def cmd_resume(settings: Settings, thread_id: str, auto_approve: str | None) -> int:
@@ -159,7 +177,10 @@ def cmd_check(settings: Settings) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m agents", description="Système multi-agents autonome")
-    sub = parser.add_subparsers(dest="command", required=True)
+    sub = parser.add_subparsers(dest="command")
+
+    p_chat = sub.add_parser("chat", help="cockpit interactif (commande par défaut)")
+    p_chat.add_argument("--projet", default="principal", help="projet de travail (dossier dans workspaces/)")
 
     p_run = sub.add_parser("run", help="lancer un objectif")
     p_run.add_argument("objective")
@@ -175,6 +196,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     settings = get_settings()
     try:
+        if args.command in (None, "chat"):
+            from agents.shell import Cockpit
+
+            return Cockpit(settings, getattr(args, "projet", None) or "principal").loop()
         if args.command == "run":
             return cmd_run(settings, args.objective, args.thread_id, args.approve_deps)
         if args.command == "resume":

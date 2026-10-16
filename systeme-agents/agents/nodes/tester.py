@@ -23,6 +23,15 @@ PYTEST_NO_TESTS = 5
 MAX_TEST_REWRITES = 1
 
 
+def test_file_for(state: AgentState, task: Task) -> str:
+    """Dans un projet, plusieurs exécutions numérotent leurs tâches à partir de 1 : le suffixe
+    de l'exécution évite d'écraser les tests (de non-régression) des demandes précédentes."""
+    if state.get("project"):
+        tag = re.sub(r"\W", "", state["thread_id"])[-6:]
+        return f"tests/test_{tag}_tache_{task['id']}.py"
+    return f"tests/test_tache_{task['id']}.py"
+
+
 def failure_signature(output: str) -> str:
     """Empreinte d'un échec, insensible aux numéros de ligne, adresses et durées."""
     lines = [l for l in output.splitlines() if l.startswith(("FAILED", "ERROR", "E ")) or "Error" in l]
@@ -33,7 +42,7 @@ def failure_signature(output: str) -> str:
 def make_tester_node(deps: Deps):
     def write_tests(state: AgentState, task: Task) -> str | None:
         ws = workspace_for(deps, state)
-        target = f"tests/test_tache_{task['id']}.py"
+        target = test_file_for(state, task)
         budget = deps.settings.prompt_budget_tokens // 2
         user = (
             f"{context_block(state)}\n\n{task_brief(task)}\n\n"

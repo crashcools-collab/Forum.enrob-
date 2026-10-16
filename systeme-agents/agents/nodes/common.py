@@ -9,7 +9,8 @@ from agents.tools.workspace import Workspace
 
 
 def workspace_for(deps: Deps, state: AgentState) -> Workspace:
-    return Workspace(Path(deps.settings.workspaces_dir) / state["thread_id"])
+    # Un projet regroupe plusieurs exécutions sur le même code (cockpit) ; à défaut, une par exécution.
+    return Workspace(Path(deps.settings.workspaces_dir) / (state.get("project") or state["thread_id"]))
 
 
 def task_brief(task: Task) -> str:

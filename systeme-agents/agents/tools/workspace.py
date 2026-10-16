@@ -7,7 +7,9 @@ from pathlib import Path
 
 from agents.llm.client import estimate_tokens
 
-IGNORED_DIRS = {".deps", "__pycache__", ".pytest_cache", ".git", ".venv"}
+IGNORED_DIRS = {".deps", "__pycache__", ".pytest_cache", ".git", ".venv", ".agents"}
+# Dossier du système dans chaque workspace (historique du projet), invisible pour les agents.
+SYSTEM_DIR = ".agents"
 TEXT_SUFFIXES = {".py", ".txt", ".md", ".toml", ".cfg", ".ini", ".json", ".yaml", ".yml", ".csv", ".html", ".js", ".css"}
 
 # Blocs de fichiers produits par les agents. Format demandé :

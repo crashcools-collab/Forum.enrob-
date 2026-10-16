@@ -98,6 +98,32 @@ Tout doit être `OK` avant de lancer une exécution. La ligne « Désactivation 
 
 ## Utilisation
 
+### Le cockpit (recommandé)
+
+```powershell
+python -m agents
+```
+
+Un terminal interactif, façon Claude Code : vous tapez une demande, les agents travaillent sous vos yeux (activité en cours, chronomètre, résultat de chaque étape), puis vous enchaînez. **Chaque nouvelle demande continue le même projet** : « ajoute une option… », « corrige… ». Le Manager connaît les fichiers existants et les demandes précédentes, et les tests des demandes précédentes restent en place (non-régression).
+
+| Commande | Effet |
+|---|---|
+| *une phrase* | nouvelle demande dans le projet courant |
+| `/fichiers` | arborescence du projet |
+| `/voir fichier.py` | afficher un fichier avec coloration |
+| `/rapport` | rapport de la dernière exécution |
+| `/historique` | demandes déjà réalisées |
+| `/projet nom` | changer de projet (créé s'il n'existe pas) |
+| `/projets` | lister les projets |
+| `/reprendre` | reprendre la dernière exécution interrompue |
+| `/check` | vérifier les services |
+| `!commande` | lancer une commande dans le dossier du projet, ex. `!python main.py` |
+| `/quitter` | quitter (ou Ctrl+D) |
+
+Pour ouvrir directement un projet donné : `python -m agents chat --projet budget`. Les projets sont dans `workspaces/<nom>/`.
+
+### En une commande
+
 ```powershell
 python -m agents run "crée une fonction fibonacci testée"
 ```

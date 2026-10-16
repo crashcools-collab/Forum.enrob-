@@ -15,6 +15,7 @@ from agents.llm.client import LLMFormatError, estimate_tokens
 from agents.logs import log_event
 from agents.memory import format_recall
 from agents.nodes.common import add_history, context_block, task_brief, workspace_for
+from agents.project import append_history, read_history
 from agents.report import build_report
 from agents.schemas import Plan, Replan
 from agents.state import AgentState, Deps, Task, find_task, new_task, replace_task
@@ -38,6 +39,18 @@ def make_plan_node(deps: Deps):
             f"Objectif : {state['objective']}\n\n"
             f"Leçons d'exécutions précédentes :\n{format_recall(lessons)}"
         )
+        if state.get("project"):
+            ws = workspace_for(deps, state)
+            files = [f for f in ws.list_files() if f != "REPORT.md"]
+            past = read_history(ws)
+            if files or past:
+                user += (
+                    "\n\nCe projet existe déjà. Planifie UNIQUEMENT ce que demande le nouvel objectif, "
+                    "en réutilisant et en modifiant les fichiers existants plutôt qu'en les recréant.\n"
+                    f"Fichiers présents : {', '.join(files) or '(aucun)'}\n"
+                    "Demandes précédentes :\n"
+                    + ("\n".join(f"- {h['objective']} → {h['status']}" for h in past) or "(aucune)")
+                )
         try:
             result = deps.llm.structured(
                 agent="manager", system=prompts.MANAGER_PLAN, user=user, schema=Plan, thinking=True
@@ -229,6 +242,16 @@ def make_finish_node(deps: Deps):
             + "; ".join(f"{t['title']} → {t['status']} ({t['attempts']} échec(s))" for t in state.get("tasks", [])),
             kind="objectif",
         )
+        if state.get("project"):
+            append_history(
+                ws,
+                {
+                    "thread_id": state["thread_id"],
+                    "objective": state["objective"],
+                    "status": status,
+                    "tasks": [t["title"] for t in state.get("tasks", []) if t["status"] != "replaced"],
+                },
+            )
         log_event("run_end", message=f"{status} — {state.get('final_reason', '')}", report=str(ws.root / "REPORT.md"))
         return {"final_status": status, "report": report, "next_agent": "end"}
 

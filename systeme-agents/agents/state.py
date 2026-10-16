@@ -39,6 +39,7 @@ class Task(TypedDict):
 class AgentState(TypedDict, total=False):
     objective: str
     thread_id: str
+    project: str  # dossier de travail partagé entre exécutions (vide = un dossier par exécution)
     tasks: list[Task]
     current_task_id: int | None
     next_agent: str
