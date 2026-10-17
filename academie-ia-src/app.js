@@ -6,7 +6,8 @@ const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const hlVars = s => esc(s).replace(/\[[^\]\n]{1,90}\]/g, m => '<span class="v">' + m + '</span>');
-const L = (v, frag) => PAGES[v] + (frag !== undefined && frag !== '' ? '#' + frag : '');
+const UNIQUE = typeof MODE_UNIQUE !== 'undefined';   // version en un seul fichier HTML
+const L = (v, frag) => (UNIQUE ? '#' + v : PAGES[v]) + (frag !== undefined && frag !== '' ? (UNIQUE ? '--' : '#') + frag : '');
 const nivName = n => NIVEAUX[n - 1].t;
 const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 const fmtDate = ev => { if (ev.s) return ev.s; const [y, m, d] = ev.d.split('-').map(Number); return (d === 1 ? '1er' : d) + ' ' + MOIS[m - 1] + ' ' + y; };
@@ -53,7 +54,7 @@ if (gForm) gForm.addEventListener('submit', e => {
   e.preventDefault();
   const q = $('#gQ').value.trim(); if (!q) return;
   try { sessionStorage.setItem(KEY + '.q', q); } catch (err) {}
-  if ($('#sQ')) { $('#sQ').value = q; renderSearch(); } else location.href = PAGES.recherche + '?q=' + encodeURIComponent(q);
+  if ($('#sQ')) { $('#sQ').value = q; renderSearch(); if (UNIQUE) location.hash = 'recherche'; } else location.href = PAGES.recherche + '?q=' + encodeURIComponent(q);
 });
 
 /* ---------- Accueil ---------- */
@@ -181,7 +182,7 @@ function renderCoursList(){
     return '<div class="card tool"><div class="head"><div><h3>' + esc(c.n) + '</h3><div class="ed">' + esc(c.by) + '</div></div><span class="chip ' + (pct === 100 ? 'g' : 'o') + '">' + (pct === 100 ? '✓ terminé' : c.ch.length + ' chapitres') + '</span></div>' +
       '<p class="uses">' + esc(c.pitch) + '</p><div class="row"><span class="chip y">Niveau ' + esc(nivName(NIV_COURS[c.id] || 1)) + '</span><span class="chip">' + esc(c.lvl) + '</span><span class="chip">≈ ' + esc(c.dur) + '</span></div>' +
       '<div><div class="bar"><i style="width:' + pct + '%"></i></div><span class="small muted">' + d + ' / ' + c.ch.length + ' chapitres compris</span></div>' +
-      '<div class="links"><a class="btn sm" href="#c-' + c.id + '">' + (d ? 'Continuer le cours' : 'Commencer le cours') + '</a></div></div>';
+      '<div class="links"><a class="btn sm" href="' + L('cours', 'c-' + c.id) + '">' + (d ? 'Continuer le cours' : 'Commencer le cours') + '</a></div></div>';
   }).join('');
 }
 function openCourse(id, keepScroll){
@@ -189,12 +190,12 @@ function openCourse(id, keepScroll){
   curCourse = c;
   const d = coursDone(c), next = COURS[COURS.indexOf(c) + 1], first = c.ch.findIndex((x, n) => !S.chap[c.id + ':' + n]);
   $('#coursDetail').innerHTML =
-    '<div class="row" style="justify-content:space-between;margin-bottom:14px"><a class="btn ghost sm" href="#liste">← Tous les cours</a><span class="count">' + d + ' / ' + c.ch.length + ' chapitres compris</span></div>' +
+    '<div class="row" style="justify-content:space-between;margin-bottom:14px"><a class="btn ghost sm" href="' + L('cours', 'liste') + '">← Tous les cours</a><span class="count">' + d + ' / ' + c.ch.length + ' chapitres compris</span></div>' +
     '<div class="card hl stack" style="margin-bottom:16px"><span class="chip o" style="white-space:normal;align-self:flex-start">' + esc(COURS_CATS[c.cat]) + ' · niveau ' + esc(nivName(NIV_COURS[c.id] || 1)) + ' · ' + esc(c.lvl) + ' · ≈ ' + esc(c.dur) + '</span><h2 style="font-family:var(--f-display);font-size:30px;text-transform:uppercase;letter-spacing:.5px">Cours ' + esc(c.n) + '</h2><p class="muted">' + esc(c.by) + '</p><p class="lead">' + esc(c.pitch) + '</p><div class="bar"><i style="width:' + Math.round(d / c.ch.length * 100) + '%"></i></div></div>' +
     '<div class="stack">' + c.ch.map((ch, j) => { const ok = S.chap[c.id + ':' + j];
       return '<details class="mod' + (ok ? ' is-done' : '') + '" id="ch' + j + '"' + (j === first ? ' open' : '') + '><summary><span class="num">' + String(j + 1).padStart(2, '0') + '</span><span class="t"><b>' + esc(ch.t) + '</b><span>' + (ok ? 'Compris ✓' : 'Chapitre ' + (j + 1) + ' sur ' + c.ch.length) + '</span></span><span class="arrow">▶</span></summary><div class="mod-body">' + ch.h +
         '<div><button class="btn' + (ok ? ' done' : '') + '" data-chap="' + j + '">' + (ok ? '✓ Compris' : "J'ai compris, chapitre suivant") + '</button></div></div></details>'; }).join('') + '</div>' +
-    (next ? '<div class="card row" style="justify-content:space-between;margin-top:18px"><span class="muted">Cours suivant : <b style="color:var(--txt)">' + esc(next.n) + '</b></span><a class="btn sm" href="#c-' + next.id + '">Ouvrir le cours ' + esc(next.n) + '</a></div>' : '');
+    (next ? '<div class="card row" style="justify-content:space-between;margin-top:18px"><span class="muted">Cours suivant : <b style="color:var(--txt)">' + esc(next.n) + '</b></span><a class="btn sm" href="' + L('cours', 'c-' + next.id) + '">Ouvrir le cours ' + esc(next.n) + '</a></div>' : '');
   $('#coursList').hidden = true; $('#coursDetail').hidden = false;
   if (!keepScroll) window.scrollTo(0, 0);
 }
@@ -245,6 +246,7 @@ if ($('#masters')) {
 }
 
 /* ---------- Atelier ---------- */
+let atelierLoad = null;
 if ($('#bOut')) {
   const TYPES = {rediger:{role:'rédacteur professionnel', verb:'Rédige'}, resumer:{role:'analyste chargé de synthèse', verb:'Résume'},
     analyser:{role:'consultant expert', verb:'Analyse'}, expliquer:{role:'formateur pédagogue', verb:'Explique'},
@@ -305,6 +307,7 @@ if ($('#bOut')) {
     $('#aHint').textContent = words + ' mots. ' + (words < 15 && t.trim() ? 'Un prompt de moins de 15 mots manque presque toujours de contexte.' : 'Note sur 100, calculée selon les 7 blocs.');
     $('#aCrit').innerHTML = rows.join('');
   };
+  atelierLoad = txt => { $('#aIn').value = txt; analyze(); setTimeout(() => $('#aIn').scrollIntoView({block:'center'}), 60); };
   const WEAK = 'écris un mail à mon propriétaire pour la fuite';
   $('#aIn').addEventListener('input', analyze);
   $('#aWeak').addEventListener('click', () => { $('#aIn').value = WEAK; analyze(); });
@@ -335,7 +338,9 @@ if ($('#prompts')) {
     if ((b = e.target.closest('[data-pcopy]'))) copyText(PROMPTS[+b.dataset.pcopy].p);
     else if ((b = e.target.closest('[data-fav]'))) { const i = +b.dataset.fav; S.fav[i] = !S.fav[i]; save(); b.classList.toggle('on', S.fav[i]); toast(S.fav[i] ? 'Ajouté aux favoris' : 'Retiré des favoris'); if (favOnly) renderPrompts(); }
     else if ((b = e.target.closest('[data-pexp]'))) { const c = b.closest('.pr'); c.classList.toggle('open'); b.textContent = c.classList.contains('open') ? 'Réduire' : 'Tout afficher'; }
-    else if ((b = e.target.closest('[data-pana]'))) { try { sessionStorage.setItem(KEY + '.ana', PROMPTS[+b.dataset.pana].p); } catch (err) {} location.href = L('atelier'); }
+    else if ((b = e.target.closest('[data-pana]'))) { const txt = PROMPTS[+b.dataset.pana].p;
+      if (UNIQUE && atelierLoad) { location.hash = 'atelier'; atelierLoad(txt); }
+      else { try { sessionStorage.setItem(KEY + '.ana', txt); } catch (err) {} location.href = L('atelier'); } }
   });
 }
 
@@ -425,20 +430,30 @@ if ($('#sRes')) {
 }
 
 /* ---------- Ancres : ouvrir un module, un chapitre, un cours, un niveau ---------- */
+function showView(v){
+  if (!$('#v-' + v)) v = 'accueil';
+  $$('.view').forEach(x => x.classList.toggle('active', x.id === 'v-' + v));
+  $$('.nav a[data-v]').forEach(a => { const on = a.dataset.v === v; a.classList.toggle('active', on); on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'); });
+  if ($('#vtitle')) $('#vtitle').textContent = PAGE_TITLES[v];
+  window.scrollTo(0, 0);
+}
 function route(){
   const h = decodeURIComponent((location.hash || '').slice(1));
-  if ($('#coursGrid')) { if (h.indexOf('c-') === 0) openCourse(h.slice(2)); else if (h === 'liste' || !h) { closeCourse(); if (h) window.scrollTo(0, 0); } }
-  const open = (sel, re) => { const m = h.match(re); if (!m) return; const d = $(sel + m[1]); if (d) { d.open = true; setTimeout(() => d.scrollIntoView({block:'start'}), 30); } };
-  if ($('#mods')) open('#m-', /^m-(\d+)$/);
-  if ($('#enc')) open('#e-', /^e-(\d+)$/);
-  if ($('#res') && /^n-\d$/.test(h)) { $('#resLv').value = h.slice(2); renderRes(); }
+  let frag = h;
+  if (UNIQUE) { const i = h.indexOf('--'); showView((i < 0 ? h : h.slice(0, i)) || 'accueil'); frag = i < 0 ? '' : h.slice(i + 2); }
+  if ($('#coursGrid')) { if (frag.indexOf('c-') === 0) openCourse(frag.slice(2)); else if (frag === 'liste' || !frag) { closeCourse(); if (frag) window.scrollTo(0, 0); } }
+  const open = (sel, re) => { const m = frag.match(re); if (!m) return false; const d = $(sel + m[1]); if (d) { d.open = true; setTimeout(() => d.scrollIntoView({block:'start'}), 30); } return true; };
+  if ($('#mods') && open('#m-', /^m-(\d+)$/)) return;
+  if ($('#enc') && open('#e-', /^e-(\d+)$/)) return;
+  if ($('#res') && /^n-\d$/.test(frag)) { $('#resLv').value = frag.slice(2); renderRes(); return; }
+  if (frag && !/^(c-|liste)/.test(frag) && document.getElementById(frag)) setTimeout(() => document.getElementById(frag).scrollIntoView({block:'start'}), 30);
 }
 route();
 window.addEventListener('hashchange', route);
 progress();
 
 /* ---------- Application installable (uniquement quand le site est servi en https) ---------- */
-if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+if (!UNIQUE && 'serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
   window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
 }
 })();

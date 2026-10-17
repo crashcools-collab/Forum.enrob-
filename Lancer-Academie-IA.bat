@@ -29,6 +29,7 @@ echo    6. Histoire de l'IA (1943-2026)    15. Securite et regles
 echo    7. Cours complets                  16. Recherche
 echo    8. Panorama des outils
 echo    9. Methode de prompt et prompt maitre
+echo   17. Version en un seul fichier HTML
 echo.
 echo  INSTALLER LES OUTILS POUR PRATIQUER
 echo   20. Ollama   (faire tourner une IA sur ton PC)
@@ -58,6 +59,7 @@ if "%choix%"=="13" call :ouvrir quiz & goto menu
 if "%choix%"=="14" call :ouvrir glossaire & goto menu
 if "%choix%"=="15" call :ouvrir securite & goto menu
 if "%choix%"=="16" call :ouvrir recherche & goto menu
+if "%choix%"=="17" start "" "%~dp0academie-ia-fichier-unique.html" & goto menu
 if "%choix%"=="20" call :installer Ollama.Ollama "Ollama" & goto menu
 if "%choix%"=="21" call :installer Python.Python.3.12 "Python 3.12" & goto menu
 if "%choix%"=="22" call :installer Git.Git "Git" & goto menu

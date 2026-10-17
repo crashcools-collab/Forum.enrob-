@@ -110,6 +110,7 @@ const META = {
   COURS_META:D.COURS.map(c => ({id:c.id, n:c.n, ch:c.ch.map(x => x.t)})),
   ENC_META:D.ENCYCLO.map(c => ({t:c.t})), MOD_META:D.MODULES.map(m => ({t:m.t})),
   PLAN:D.PLAN, RES_PAR_NIV,
+  PAGE_TITLES:Object.fromEntries(PAGE_LIST.filter(p => !p.sep).map(p => [p.v, p.t])),
   COUNTS:{quiz:D.QUIZ.length, hist:D.HIST.length, res:D.RESSOURCES.length, tools:D.TOOLS.length, prompts:D.PROMPTS.length + D.MASTERS.length, gloss:D.GLOSS.length}
 };
 if (META.MOD_NIV.length !== D.MODULES.length || D.NIV_ENC.length !== D.ENCYCLO.length) throw new Error('Niveaux incomplets');
@@ -232,6 +233,65 @@ self.addEventListener('fetch', e => {
   })));
 });
 `);
+
+/* ---------- 6. Version en un seul fichier HTML ---------- */
+const noScriptEnd = t => t.replace(/<\/script/gi, '<\\/script');
+const icone = 'data:image/png;base64,' + fs.readFileSync(path.join(OUT, 'assets', 'icone-192.png')).toString('base64');
+const navUnique = PAGE_LIST.map(p => p.sep ? '    <div class="sep"></div>' :
+  '    <a href="#' + p.v + '" data-v="' + p.v + '"' + (p.v === 'accueil' ? ' class="active" aria-current="page"' : '') + '><span class="ic">' + p.ic + '</span> ' + esc(p.t) + '</a>').join('\n');
+const toutesDonnees = decl(META) + Object.values(GROUPS).map(decl).join('');
+const unique = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Académie IA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Académie IA : formation complète sur l'intelligence artificielle, du novice à l'expert, à jour au ${D.MAJ}. Version en un seul fichier.">
+<meta name="theme-color" content="#0D0D0D">
+<link rel="icon" href="${icone}" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+${css.trim()}
+</style>
+</head>
+<body>
+<aside class="side">
+  <div class="hazard"></div>
+  <a class="brand" href="#accueil" style="text-decoration:none">
+    <span class="logo">ACADÉMIE IA</span>
+    <small>Tout savoir sur l'intelligence artificielle</small>
+  </a>
+  <nav class="nav" aria-label="Parties de la formation">
+${navUnique}
+  </nav>
+  <div class="progress-box">
+    Ta progression : <b data-pg-txt>0 %</b>
+    <div class="bar"><i data-pg-bar></i></div>
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <h1 id="vtitle">${esc(PAGE_LIST[0].t)}</h1>
+    <form id="gSearch" role="search"><input type="search" id="gQ" placeholder="Chercher dans toute la formation…" aria-label="Chercher dans toute la formation"></form>
+  </header>
+  <main class="content">
+${PAGE_LIST.filter(p => !p.sep).map(p => '  <section class="view' + (p.v === 'accueil' ? ' active' : '') + '" id="v-' + p.v + '">' + sections[p.v] + '</section>').join('\n')}
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const MODE_UNIQUE = true;
+${noScriptEnd(toutesDonnees)}
+${noScriptEnd(fs.readFileSync(path.join(HERE, 'app.js'), 'utf8'))}
+</script>
+</body>
+</html>
+`;
+const UNIQUE_OUT = path.join(OUT, '..', 'academie-ia-fichier-unique.html');
+fs.writeFileSync(UNIQUE_OUT, unique);
+console.log('Fichier unique :', path.basename(UNIQUE_OUT), '·', Math.round(Buffer.byteLength(unique) / 1024) + ' Ko');
 
 const total = Object.values(files).reduce((n, c) => n + Buffer.byteLength(c), 0);
 console.log('Pages :', PAGE_LIST.filter(p => !p.sep).length, '· fichiers :', Object.keys(files).length + 1, '· taille :', Math.round(total / 1024) + ' Ko · version', version);
