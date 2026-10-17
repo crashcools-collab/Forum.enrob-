@@ -46,3 +46,24 @@ const SUPABASE_ANON = 'cle_publique_anon';
 ## Local vs partagé
 - **Partagé entre toute l'équipe (via Supabase)** : la messagerie.
 - **Local à chaque appareil (navigateur)** : forum, calendrier, documents, bot.
+
+## Appli « Bons de livraison » (`bons/`)
+
+Appli pour téléphone, à part de l'OS, pour gérer les bons de livraison d'enrobé sur le chantier.
+Lien : `https://<compte>.github.io/<dépôt>/bons/` (également accessible depuis le menu de l'OS).
+
+- **Photo du bon** avec le bouton + : la photo est gardée comme preuve.
+- **Saisie rapide** : on tape le tonnage (le reste est facultatif). Aucune IA, tout est calculé dans le téléphone.
+- **Totaux du jour** par chantier : camions, tonnes, t/camion, épaisseur moyenne (cm et kg/m²)
+  comparée à l'épaisseur prévue (densité et tolérance réglables).
+- **Alertes** : n° de bon en double, tonnage anormal, température sous le seuil choisi.
+- **Envoi au bureau** : récap texte (WhatsApp, SMS, partage), export CSV pour Excel, rapport PDF avec photos.
+- **Sans réseau** : l'appli s'ouvre et fonctionne hors ligne une fois installée.
+
+### Installer sur le téléphone du chef
+1. Ouvrir le lien dans Chrome (Android) ou Safari (iPhone).
+2. Android : menu ⋮ → « Installer l'application ». iPhone : Partager → « Sur l'écran d'accueil ».
+3. L'icône « Bons » apparaît comme une appli normale.
+
+### Données
+Tout reste **dans le téléphone** (localStorage + IndexedDB pour les photos), rien n'est envoyé sur Internet. Faire une **sauvegarde** (Réglages → Sauvegarder) chaque semaine.

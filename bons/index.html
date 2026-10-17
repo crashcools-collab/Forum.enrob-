@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0D0D0D">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bons">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Bons Enrobé</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#FF6A00;
+  --orange-d:#E55E00;
+  --jaune:#FFC400;
+  --anthra:#0D0D0D;       /* fond */
+  --anthra-2:#161616;     /* cartes */
+  --anthra-3:#1F1F1F;     /* éléments */
+  --line:#2E2E2E;
+  --txt:#F5F2EC;
+  --txt-mute:#9a948a;
+  --ok:#3ddc84;
+  --warn:#ff5d5d;
+  --r:12px;
+  --nav-h:68px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'Manrope',system-ui,sans-serif;background:var(--anthra);color:var(--txt);font-size:16px;-webkit-tap-highlight-color:transparent}
+.hazard{height:6px;background:repeating-linear-gradient(45deg,var(--orange) 0 18px,#0D0D0D 18px 36px)}
+/* ===== EN-TÊTE ===== */
+.top{position:sticky;top:0;z-index:20;background:var(--anthra-2);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.top-in{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px}
+.top h1{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-weight:700;font-size:20px;letter-spacing:1px;text-transform:uppercase}
+.top h1 span{background:linear-gradient(90deg,var(--orange),var(--jaune));color:#000;padding:1px 8px;border-radius:4px;display:inline-block;transform:skewX(-6deg);margin-right:6px}
+.net{font-size:12px;font-weight:700;padding:5px 10px;border-radius:20px;border:1px solid var(--line);color:var(--ok);white-space:nowrap}
+.net.off{color:var(--warn);border-color:var(--warn)}
+.home-link{color:var(--txt-mute);text-decoration:none;font-size:13px;font-weight:700;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+/* ===== VUES ===== */
+main{max-width:720px;margin:0 auto;padding:16px 16px calc(var(--nav-h) + 30px + env(safe-area-inset-bottom))}
+.view{display:none}
+.view.active{display:block}
+h2.sec{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:17px;text-transform:uppercase;letter-spacing:1px;margin:6px 0 12px;color:var(--jaune);border-left:3px solid var(--jaune);padding-left:10px}
+.card{background:var(--anthra-2);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.muted{color:var(--txt-mute);font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grow{flex:1;min-width:0}
+/* ===== BOUTONS & CHAMPS ===== */
+.btn{background:var(--orange);color:#000;border:none;min-height:52px;padding:12px 18px;border-radius:10px;font-family:'Manrope';font-weight:800;font-size:16px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn:active{background:var(--orange-d)}
+.btn.ghost{background:var(--anthra-3);color:var(--txt);border:1px solid var(--line)}
+.btn.danger{background:var(--warn);color:#fff}
+.btn.sm{min-height:42px;padding:8px 12px;font-size:14px}
+.btn.block{width:100%}
+.btn:disabled{opacity:.5}
+label{font-size:12px;color:var(--txt-mute);font-weight:700;display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+input,select,textarea{background:var(--anthra);border:1px solid var(--line);color:var(--txt);min-height:50px;padding:12px 13px;border-radius:10px;font-family:'Manrope';font-size:17px;width:100%;outline:none}
+textarea{min-height:80px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--orange)}
+.field{margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.big input{font-size:26px;font-weight:800;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;letter-spacing:.5px}
+/* ===== STATS ===== */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.stat{background:var(--anthra-3);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.stat b{display:block;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:24px;color:var(--txt)}
+.stat small{color:var(--txt-mute);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.ep{border-radius:10px;padding:10px 12px;margin:10px 0;font-weight:700;border:1px solid var(--line);background:var(--anthra-3)}
+.ep.ok{border-color:var(--ok);color:var(--ok)}
+.ep.ko{border-color:var(--orange);color:var(--orange)}
+/* ===== LISTE DES BONS ===== */
+.bon{display:flex;align-items:center;gap:10px;padding:11px 4px;border-top:1px solid var(--line);cursor:pointer}
+.bon:first-child{border-top:none}
+.bon .h{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:16px;color:var(--txt-mute);width:48px;flex-shrink:0}
+.bon .t{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:20px;font-weight:600;white-space:nowrap}
+.bon .d{flex:1;min-width:0;font-size:13px;color:var(--txt-mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bon .d b{color:var(--txt)}
+.tag{font-size:11px;font-weight:800;padding:2px 7px;border-radius:6px;background:var(--anthra-3);border:1px solid var(--line);white-space:nowrap}
+.tag.warn{color:var(--warn);border-color:var(--warn)}
+.chip{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:20px;background:var(--orange);color:#000;vertical-align:middle;margin-left:6px}
+.datebar{display:flex;gap:8px;align-items:center;margin-bottom:14px}
+.datebar input{text-align:center;font-weight:700}
+.datebar .btn{min-width:52px;padding:0}
+.progress{height:10px;background:var(--anthra-3);border-radius:6px;overflow:hidden;margin-top:8px;border:1px solid var(--line)}
+.progress div{height:100%;background:linear-gradient(90deg,var(--orange),var(--jaune))}
+.empty{text-align:center;padding:30px 16px}
+.empty .ico{font-size:44px;margin-bottom:8px}
+.banner{background:#1d1800;border:1px solid var(--jaune);color:var(--jaune);border-radius:10px;padding:12px;margin-bottom:14px;font-size:14px;font-weight:600}
+.banner.red{background:#260b0b;border-color:var(--warn);color:var(--warn)}
+/* ===== BARRE DU BAS ===== */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--anthra-2);border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center;height:calc(var(--nav-h) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom)}
+.nav button{background:none;border:none;color:var(--txt-mute);font-family:'Manrope';font-weight:700;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;height:100%;justify-content:center;cursor:pointer}
+.nav button .i{font-size:22px;line-height:1}
+.nav button.active{color:var(--orange)}
+.nav .plus{flex:0 0 auto}
+.nav .plus span{width:66px;height:66px;border-radius:50%;background:var(--orange);color:#000;font-size:40px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:-30px;border:4px solid var(--anthra);box-shadow:0 4px 18px rgba(255,106,0,.45)}
+/* ===== FENÊTRES ===== */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.75);display:none;align-items:flex-end;justify-content:center}
+.modal.open{display:flex}
+.sheet{background:var(--anthra-2);border:1px solid var(--line);border-radius:18px 18px 0 0;width:100%;max-width:720px;max-height:94vh;overflow:auto;padding:16px 16px calc(20px + env(safe-area-inset-bottom))}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sheet-h h3{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:20px;text-transform:uppercase;letter-spacing:1px}
+.x{background:var(--anthra-3);border:1px solid var(--line);color:var(--txt);width:44px;height:44px;border-radius:10px;font-size:20px;cursor:pointer}
+.photo-prev{width:100%;max-height:260px;object-fit:contain;background:#000;border-radius:10px;border:1px solid var(--line);margin-bottom:12px;cursor:zoom-in}
+#viewer{align-items:center;background:rgba(0,0,0,.95)}
+#viewer img{max-width:100%;max-height:100%;object-fit:contain}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 24px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--txt);color:#000;font-weight:800;padding:12px 18px;border-radius:10px;z-index:60;display:none;max-width:90vw;text-align:center}
+.toast.show{display:block}
+#recapTxt{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;min-height:220px}
+/* ===== IMPRESSION / PDF ===== */
+#print{display:none}
+@media print{
+  body{background:#fff;color:#000}
+  .top,main,.nav,.modal,.toast{display:none!important}
+  #print{display:block;font-family:Arial,sans-serif;font-size:11pt;color:#000}
+  #print h1{font-size:18pt;margin-bottom:4px}
+  #print h2{font-size:13pt;margin:16px 0 6px;border-bottom:2px solid #FF6A00;padding-bottom:3px}
+  #print table{width:100%;border-collapse:collapse;margin-bottom:6px}
+  #print th,#print td{border:1px solid #999;padding:4px 6px;text-align:left;font-size:9.5pt}
+  #print th{background:#eee}
+  #print .num{text-align:right}
+  #print .sum{font-weight:bold;margin:4px 0 10px}
+  #print .photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  #print .photos figure{break-inside:avoid;border:1px solid #999;padding:4px}
+  #print .photos img{width:100%;max-height:120mm;object-fit:contain}
+  #print figcaption{font-size:9pt;text-align:center}
+  #print .pb{break-before:page}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="hazard"></div>
+  <div class="top-in">
+    <h1><span>COLAS</span>Bons</h1>
+    <div class="row" style="gap:8px;flex-wrap:nowrap">
+      <span class="net" id="net">● En ligne</span>
+      <a class="home-link" href="../">OS ↗</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ===== JOUR ===== -->
+  <section class="view active" id="v-jour">
+    <div id="installBanner"></div>
+    <div class="datebar">
+      <button class="btn ghost" onclick="shiftDay(-1)" aria-label="Jour précédent">‹</button>
+      <input type="date" id="jourDate" onchange="setDay(this.value)">
+      <button class="btn ghost" onclick="shiftDay(1)" aria-label="Jour suivant">›</button>
+    </div>
+    <div id="jourBody"></div>
+  </section>
+
+  <!-- ===== CHANTIERS ===== -->
+  <section class="view" id="v-chantiers">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <h2 class="sec" style="margin:0">Chantiers</h2>
+      <button class="btn sm" onclick="openChantier()">+ Nouveau chantier</button>
+    </div>
+    <div id="chantiersBody"></div>
+  </section>
+
+  <!-- ===== HISTORIQUE ===== -->
+  <section class="view" id="v-histo">
+    <h2 class="sec">Historique des bons</h2>
+    <div class="card">
+      <div class="grid2">
+        <div class="field"><label>Du</label><input type="date" id="hDu" onchange="renderHisto()"></div>
+        <div class="field"><label>Au</label><input type="date" id="hAu" onchange="renderHisto()"></div>
+      </div>
+      <div class="field"><label>Chantier</label><select id="hCh" onchange="renderHisto()"></select></div>
+      <div class="field" style="margin-bottom:0"><label>Recherche (n° de bon, camion, formule)</label><input id="hQ" type="search" placeholder="ex. 104523" oninput="renderHisto()"></div>
+    </div>
+    <div id="histoBody"></div>
+  </section>
+
+  <!-- ===== RÉGLAGES ===== -->
+  <section class="view" id="v-reglages">
+    <h2 class="sec">Réglages</h2>
+    <div class="card">
+      <div class="field"><label>Nom du chef d'équipe (pour le récap)</label><input id="sChef" placeholder="ex. Martin D."></div>
+      <div class="grid2">
+        <div class="field"><label>Densité enrobé (t/m³)</label><input id="sDens" inputmode="decimal" placeholder="2,35"></div>
+        <div class="field"><label>Tolérance épaisseur (%)</label><input id="sTol" inputmode="decimal" placeholder="10"></div>
+      </div>
+      <div class="field"><label>Alerte si température sous (°C)</label><input id="sTmin" inputmode="decimal" placeholder="vide = pas d'alerte"></div>
+      <p class="muted" style="margin-bottom:12px">La densité et la température minimale dépendent de la formule : mets les valeurs données par ton conducteur de travaux.</p>
+      <button class="btn block" onclick="saveSettings()">Enregistrer</button>
+    </div>
+
+    <h2 class="sec">Installer sur le téléphone</h2>
+    <div class="card">
+      <button class="btn block" id="installBtn" style="display:none;margin-bottom:12px" onclick="doInstall()">📲 Installer l'appli</button>
+      <p class="muted"><b>Android (Chrome) :</b> menu ⋮ → « Ajouter à l'écran d'accueil » ou « Installer l'application ».<br><b>iPhone (Safari) :</b> bouton Partager → « Sur l'écran d'accueil ».</p>
+    </div>
+
+    <h2 class="sec">Sauvegarde</h2>
+    <div class="card">
+      <p class="muted" id="storageInfo" style="margin-bottom:12px"></p>
+      <div class="row">
+        <button class="btn ghost grow" onclick="exportJSON()">💾 Sauvegarder (fichier)</button>
+        <button class="btn ghost grow" onclick="document.getElementById('restoreIn').click()">↺ Restaurer</button>
+      </div>
+      <p class="muted" style="margin-top:10px">Les bons sont gardés dans ce téléphone. Fais une sauvegarde chaque semaine et avant de changer de téléphone.</p>
+      <input type="file" id="restoreIn" accept="application/json,.json" hidden onchange="importJSON(this)">
+      <button class="btn danger block" style="margin-top:14px" onclick="wipeAll()">Tout effacer</button>
+    </div>
+  </section>
+</main>
+
+<!-- ===== BARRE DU BAS ===== -->
+<nav class="nav" id="nav">
+  <button data-v="jour" class="active"><span class="i">▣</span>Jour</button>
+  <button data-v="chantiers"><span class="i">⛏</span>Chantiers</button>
+  <button class="plus" onclick="takePhoto()" aria-label="Nouveau bon (photo)"><span>+</span></button>
+  <button data-v="histo"><span class="i">☰</span>Historique</button>
+  <button data-v="reglages"><span class="i">⚙</span>Réglages</button>
+</nav>
+
+<input type="file" id="camIn" accept="image/*" capture="environment" hidden onchange="onPhoto(this)">
+<input type="file" id="galIn" accept="image/*" hidden onchange="onPhoto(this)">
+
+<!-- ===== FICHE BON ===== -->
+<div class="modal" id="bonModal">
+  <div class="sheet">
+    <div class="sheet-h"><h3 id="bonTitle">Nouveau bon</h3><button class="x" onclick="closeModal('bonModal')">✕</button></div>
+    <img class="photo-prev" id="bonPhoto" alt="Photo du bon" style="display:none" onclick="viewPhoto(this.src)">
+    <p class="muted" id="bonHint" style="margin-bottom:12px">Tape le tonnage du bon, le reste est facultatif. La photo est gardée comme preuve.</p>
+    <div class="field"><label>Chantier</label><select id="fCh" onchange="if(this.value==='__new')openChantier(null,true)"></select></div>
+    <div class="grid2">
+      <div class="field big"><label>Tonnage net (t)</label><input id="fT" inputmode="decimal" placeholder="0,00"></div>
+      <div class="field"><label>N° du bon</label><input id="fNum" inputmode="text" placeholder="ex. 104523"></div>
+    </div>
+    <div class="field"><label>Formule / produit</label><input id="fForm" placeholder="ex. BBSG 0/10 35/50" list="formules"><datalist id="formules"></datalist></div>
+    <div class="grid2">
+      <div class="field"><label>Heure chargement</label><input id="fHc" type="time"></div>
+      <div class="field"><label>Heure arrivée</label><input id="fHa" type="time"></div>
+      <div class="field"><label>T° départ (°C)</label><input id="fTd" inputmode="decimal" placeholder="—"></div>
+      <div class="field"><label>T° arrivée (°C)</label><input id="fTa" inputmode="decimal" placeholder="—"></div>
+      <div class="field"><label>Camion (immat.)</label><input id="fCam" placeholder="AB-123-CD" autocapitalize="characters"></div>
+      <div class="field"><label>Date</label><input id="fDate" type="date"></div>
+    </div>
+    <div class="field"><label>Centrale / fournisseur</label><input id="fCent" list="centrales" placeholder="—"><datalist id="centrales"></datalist></div>
+    <div class="field"><label>Remarque</label><input id="fNote" placeholder="ex. camion en retard, enrobé froid…"></div>
+    <button class="btn block" style="min-height:60px;font-size:18px" onclick="saveBon()">✔ Valider le bon</button>
+    <div class="row" style="margin-top:10px">
+      <button class="btn ghost sm grow" id="btnPhoto" onclick="document.getElementById('galIn').click()">🖼 Choisir une photo</button>
+      <button class="btn danger sm grow" id="btnDel" onclick="deleteBon()">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FICHE CHANTIER ===== -->
+<div class="modal" id="chModal">
+  <div class="sheet">
+    <div class="sheet-h"><h3 id="chTitle">Nouveau chantier</h3><button class="x" onclick="closeChantier()">✕</button></div>
+    <div class="field"><label>Nom du chantier *</label><input id="cNom" placeholder="ex. RD 12 – Saint-Jean"></div>
+    <div class="field"><label>Client / lieu</label><input id="cClient" placeholder="—"></div>
+    <div class="grid2">
+      <div class="field"><label>Surface totale (m²)</label><input id="cSurf" inputmode="decimal" placeholder="ex. 4500"></div>
+      <div class="field"><label>Épaisseur prévue (cm)</label><input id="cEp" inputmode="decimal" placeholder="ex. 6"></div>
+    </div>
+    <div class="field"><label>Formule prévue</label><input id="cForm" placeholder="ex. BBSG 0/10 35/50" list="formules"></div>
+    <label style="display:flex;gap:10px;align-items:center;text-transform:none;font-size:15px;color:var(--txt);margin:6px 0 14px"><input type="checkbox" id="cActif" style="width:22px;height:22px;min-height:0;accent-color:var(--orange)"> Chantier en cours</label>
+    <button class="btn block" onclick="saveChantier()">✔ Enregistrer</button>
+    <button class="btn danger block sm" id="cDel" style="margin-top:10px" onclick="deleteChantier()">Supprimer ce chantier</button>
+  </div>
+</div>
+
+<!-- ===== RÉCAP ===== -->
+<div class="modal" id="recapModal">
+  <div class="sheet">
+    <div class="sheet-h"><h3>Récap pour le bureau</h3><button class="x" onclick="closeModal('recapModal')">✕</button></div>
+    <textarea id="recapTxt" readonly></textarea>
+    <div class="row" style="margin-top:12px">
+      <button class="btn grow" id="shareBtn" onclick="shareRecap()">📤 Partager</button>
+      <button class="btn ghost grow" onclick="openWA()">WhatsApp</button>
+      <button class="btn ghost grow" onclick="openSMS()">SMS</button>
+      <button class="btn ghost grow" onclick="copyRecap()">Copier</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="viewer" onclick="closeModal('viewer')"><img id="viewerImg" alt="Photo du bon"></div>
+<div class="toast" id="toast"></div>
+<div id="print"></div>
+
+<script>
+/* =========================================================
+   BONS ENROBÉ — gestion des bons de livraison sur chantier
+   Données : localStorage (bons, chantiers) + IndexedDB (photos)
+   ========================================================= */
+const KEY = 'colas_bons_v1';
+const DEFAULTS = {chef:'', densite:2.35, tolerance:10, tempMin:'', courant:null};
+let S = {chantiers:[], bons:[], jours:{}, settings:{...DEFAULTS}};
+let curDay = today();
+let draft = null;          // bon en cours de saisie
+let editChId = null, chFromBon = false;
+let recapText = '';
+let installEvt = null;
+
+/* ---------- utilitaires ---------- */
+const $ = id => document.getElementById(id);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+function pad(n){return String(n).padStart(2,'0')}
+function today(){const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function nowHM(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())}
+function esc(s){return String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function num(v){if(v===null||v===undefined||v==='')return null;const n=parseFloat(String(v).replace(/\s/g,'').replace(',','.'));return isFinite(n)?n:null}
+function fr(n,dec=2){return n===null||n===undefined||!isFinite(n)?'—':n.toLocaleString('fr-FR',{minimumFractionDigits:dec,maximumFractionDigits:dec})}
+function frDate(d,long){const x=new Date(d+'T12:00');return x.toLocaleDateString('fr-FR',long?{weekday:'long',day:'numeric',month:'long',year:'numeric'}:{weekday:'short',day:'2-digit',month:'2-digit'})}
+function toast(t,ms=2200){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),ms)}
+function chantier(id){return S.chantiers.find(c=>c.id===id)}
+function chName(id){return chantier(id)?.nom || 'Sans chantier'}
+
+/* ---------- stockage ---------- */
+function load(){
+  try{const d=localStorage.getItem(KEY);if(d){const p=JSON.parse(d);S={...S,...p,settings:{...DEFAULTS,...(p.settings||{})}}}}catch(e){}
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('⚠ Mémoire pleine : fais une sauvegarde puis efface les vieux bons',4000)}
+}
+
+let idb = null;
+function openIDB(){
+  return new Promise(res=>{
+    try{
+      const r=indexedDB.open('colas_bons',1);
+      r.onupgradeneeded=()=>r.result.createObjectStore('photos');
+      r.onsuccess=()=>{idb=r.result;res(idb)};
+      r.onerror=()=>res(null);
+    }catch(e){res(null)}
+  });
+}
+function idbDo(mode,fn){
+  return new Promise((res,rej)=>{
+    if(!idb)return res(null);
+    const tx=idb.transaction('photos',mode);const st=tx.objectStore('photos');
+    const r=fn(st);tx.oncomplete=()=>res(r&&r.result!==undefined?r.result:null);tx.onerror=()=>rej(tx.error);
+  });
+}
+const putPhoto=(id,data)=>idbDo('readwrite',st=>st.put(data,id));
+const getPhoto=id=>idbDo('readonly',st=>st.get(id));
+const delPhoto=id=>idbDo('readwrite',st=>st.delete(id));
+
+/* ---------- navigation ---------- */
+document.querySelectorAll('#nav button[data-v]').forEach(b=>b.onclick=()=>show(b.dataset.v));
+function show(v){
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id==='v-'+v));
+  document.querySelectorAll('#nav button[data-v]').forEach(x=>x.classList.toggle('active',x.dataset.v===v));
+  window.scrollTo(0,0);
+  if(v==='jour')renderJour();
+  if(v==='chantiers')renderChantiers();
+  if(v==='histo')renderHisto();
+  if(v==='reglages')renderSettings();
+}
+function openModal(id){$(id).classList.add('open')}
+function closeModal(id){$(id).classList.remove('open')}
+
+/* ---------- réseau ---------- */
+function updateNet(){const on=navigator.onLine;const n=$('net');n.textContent=on?'● En ligne':'● Hors réseau';n.classList.toggle('off',!on)}
+addEventListener('online',updateNet);addEventListener('offline',updateNet);
+
+/* =========================================================
+   CALCULS
+   ========================================================= */
+function bonsDuJour(day,cid){return S.bons.filter(b=>b.date===day&&(cid===undefined||b.chantierId===cid)).sort((a,b)=>(a.heureArrivee||'').localeCompare(b.heureArrivee||''))}
+function sumT(list){return list.reduce((s,b)=>s+(num(b.tonnage)||0),0)}
+function jourKey(day,cid){return day+'|'+cid}
+// Épaisseur moyenne (cm) = tonnes / (surface m² × densité t/m³) × 100
+function epaisseur(t,surf){const d=num(S.settings.densite)||2.35;return surf>0?t/(surf*d)*100:null}
+function epBlock(t,surf,prevue){
+  const ep=epaisseur(t,surf);
+  if(ep===null)return '<div class="ep">Entre la surface posée pour calculer l\'épaisseur moyenne.</div>';
+  const kg=t*1000/surf;
+  let txt='Épaisseur moyenne : <b>'+fr(ep,1)+' cm</b> · '+fr(kg,0)+' kg/m²';
+  if(!prevue)return '<div class="ep">'+txt+'</div>';
+  const ecart=(ep-prevue)/prevue*100, tol=num(S.settings.tolerance)??10, ok=Math.abs(ecart)<=tol;
+  txt+='<br>Prévu '+fr(prevue,1)+' cm → écart '+(ecart>0?'+':'')+fr(ecart,0)+' % '+(ok?'✔':(ecart>0?'⚠ trop épais':'⚠ trop mince'));
+  return '<div class="ep '+(ok?'ok':'ko')+'">'+txt+'</div>';
+}
+function tempAlert(b){const min=num(S.settings.tempMin);if(min===null)return false;const t=num(b.tempArrivee)??num(b.tempDepart);return t!==null&&t<min}
+
+/* =========================================================
+   VUE JOUR
+   ========================================================= */
+function setDay(d){if(d){curDay=d;renderJour()}}
+function shiftDay(n){const x=new Date(curDay+'T12:00');x.setDate(x.getDate()+n);curDay=x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate());renderJour()}
+function bonRow(b,showCh){
+  const tags=[];
+  if(tempAlert(b))tags.push('<span class="tag warn">'+esc(fr(num(b.tempArrivee)??num(b.tempDepart),0))+' °C</span>');
+  if(b.photoId)tags.push('<span class="tag">📷</span>');
+  const desc=[showCh?'<b>'+esc(chName(b.chantierId))+'</b>':'', b.numero?'n° <b>'+esc(b.numero)+'</b>':'', esc(b.formule||''), b.camion?esc(b.camion):''].filter(Boolean).join(' · ');
+  return '<div class="bon" onclick="editBon(\''+b.id+'\')"><span class="h">'+esc(b.heureArrivee||'--:--')+'</span><span class="d">'+(desc||'<i>bon sans détail</i>')+'</span>'+tags.join('')+'<span class="t">'+fr(num(b.tonnage))+' t</span></div>';
+}
+function renderJour(){
+  $('jourDate').value=curDay;
+  const body=$('jourBody');
+  const list=bonsDuJour(curDay);
+  if(!S.chantiers.length){
+    body.innerHTML='<div class="card empty"><div class="ico">⛏</div><p style="margin-bottom:14px"><b>Commence par créer ton chantier.</b><br><span class="muted">Ensuite, appuie sur le gros bouton + pour photographier chaque bon.</span></p><button class="btn" onclick="openChantier()">+ Créer un chantier</button></div>';
+    return;
+  }
+  const ids=[...new Set(list.map(b=>b.chantierId))];
+  const cur=S.settings.courant;
+  if(curDay===today()&&cur&&chantier(cur)&&!ids.includes(cur))ids.unshift(cur);
+  let h='';
+  h+='<div class="stats"><div class="stat"><b>'+list.length+'</b><small>camions</small></div><div class="stat"><b>'+fr(sumT(list),1)+'</b><small>tonnes</small></div><div class="stat"><b>'+ids.length+'</b><small>chantier'+(ids.length>1?'s':'')+'</small></div></div>';
+  if(!list.length)h+='<div class="card empty"><div class="ico">📷</div><p><b>Aucun bon '+(curDay===today()?'aujourd\'hui':'ce jour-là')+'.</b><br><span class="muted">Appuie sur <b style="color:var(--orange)">+</b> en bas pour photographier un bon.</span></p><button class="btn ghost sm" style="margin-top:14px" onclick="newBon(null)">✍ Saisir un bon à la main</button></div>';
+  ids.forEach(cid=>{
+    const c=chantier(cid), bl=bonsDuJour(curDay,cid), t=sumT(bl);
+    const j=S.jours[jourKey(curDay,cid)]||{};
+    h+='<div class="card"><div class="row" style="justify-content:space-between"><h2 class="sec" style="margin:0">'+esc(chName(cid))+(cid===cur?'<span class="chip">en cours</span>':'')+'</h2></div>';
+    h+='<div class="stats" style="margin:12px 0 4px"><div class="stat"><b>'+bl.length+'</b><small>camions</small></div><div class="stat"><b>'+fr(t,2)+'</b><small>tonnes</small></div><div class="stat"><b>'+(bl.length?fr(t/bl.length,1):'—')+'</b><small>t / camion</small></div></div>';
+    if(c){
+      h+='<div class="field" style="margin:10px 0 0"><label>Surface posée ce jour (m²)</label><input inputmode="decimal" value="'+esc(j.surface??'')+'" placeholder="ex. 1200" onchange="setSurface(\''+cid+'\',this.value)"></div>';
+      h+=epBlock(t,num(j.surface),num(c.epaisseur));
+    }
+    h+=bl.length?'<div>'+bl.map(b=>bonRow(b,false)).join('')+'</div>':'<p class="muted" style="padding:8px 0">Pas encore de bon sur ce chantier aujourd\'hui.</p>';
+    h+='</div>';
+  });
+  if(list.length){
+    h+='<div class="row"><button class="btn grow" onclick="openRecap()">📤 Récap du jour</button><button class="btn ghost grow" onclick="exportCSV(bonsDuJour(curDay),\'bons_\'+curDay)">CSV Excel</button><button class="btn ghost grow" onclick="printReport(bonsDuJour(curDay),\'Bons du \'+frDate(curDay,true))">PDF</button></div>';
+    h+='<button class="btn ghost sm block" style="margin-top:10px" onclick="newBon(null)">✍ Saisir un bon à la main</button>';
+  }
+  body.innerHTML=h;
+}
+function setSurface(cid,v){const k=jourKey(curDay,cid);S.jours[k]={...(S.jours[k]||{}),surface:num(v)};save();renderJour()}
+
+/* =========================================================
+   SAISIE D'UN BON
+   ========================================================= */
+function takePhoto(){
+  if(!S.chantiers.length){toast('Crée d\'abord un chantier');openChantier();return}
+  $('camIn').click();
+}
+async function onPhoto(input){
+  const f=input.files&&input.files[0];input.value='';
+  if(!f)return;
+  let dataUrl;
+  try{dataUrl=await compress(f)}catch(e){toast('Photo illisible, réessaie');return}
+  if(draft&&$('bonModal').classList.contains('open')){readForm();draft._photo=dataUrl;draft._photoChanged=true;fillForm();return}
+  newBon(dataUrl);
+}
+// Réduit la photo (≈1600 px, JPEG) : lisible pour vérifier le bon, légère pour le téléphone
+function compress(file){
+  return new Promise((res,rej)=>{
+    const url=URL.createObjectURL(file);const img=new Image();
+    img.onload=()=>{
+      const max=1600;let w=img.naturalWidth,h=img.naturalHeight;const k=Math.min(1,max/Math.max(w,h));w=Math.round(w*k);h=Math.round(h*k);
+      const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(url);res(cv.toDataURL('image/jpeg',0.72));
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);rej()};img.src=url;
+  });
+}
+function newBon(photo){
+  if(!S.chantiers.length){openChantier();return}
+  const cur=S.settings.courant&&chantier(S.settings.courant)?S.settings.courant:S.chantiers.find(c=>c.actif!==false)?.id||S.chantiers[0].id;
+  draft={id:uid(),isNew:true,chantierId:cur,date:curDay===today()?today():curDay,heureArrivee:curDay===today()?nowHM():'',_photo:photo,_photoChanged:!!photo};
+  fillForm();openModal('bonModal');
+  setTimeout(()=>$('fT').focus(),300);
+}
+async function editBon(id){
+  const b=S.bons.find(x=>x.id===id);if(!b)return;
+  draft={...b,isNew:false,_photo:null,_photoChanged:false};
+  if(b.photoId){try{draft._photo=await getPhoto(b.photoId)}catch(e){}}
+  fillForm();openModal('bonModal');
+}
+const FIELDS={fNum:'numero',fT:'tonnage',fForm:'formule',fHc:'heureChargement',fHa:'heureArrivee',fTd:'tempDepart',fTa:'tempArrivee',fCam:'camion',fDate:'date',fCent:'centrale',fNote:'note'};
+function fillForm(){
+  $('bonTitle').textContent=draft.isNew?'Nouveau bon':'Bon '+(draft.numero?'n° '+draft.numero:'');
+  const sel=$('fCh');
+  sel.innerHTML=S.chantiers.filter(c=>c.actif!==false||c.id===draft.chantierId).map(c=>'<option value="'+c.id+'">'+esc(c.nom)+'</option>').join('')+'<option value="__new">+ Nouveau chantier…</option>';
+  sel.value=draft.chantierId;
+  for(const [el,k] of Object.entries(FIELDS)){const v=draft[k];$(el).value=(k==='tonnage'||k==='tempDepart'||k==='tempArrivee')&&v!==null&&v!==undefined&&v!==''?String(v).replace('.',','):(v??'')}
+  const ph=$('bonPhoto');if(draft._photo){ph.src=draft._photo;ph.style.display='block'}else{ph.removeAttribute('src');ph.style.display='none'}
+  $('btnPhoto').textContent=draft._photo?'📷 Changer la photo':'📷 Ajouter une photo';
+  $('btnDel').style.display=draft.isNew?'none':'';
+  const fl=[...new Set(S.bons.map(b=>b.formule).concat(S.chantiers.map(c=>c.formule)).filter(Boolean))];
+  $('formules').innerHTML=fl.map(f=>'<option value="'+esc(f)+'">').join('');
+  $('centrales').innerHTML=[...new Set(S.bons.map(b=>b.centrale).filter(Boolean))].map(f=>'<option value="'+esc(f)+'">').join('');
+}
+function readForm(){
+  draft.chantierId=$('fCh').value;
+  for(const [el,k] of Object.entries(FIELDS))draft[k]=$(el).value.trim();
+  draft.tonnage=num(draft.tonnage);draft.tempDepart=num(draft.tempDepart);draft.tempArrivee=num(draft.tempArrivee);
+  draft.camion=draft.camion.toUpperCase();
+}
+async function saveBon(){
+  readForm();
+  if(!draft.chantierId||draft.chantierId==='__new'){toast('Choisis un chantier');return}
+  if(!(draft.tonnage>0)){toast('Indique le tonnage');$('fT').focus();return}
+  if(draft.tonnage>60&&!confirm(fr(draft.tonnage)+' t sur un seul camion, c\'est bien ça ?'))return;
+  if(!draft.date)draft.date=today();
+  if(draft.numero){
+    const dup=S.bons.find(b=>b.id!==draft.id&&b.numero&&b.numero===draft.numero&&b.chantierId===draft.chantierId);
+    if(dup&&!confirm('Le bon n° '+draft.numero+' existe déjà ('+frDate(dup.date)+', '+fr(num(dup.tonnage))+' t). L\'enregistrer quand même ?'))return;
+  }
+  if(draft._photoChanged&&draft._photo){
+    const pid=draft.photoId||draft.id;
+    try{await putPhoto(pid,draft._photo);draft.photoId=pid}catch(e){toast('⚠ Photo non enregistrée (mémoire pleine ?)',4000)}
+    try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+  }
+  const {isNew,_photo,_photoChanged,...bon}=draft;
+  if(isNew){bon.createdAt=Date.now();S.bons.push(bon)}else{const i=S.bons.findIndex(b=>b.id===bon.id);if(i>=0)S.bons[i]=bon}
+  S.settings.courant=bon.chantierId;
+  save();closeModal('bonModal');draft=null;
+  curDay=bon.date;show('jour');
+  const n=bonsDuJour(bon.date,bon.chantierId);
+  toast('✔ Bon enregistré · '+n.length+' camion'+(n.length>1?'s':'')+' · '+fr(sumT(n),1)+' t');
+}
+async function deleteBon(){
+  if(!draft||draft.isNew)return;
+  if(!confirm('Supprimer ce bon ?'))return;
+  S.bons=S.bons.filter(b=>b.id!==draft.id);
+  if(draft.photoId){try{await delPhoto(draft.photoId)}catch(e){}}
+  save();closeModal('bonModal');draft=null;renderJour();if($('v-histo').classList.contains('active'))renderHisto();toast('Bon supprimé');
+}
+
+/* =========================================================
+   CHANTIERS
+   ========================================================= */
+function renderChantiers(){
+  const b=$('chantiersBody');
+  if(!S.chantiers.length){b.innerHTML='<div class="card empty"><div class="ico">⛏</div><p class="muted">Aucun chantier pour l\'instant.</p></div>';return}
+  const d=num(S.settings.densite)||2.35;
+  const sorted=[...S.chantiers].sort((a,c)=>(c.actif!==false)-(a.actif!==false)||(c.createdAt||0)-(a.createdAt||0));
+  b.innerHTML=sorted.map(c=>{
+    const bl=S.bons.filter(x=>x.chantierId===c.id), t=sumT(bl), jours=new Set(bl.map(x=>x.date)).size;
+    const prevu=num(c.surface)&&num(c.epaisseur)?num(c.surface)*num(c.epaisseur)/100*d:null;
+    const pct=prevu?Math.min(100,t/prevu*100):null;
+    const surfPosee=Object.entries(S.jours).filter(([k])=>k.endsWith('|'+c.id)).reduce((s,[,v])=>s+(num(v.surface)||0),0);
+    return '<div class="card" style="'+(c.actif===false?'opacity:.6':'')+'">'+
+      '<h2 class="sec" style="margin-bottom:6px">'+esc(c.nom)+(c.id===S.settings.courant?'<span class="chip">en cours</span>':'')+(c.actif===false?' <span class="tag">terminé</span>':'')+'</h2>'+
+      (c.client?'<p class="muted">'+esc(c.client)+'</p>':'')+
+      '<div class="stats" style="margin:10px 0 4px"><div class="stat"><b>'+fr(t,1)+'</b><small>t posées</small></div><div class="stat"><b>'+bl.length+'</b><small>camions</small></div><div class="stat"><b>'+jours+'</b><small>jour'+(jours>1?'s':'')+'</small></div></div>'+
+      '<p class="muted">'+(num(c.surface)?fr(num(c.surface),0)+' m²':'surface ?')+' · '+(num(c.epaisseur)?fr(num(c.epaisseur),1)+' cm':'épaisseur ?')+(c.formule?' · '+esc(c.formule):'')+'</p>'+
+      (prevu?'<p class="muted" style="margin-top:6px">Tonnage prévu ≈ '+fr(prevu,0)+' t · avancement '+fr(pct,0)+' %</p><div class="progress"><div style="width:'+pct+'%"></div></div>':'')+
+      (surfPosee?epBlock(t,surfPosee,num(c.epaisseur)).replace('Épaisseur moyenne','Épaisseur moyenne (jours renseignés)'):'')+
+      '<div class="row" style="margin-top:12px">'+(c.id!==S.settings.courant&&c.actif!==false?'<button class="btn sm grow" onclick="setCourant(\''+c.id+'\')">Choisir pour les bons</button>':'')+
+      '<button class="btn ghost sm grow" onclick="openChantier(\''+c.id+'\')">Modifier</button>'+
+      (bl.length?'<button class="btn ghost sm grow" onclick="exportCSV(S.bons.filter(x=>x.chantierId===\''+c.id+'\'),\'bons_\'+chName(\''+c.id+'\'))">CSV</button>':'')+'</div></div>';
+  }).join('');
+}
+function setCourant(id){S.settings.courant=id;save();renderChantiers();toast('Les nouveaux bons iront sur « '+chName(id)+' »')}
+function openChantier(id,fromBon){
+  editChId=id||null;chFromBon=!!fromBon;
+  const c=id?chantier(id):{nom:'',client:'',surface:'',epaisseur:'',formule:'',actif:true};
+  $('chTitle').textContent=id?'Modifier le chantier':'Nouveau chantier';
+  $('cNom').value=c.nom||'';$('cClient').value=c.client||'';
+  $('cSurf').value=c.surface!=null&&c.surface!==''?String(c.surface).replace('.',','):'';
+  $('cEp').value=c.epaisseur!=null&&c.epaisseur!==''?String(c.epaisseur).replace('.',','):'';
+  $('cForm').value=c.formule||'';$('cActif').checked=c.actif!==false;
+  $('cDel').style.display=id?'':'none';
+  openModal('chModal');setTimeout(()=>$('cNom').focus(),50);
+}
+function closeChantier(){
+  closeModal('chModal');
+  if(chFromBon&&draft){$('fCh').value=draft.chantierId}
+  chFromBon=false;
+}
+function saveChantier(){
+  const nom=$('cNom').value.trim();if(!nom){toast('Donne un nom au chantier');return}
+  const data={nom,client:$('cClient').value.trim(),surface:num($('cSurf').value),epaisseur:num($('cEp').value),formule:$('cForm').value.trim(),actif:$('cActif').checked};
+  let id=editChId;
+  if(id){Object.assign(chantier(id),data)}else{id=uid();S.chantiers.push({id,createdAt:Date.now(),...data})}
+  if(!S.settings.courant||!chantier(S.settings.courant)||(!editChId&&data.actif))S.settings.courant=id;
+  save();closeModal('chModal');
+  if(chFromBon&&draft){readForm();draft.chantierId=id;fillForm()}
+  chFromBon=false;
+  renderChantiers();renderJour();toast('✔ Chantier enregistré');
+}
+function deleteChantier(){
+  const id=editChId;if(!id)return;
+  const n=S.bons.filter(b=>b.chantierId===id).length;
+  if(n){alert('Ce chantier a '+n+' bon(s). Décoche « Chantier en cours » pour l\'archiver au lieu de le supprimer.');return}
+  if(!confirm('Supprimer ce chantier ?'))return;
+  S.chantiers=S.chantiers.filter(c=>c.id!==id);
+  if(S.settings.courant===id)S.settings.courant=S.chantiers[0]?.id||null;
+  save();closeModal('chModal');renderChantiers();renderJour();
+}
+
+/* =========================================================
+   HISTORIQUE
+   ========================================================= */
+function histoList(){
+  const du=$('hDu').value,au=$('hAu').value,ch=$('hCh').value,q=$('hQ').value.trim().toLowerCase();
+  return S.bons.filter(b=>(!du||b.date>=du)&&(!au||b.date<=au)&&(!ch||b.chantierId===ch)&&(!q||[b.numero,b.camion,b.formule,b.centrale,b.note].join(' ').toLowerCase().includes(q)))
+    .sort((a,b)=>b.date.localeCompare(a.date)||(b.heureArrivee||'').localeCompare(a.heureArrivee||''));
+}
+function renderHisto(){
+  const sel=$('hCh'),v=sel.value;
+  sel.innerHTML='<option value="">Tous les chantiers</option>'+S.chantiers.map(c=>'<option value="'+c.id+'">'+esc(c.nom)+'</option>').join('');sel.value=v;
+  const list=histoList(),b=$('histoBody');
+  if(!list.length){b.innerHTML='<div class="card empty"><p class="muted">Aucun bon trouvé.</p></div>';return}
+  const byDay={};list.forEach(x=>(byDay[x.date]=byDay[x.date]||[]).push(x));
+  let h='<div class="stats"><div class="stat"><b>'+list.length+'</b><small>bons</small></div><div class="stat"><b>'+fr(sumT(list),1)+'</b><small>tonnes</small></div><div class="stat"><b>'+Object.keys(byDay).length+'</b><small>jours</small></div></div>';
+  h+='<div class="row" style="margin-bottom:14px"><button class="btn grow" onclick="exportCSV(histoList(),\'bons_export\')">CSV Excel</button><button class="btn ghost grow" onclick="printReport(histoList(),\'Bons de livraison\')">PDF</button></div>';
+  for(const [d,l] of Object.entries(byDay)){
+    h+='<div class="card"><div class="row" style="justify-content:space-between;margin-bottom:4px"><b style="text-transform:capitalize">'+frDate(d)+'</b><span class="muted">'+l.length+' bon(s) · <b style="color:var(--txt)">'+fr(sumT(l),2)+' t</b></span></div>'+l.map(x=>bonRow(x,true)).join('')+'</div>';
+  }
+  b.innerHTML=h;
+}
+
+/* =========================================================
+   RÉCAP / CSV / PDF
+   ========================================================= */
+function buildRecap(day){
+  const list=bonsDuJour(day);
+  const L=['BONS ENROBÉ – '+frDate(day,true)];
+  if(S.settings.chef)L.push('Chef d\'équipe : '+S.settings.chef);
+  [...new Set(list.map(b=>b.chantierId))].forEach(cid=>{
+    const c=chantier(cid),bl=bonsDuJour(day,cid),t=sumT(bl),surf=num((S.jours[jourKey(day,cid)]||{}).surface);
+    L.push('','▶ '+chName(cid),bl.length+' camion'+(bl.length>1?'s':'')+' · '+fr(t)+' t');
+    if(surf){const ep=epaisseur(t,surf);L.push('Surface : '+fr(surf,0)+' m² → '+fr(ep,1)+' cm · '+fr(t*1000/surf,0)+' kg/m²'+(c&&num(c.epaisseur)?' (prévu '+fr(num(c.epaisseur),1)+' cm)':''))}
+    const forms={};bl.forEach(b=>{const f=b.formule||'formule ?';forms[f]=(forms[f]||0)+(num(b.tonnage)||0)});
+    if(Object.keys(forms).length>1)Object.entries(forms).forEach(([f,v])=>L.push('  '+f+' : '+fr(v)+' t'));
+    L.push('Bons :');
+    bl.forEach(b=>L.push('  '+(b.heureArrivee||'--:--')+'  n°'+(b.numero||'?')+'  '+fr(num(b.tonnage))+' t'+(Object.keys(forms).length>1&&b.formule?'  '+b.formule:'')+(num(b.tempArrivee)!==null?'  '+fr(num(b.tempArrivee),0)+'°C':'')+(b.note?'  ('+b.note+')':'')));
+  });
+  L.push('','TOTAL JOUR : '+list.length+' camion'+(list.length>1?'s':'')+' · '+fr(sumT(list))+' t');
+  return L.join('\n');
+}
+function openRecap(){recapText=buildRecap(curDay);$('recapTxt').value=recapText;$('shareBtn').style.display=navigator.share?'':'none';openModal('recapModal')}
+async function shareRecap(){try{await navigator.share({title:'Bons enrobé '+curDay,text:recapText})}catch(e){}}
+function openWA(){location.href='https://wa.me/?text='+encodeURIComponent(recapText)}
+function openSMS(){location.href='sms:?&body='+encodeURIComponent(recapText)}
+async function copyRecap(){try{await navigator.clipboard.writeText(recapText);toast('Copié ✔')}catch(e){$('recapTxt').select();document.execCommand('copy');toast('Copié ✔')}}
+
+function download(name,blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+function fileSafe(s){return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w-]+/g,'_')}
+// CSV pour Excel français : séparateur « ; », virgule décimale, BOM UTF-8
+function exportCSV(list,name){
+  if(!list.length){toast('Aucun bon à exporter');return}
+  const cell=v=>{const s=String(v??'');return /[;"\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+  const n=v=>num(v)===null?'':String(num(v)).replace('.',',');
+  const rows=[['Date','Chantier','N° bon','Tonnage (t)','Formule','Heure chargement','Heure arrivée','T° départ (°C)','T° arrivée (°C)','Camion','Centrale','Remarque']];
+  [...list].sort((a,b)=>a.date.localeCompare(b.date)||(a.heureArrivee||'').localeCompare(b.heureArrivee||'')).forEach(b=>rows.push([b.date,chName(b.chantierId),b.numero,n(b.tonnage),b.formule,b.heureChargement,b.heureArrivee,n(b.tempDepart),n(b.tempArrivee),b.camion,b.centrale,b.note]));
+  download(fileSafe(name)+'.csv',new Blob(['﻿'+rows.map(r=>r.map(cell).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}));
+  toast('Fichier CSV téléchargé');
+}
+// Rapport imprimable : le téléphone propose « Enregistrer en PDF »
+async function printReport(list,title){
+  if(!list.length){toast('Aucun bon');return}
+  toast('Préparation du PDF…');
+  const sorted=[...list].sort((a,b)=>a.date.localeCompare(b.date)||(a.heureArrivee||'').localeCompare(b.heureArrivee||''));
+  let h='<h1>'+esc(title)+'</h1><p>'+(S.settings.chef?'Chef d\'équipe : '+esc(S.settings.chef)+' · ':'')+'édité le '+new Date().toLocaleString('fr-FR')+'</p>';
+  const groups={};sorted.forEach(b=>{const k=b.date+'|'+b.chantierId;(groups[k]=groups[k]||[]).push(b)});
+  for(const [k,bl] of Object.entries(groups)){
+    const [d,cid]=k.split('|'),t=sumT(bl),surf=num((S.jours[k]||{}).surface);
+    h+='<h2>'+esc(frDate(d,true))+' – '+esc(chName(cid))+'</h2><table><tr><th>Arrivée</th><th>N° bon</th><th class="num">Tonnes</th><th>Formule</th><th>Chargement</th><th>T° dép.</th><th>T° arr.</th><th>Camion</th><th>Remarque</th></tr>'+
+      bl.map(b=>'<tr><td>'+esc(b.heureArrivee)+'</td><td>'+esc(b.numero)+'</td><td class="num">'+fr(num(b.tonnage))+'</td><td>'+esc(b.formule)+'</td><td>'+esc(b.heureChargement)+'</td><td>'+(num(b.tempDepart)??'')+'</td><td>'+(num(b.tempArrivee)??'')+'</td><td>'+esc(b.camion)+'</td><td>'+esc(b.note)+'</td></tr>').join('')+'</table>'+
+      '<p class="sum">'+bl.length+' camion(s) · '+fr(t)+' t'+(surf?' · '+fr(surf,0)+' m² → '+fr(epaisseur(t,surf),1)+' cm ('+fr(t*1000/surf,0)+' kg/m²)':'')+'</p>';
+  }
+  h+='<p class="sum">TOTAL : '+sorted.length+' bon(s) · '+fr(sumT(sorted))+' t</p>';
+  const withPh=sorted.filter(b=>b.photoId);
+  if(withPh.length){
+    h+='<h2 class="pb">Photos des bons</h2><div class="photos">';
+    for(const b of withPh){let src='';try{src=await getPhoto(b.photoId)}catch(e){}if(src)h+='<figure><img src="'+src+'"><figcaption>'+esc(frDate(b.date))+' · n° '+esc(b.numero||'?')+' · '+fr(num(b.tonnage))+' t</figcaption></figure>'}
+    h+='</div>';
+  }
+  const p=$('print');p.innerHTML=h;
+  await Promise.all([...p.querySelectorAll('img')].map(i=>i.complete?0:new Promise(r=>{i.onload=i.onerror=r})));
+  window.print();
+}
+
+/* =========================================================
+   RÉGLAGES & SAUVEGARDE
+   ========================================================= */
+function renderSettings(){
+  const s=S.settings;
+  $('sChef').value=s.chef||'';$('sDens').value=String(s.densite??'').replace('.',',');$('sTol').value=String(s.tolerance??'').replace('.',',');$('sTmin').value=String(s.tempMin??'').replace('.',',');
+  $('installBtn').style.display=installEvt?'':'none';
+  storageInfo();
+}
+function saveSettings(silent){
+  const s=S.settings;
+  s.chef=$('sChef').value.trim();
+  s.densite=num($('sDens').value)||DEFAULTS.densite;
+  s.tolerance=num($('sTol').value)??DEFAULTS.tolerance;
+  s.tempMin=num($('sTmin').value)??'';
+  save();if(silent!==true){renderSettings();toast('✔ Réglages enregistrés')}
+}
+async function storageInfo(){
+  let t=S.bons.length+' bon(s), '+S.chantiers.length+' chantier(s).';
+  try{if(navigator.storage&&navigator.storage.estimate){const e=await navigator.storage.estimate();t+=' Espace utilisé : '+fr((e.usage||0)/1048576,1)+' Mo.'}}catch(e){}
+  $('storageInfo').textContent=t;
+}
+async function exportJSON(){
+  toast('Préparation de la sauvegarde…');
+  const photos={};
+  for(const b of S.bons)if(b.photoId){try{const p=await getPhoto(b.photoId);if(p)photos[b.photoId]=p}catch(e){}}
+  const data={app:'bons-enrobe',version:1,date:new Date().toISOString(),state:S,photos};
+  download('sauvegarde_bons_'+today()+'.json',new Blob([JSON.stringify(data)],{type:'application/json'}));
+}
+function importJSON(input){
+  const f=input.files&&input.files[0];input.value='';if(!f)return;
+  const r=new FileReader();
+  r.onload=async()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(d.app!=='bons-enrobe'||!d.state)throw 0;
+      if(!confirm('Remplacer les données de ce téléphone par cette sauvegarde ('+(d.state.bons||[]).length+' bons) ?'))return;
+      S={chantiers:d.state.chantiers||[],bons:d.state.bons||[],jours:d.state.jours||{},settings:{...DEFAULTS,...(d.state.settings||{})}};
+      for(const [id,p] of Object.entries(d.photos||{}))await putPhoto(id,p);
+      save();renderSettings();renderJour();toast('✔ Sauvegarde restaurée');
+    }catch(e){alert('Ce fichier n\'est pas une sauvegarde des bons.')}
+  };
+  r.readAsText(f);
+}
+async function wipeAll(){
+  if(!confirm('Effacer TOUS les bons, chantiers et photos de ce téléphone ?'))return;
+  if(!confirm('Vraiment ? As-tu fait une sauvegarde ?'))return;
+  S={chantiers:[],bons:[],jours:{},settings:{...DEFAULTS}};save();
+  try{await idbDo('readwrite',st=>st.clear())}catch(e){}
+  renderSettings();toast('Données effacées');
+}
+
+/* ---------- installation sur l'écran d'accueil ---------- */
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;renderInstallBanner();if($('v-reglages').classList.contains('active'))renderSettings()});
+addEventListener('appinstalled',()=>{installEvt=null;renderInstallBanner()});
+async function doInstall(){if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;renderInstallBanner();renderSettings()}
+function renderInstallBanner(){
+  let hidden=false;try{hidden=localStorage.getItem('bons_hide_install')==='1'}catch(e){}
+  $('installBanner').innerHTML=installEvt&&!hidden?'<div class="banner">Installe l\'appli sur ton téléphone pour l\'ouvrir comme une vraie appli, même sans réseau.<div class="row" style="margin-top:8px"><button class="btn sm" onclick="doInstall()">📲 Installer</button><button class="btn ghost sm" onclick="hideInstall()">Plus tard</button></div></div>':'';
+}
+function hideInstall(){try{localStorage.setItem('bons_hide_install','1')}catch(e){}renderInstallBanner()}
+
+/* ---------- démarrage ---------- */
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'))});
+function viewPhoto(src){if(!src)return;$('viewerImg').src=src;openModal('viewer')}
+(async function init(){
+  load();await openIDB();updateNet();renderJour();renderInstallBanner();
+  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+})();
+</script>
+</body>
+</html>
