@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#03050c">
+<title>Atlas de l'Univers</title>
+<meta name="description" content="Le ciel réel en direct, le système solaire et l'univers en 3D, les photos et vidéos de la NASA, des démonstrations, des quiz et Stella, la fée des étoiles.">
+<style>/*STYLE*/</style>
+</head>
+<body>
+<div class="filtre-rouge" aria-hidden="true"></div>
+<div class="appli">
+  <header class="entete">
+    <div class="logo">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><defs><radialGradient id="lg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#ffd27a"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient></defs><circle cx="16" cy="16" r="15" fill="url(#lg)" opacity=".5"/><ellipse cx="16" cy="16" rx="14" ry="5" fill="none" stroke="#8ab4ff" stroke-width="1.4" transform="rotate(-25 16 16)"/><circle cx="16" cy="16" r="4.5" fill="#ffe7a8"/></svg>
+      <span>Atlas de l'Univers</span>
+    </div>
+    <nav class="onglets" role="tablist" aria-label="Sections">
+      <button class="onglet actif" data-vue="ciel" role="tab">🌌 Ciel en direct</button>
+      <button class="onglet" data-vue="cesoir" role="tab">🔭 Ce soir</button>
+      <button class="onglet" data-vue="systeme" role="tab">🪐 Système solaire 3D</button>
+      <button class="onglet" data-vue="cosmos" role="tab">🌀 Univers 3D</button>
+      <button class="onglet" data-vue="medias" role="tab">📷 Photos et vidéos NASA</button>
+      <button class="onglet" data-vue="decouvertes" role="tab">✨ Découvertes</button>
+      <button class="onglet" data-vue="demos" role="tab">🧪 Démonstrations</button>
+      <button class="onglet" data-vue="encyclo" role="tab">📚 Encyclopédie</button>
+      <button class="onglet" data-vue="quiz" role="tab">🧠 Quiz</button>
+      <button class="onglet" data-vue="defis" role="tab">🏅 Défis</button>
+      <button class="onglet" data-vue="outils" role="tab">🧮 Outils et calendrier</button>
+    </nav>
+    <button class="bouton-icone" id="btn-rouge" aria-pressed="false" title="Lumière rouge : garde ta vision de nuit pendant l'observation">🔴 Nuit</button>
+  </header>
+
+  <main>
+    <!-- Planétarium -->
+    <section class="vue active" id="vue-ciel">
+      <div class="ciel-zone" id="ciel-zone"><canvas id="ciel-canvas"></canvas></div>
+      <div class="haut-ciel">
+        <div class="recherche-ciel">
+          <input type="search" id="ciel-recherche" placeholder="Chercher : Mars, Sirius, M31, Orion…" autocomplete="off" aria-label="Chercher un astre">
+          <div class="suggestions" id="ciel-suggestions" hidden></div>
+        </div>
+        <div class="infos-ciel" id="ciel-infos"></div>
+      </div>
+      <aside class="fiche-astre" id="fiche-astre" hidden></aside>
+      <div class="panneau-options" id="ciel-options" hidden></div>
+      <div class="barre-ciel">
+        <button class="btn petit" id="t-arriere" title="Remonter le temps plus vite">⏪</button>
+        <button class="btn petit" id="t-pause" title="Pause / lecture">⏸</button>
+        <button class="btn petit" id="t-avant" title="Accélérer le temps">⏩</button>
+        <span class="pastille" id="t-vitesse">temps réel</span>
+        <button class="btn petit" id="t-maintenant">Maintenant</button>
+        <input type="datetime-local" id="t-date" aria-label="Date et heure">
+        <span class="sep"></span>
+        <select id="ciel-direction" aria-label="Regarder vers">
+          <option value="">Regarder vers…</option>
+          <option value="0">Nord</option><option value="90">Est</option><option value="180">Sud</option><option value="270">Ouest</option><option value="zenith">Zénith</option>
+        </select>
+        <button class="btn petit" id="ciel-zoom-moins" title="Dézoomer">−</button>
+        <button class="btn petit" id="ciel-zoom-plus" title="Zoomer">+</button>
+        <button class="btn petit" id="ciel-btn-options">⚙️ Affichage et lieu</button>
+      </div>
+    </section>
+
+    <!-- Ce soir -->
+    <section class="vue" id="vue-cesoir"><div class="defile"><div class="contenu" id="cesoir"></div></div></section>
+
+    <!-- Système solaire -->
+    <section class="vue" id="vue-systeme">
+      <div class="scene" id="systeme-zone"><canvas id="systeme-canvas"></canvas></div>
+      <div class="legende-3d" id="systeme-legende"></div>
+      <div class="barre-ciel" id="systeme-barre"></div>
+    </section>
+
+    <!-- Univers 3D -->
+    <section class="vue" id="vue-cosmos">
+      <div class="scene" id="cosmos-zone"><canvas id="cosmos-canvas"></canvas></div>
+      <div class="legende-3d" id="cosmos-legende"></div>
+      <div class="barre-ciel" id="cosmos-barre"></div>
+    </section>
+
+    <!-- Photos et vidéos NASA -->
+    <section class="vue" id="vue-medias"><div class="defile"><div class="contenu" id="medias"></div></div></section>
+
+    <section class="vue" id="vue-decouvertes"><div class="defile"><div class="contenu" id="decouvertes"></div></div></section>
+    <section class="vue" id="vue-demos"><div class="defile"><div class="contenu" id="demos"></div></div></section>
+    <section class="vue" id="vue-encyclo"><div class="defile"><div class="contenu" id="encyclo"></div></div></section>
+    <section class="vue" id="vue-quiz"><div class="defile"><div class="contenu" id="quiz"></div></div></section>
+    <section class="vue" id="vue-defis"><div class="defile"><div class="contenu" id="defis"></div></div></section>
+    <section class="vue" id="vue-outils"><div class="defile"><div class="contenu" id="outils"></div></div></section>
+  </main>
+</div>
+
+<!-- Stella, la fée des étoiles -->
+<button class="fee" id="fee" aria-label="Parler à Stella, la fée des étoiles" title="Stella, la fée des étoiles">
+  <svg viewBox="0 0 100 100" aria-hidden="true">
+    <defs>
+      <radialGradient id="halo-fee"><stop offset="0" stop-color="#fff7d6" stop-opacity=".9"/><stop offset=".5" stop-color="#ff9ad5" stop-opacity=".35"/><stop offset="1" stop-color="#9a6bff" stop-opacity="0"/></radialGradient>
+      <linearGradient id="aile-fee" x1="0" x2="1"><stop offset="0" stop-color="#bfe6ff" stop-opacity=".85"/><stop offset="1" stop-color="#e9b8ff" stop-opacity=".5"/></linearGradient>
+      <linearGradient id="robe-fee" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98cff"/><stop offset="1" stop-color="#ff8fc8"/></linearGradient>
+    </defs>
+    <circle cx="50" cy="50" r="48" fill="url(#halo-fee)"/>
+    <g class="corps-fee">
+      <g class="ailes">
+        <path d="M50 48 C30 20 10 28 18 44 C22 54 38 54 50 50 Z" fill="url(#aile-fee)" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/>
+        <path d="M50 48 C70 20 90 28 82 44 C78 54 62 54 50 50 Z" fill="url(#aile-fee)" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/>
+        <path d="M50 52 C36 60 26 74 36 76 C44 77 48 64 50 54 Z" fill="url(#aile-fee)" opacity=".8"/>
+        <path d="M50 52 C64 60 74 74 64 76 C56 77 52 64 50 54 Z" fill="url(#aile-fee)" opacity=".8"/>
+      </g>
+      <path d="M43 52 L57 52 L62 74 L38 74 Z" fill="url(#robe-fee)"/>
+      <circle cx="50" cy="40" r="9" fill="#ffe2cf"/>
+      <path d="M41 38 C41 28 59 28 59 38 C57 33 53 31 50 31 C47 31 43 33 41 38 Z" fill="#ffd27a"/>
+      <circle cx="46.5" cy="41" r="1.3" fill="#2a1d52"/><circle cx="53.5" cy="41" r="1.3" fill="#2a1d52"/>
+      <path d="M47 45 Q50 47.5 53 45" stroke="#c0567f" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M60 56 L72 44" stroke="#ffe9a8" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M72 38 L73.8 42.2 L78 44 L73.8 45.8 L72 50 L70.2 45.8 L66 44 L70.2 42.2 Z" fill="#fff3b0"/>
+    </g>
+  </svg>
+</button>
+<section class="bulle-fee" id="bulle-fee" hidden aria-label="Discussion avec Stella">
+  <header>
+    <span aria-hidden="true">🧚</span><b>Stella, la fée des étoiles</b>
+    <button class="btn petit" id="fee-voix" aria-pressed="true" title="Stella lit ses réponses à voix haute">🔊</button>
+    <button class="btn petit" id="fee-visite">Visite guidée</button>
+    <button class="fermer" id="fee-fermer" aria-label="Fermer">×</button>
+  </header>
+  <div class="fil" id="fee-fil" aria-live="polite"></div>
+  <div class="suggestions-fee" id="fee-suggestions"></div>
+  <form class="saisie-fee" id="fee-form">
+    <input type="text" id="fee-saisie" placeholder="Pose ta question à Stella…" autocomplete="off" aria-label="Ta question">
+    <button class="btn primaire" type="submit">Envoyer</button>
+  </form>
+</section>
+<div class="visite" id="visite" hidden></div>
+<div class="visionneuse" id="visionneuse" hidden></div>
+
+<script>/*DONNEES*/</script>
+<script>/*SCRIPTS*/</script>
+</body>
+</html>

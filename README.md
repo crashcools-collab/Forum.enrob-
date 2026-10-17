@@ -11,6 +11,9 @@ bot maths (Mistral), documents, et **messagerie temps réel** pour l'équipe.
 - `academie-ia-src/` → sources du site ; reconstruire avec `node academie-ia-src/build.mjs`.
 - `Lancer-Academie-IA.bat` → lanceur Windows : menu pour ouvrir chaque page et installer les outils de pratique (Ollama, Python, Git, VS Code).
 - `formation-ia.html` → redirige vers `academie-ia/index.html`.
+- `atlas-univers/index.html` → l’Atlas de l’Univers, en un seul fichier qui fonctionne hors connexion : le vrai ciel en direct pour ta ville (5 044 étoiles, constellations, Voie lactée, objets de Messier, planètes et Lune calculées), « Ce soir » (que voir cette nuit), système solaire et univers en 3D, découvertes, 8 démonstrations interactives, encyclopédie avec 13 schémas, quiz, défis d’observation, calendrier (éclipses, étoiles filantes, phases, oppositions) et Stella, la fée guide qui répond avec la base interne. Seul l’onglet « Photos et vidéos NASA » utilise internet (API officielle de la NASA uniquement).
+- `atlas-univers-src/` → sources de l’atlas ; reconstruire avec `node atlas-univers-src/build.mjs`. Les données du ciel (`donnees/ciel.json`) viennent du catalogue d3-celestial (© Olaf Frohn, licence BSD-3) via `prep.mjs`.
+- `Lancer-Atlas-Univers.bat` → lanceur Windows : menu pour ouvrir chaque partie de l’atlas ou la visite guidée.
 
 ## Activer la messagerie (une seule fois)
 
