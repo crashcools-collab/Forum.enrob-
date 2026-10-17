@@ -253,7 +253,7 @@ const QUIZ = [
 /* ====== GLOSSAIRE ====== */
 const GLOSS = [
 ["Agent","IA qui enchaîne plusieurs actions seule (chercher, cliquer, coder, tester) pour atteindre un objectif."],
-["API","Interface qui permet à un programme d'envoyer une demande à un modèle et de recevoir la réponse."],
+["API","Interface de programmation : la porte d'entrée qu'un service ouvre pour que d'autres programmes lui demandent quelque chose (météo, paiement, connexion, modèle d'IA) selon des règles précises."],
 ["Artefact","Chez Claude : document, code ou application généré et affiché à côté de la conversation."],
 ["Biais","Tendance d'un modèle à reproduire des stéréotypes ou déséquilibres présents dans ses données d'entraînement."],
 ["Branche","Version parallèle d'un projet Git pour travailler sans toucher à la version principale."],

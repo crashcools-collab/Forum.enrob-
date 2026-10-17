@@ -1,5 +1,11 @@
 /* ====== QUIZ ET GLOSSAIRE : créer des programmes ====== */
 QUIZ.splice(QUIZ.length - 1, 0,
+{q:"Qu'est-ce qu'une API ?",o:["Un virus","Une porte d'entrée qu'un service ouvre pour que d'autres programmes lui demandent quelque chose","Un type d'écran","Un langage de programmation"],a:1,e:"Comme un serveur de restaurant : il prend la commande du programme et rapporte la réponse du service."},
+{q:"Quand tu cliques sur « Se connecter avec Google » sur un site, que se passe-t-il ?",o:["Le site voit ton mot de passe Google","Le site utilise l'API de connexion de Google, sans voir ton mot de passe","Rien","Google crée un nouveau compte"],a:1,e:"L'API de connexion confirme ton identité au site sans lui confier ton mot de passe."},
+{q:"Que signifie le code de réponse 429 d'une API ?",o:["Tout s'est bien passé","Trop de demandes en peu de temps","Page introuvable","Clé correcte"],a:1,e:"200 = réussi, 401 = clé manquante ou fausse, 404 = introuvable, 429 = trop de demandes, 500 = erreur du service."},
+{q:"Pourquoi une application de livraison utilise-t-elle des API ?",o:["Pour ne pas réinventer la carte, le paiement ou les notifications","Parce que c'est obligatoire par la loi","Pour ralentir l'application","Pour cacher la publicité"],a:0,e:"Les API permettent d'assembler des services existants comme des briques."},
+{q:"Quelle est la différence entre une API classique et un webhook ?",o:["Aucune","Avec un webhook, c'est le service qui appelle ton programme quand un événement arrive","Le webhook est plus lent","Le webhook ne marche que sur téléphone"],a:1,e:"API : tu demandes. Webhook : on te prévient."},
+{q:"Quelle est la règle de sécurité la plus importante pour une clé API ?",o:["La mettre dans le code de la page web","La garder secrète comme un mot de passe","La partager sur les réseaux sociaux","L'écrire dans le titre du site"],a:1,e:"Une clé volée peut être utilisée à tes frais : jamais dans un code visible ni sur GitHub."},
 {q:"Quelle est la règle d'or pour réussir un programme ?",o:["Tout prévoir avant d'écrire une ligne","Commencer petit et terminer","Choisir le langage le plus difficile","Ne jamais tester"],a:1,e:"Un petit programme fini vaut mieux que dix gros projets abandonnés."},
 {q:"Quelle technologie permet de faire une application Android et iPhone avec un seul code ?",o:["Flutter ou React Native","VBA","Bash","SQL"],a:0,e:"Flutter (Dart) et React Native (JavaScript) ciblent les deux systèmes."},
 {q:"Quel outil transforme un programme Python en .exe ?",o:["PyInstaller","Photoshop","Git","Docker"],a:0,e:"pyinstaller --onefile crée un exécutable autonome."},
@@ -10,6 +16,12 @@ QUIZ.splice(QUIZ.length - 1, 0,
 {q:"Pourquoi Windows affiche-t-il « Windows a protégé votre ordinateur » au lancement d'un programme maison ?",o:["Le programme est forcément un virus","Le programme n'est pas signé numériquement","L'ordinateur est trop vieux","Il manque Internet"],a:1,e:"Un certificat de signature de code fait disparaître cet avertissement pour les programmes diffusés."}
 );
 GLOSS.push(
+["JSON","Format de texte structuré utilisé par presque toutes les API pour échanger des données : {\"ville\": \"Paris\", \"temperature\": 14}."],
+["REST","Style d'API web le plus répandu : des adresses web, des méthodes (GET, POST, PUT, DELETE) et des données en JSON."],
+["Point d'accès (endpoint)","Adresse précise d'une API à laquelle on envoie une requête, par exemple /v1/forecast."],
+["Requête HTTP","Message envoyé par un programme à une adresse web, avec une méthode, des en-têtes et éventuellement des données."],
+["GraphQL","Type d'API où l'on demande exactement les champs voulus en une seule requête."],
+["WebSocket","Connexion qui reste ouverte entre un programme et un service pour échanger en temps réel."],
 ["Back-end","Partie d'une application qui tourne sur un serveur : logique, base de données, clés secrètes."],
 ["Bibliothèque","Code réutilisable écrit par d'autres, qu'on ajoute à son projet."],
 ["Compilateur","Programme qui traduit le code source en programme exécutable (C, C++, Rust, Go)."],
