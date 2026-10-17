@@ -6,8 +6,10 @@ bot maths (Mistral), documents, et **messagerie temps réel** pour l'équipe.
 
 ## Fichiers à héberger
 - `index.html` → c'est toute l'app.
-- `formation-ia.html` → l'Académie IA, une formation complète et autonome sur l'intelligence artificielle, à jour au 17 octobre 2026 : parcours en 5 niveaux (novice à expert), encyclopédie de 36 chapitres, pile de l'IA (des puces aux applications), histoire datée de 1943 à aujourd'hui, 33 cours (ChatGPT, Claude, Gemini, Vibe, Copilot, GitHub, Hugging Face, Cursor, API, Python, machine learning, deep learning, RAG, agents, automatisation, sites web, Claude Code, Codex, images, vidéo, voix, vision, cybersécurité, jeux vidéo, métiers…), panorama des outils, méthode de prompt, atelier, bibliothèque de prompts, 88 ressources GitHub et Hugging Face, quiz de 57 questions et glossaire de 108 termes. Progression stockée localement dans le navigateur.
-- `Lancer-Academie-IA.bat` → lanceur Windows : menu pour ouvrir chaque section de la formation et installer les outils de pratique (Ollama, Python, Git, VS Code).
+- `academie-ia/` → l'Académie IA, site complet sur l'intelligence artificielle (17 pages), à jour au 17 octobre 2026 : parcours en 5 niveaux, encyclopédie (36 chapitres), pile de l'IA, histoire de 1943 à aujourd'hui (172 événements), 33 cours (177 chapitres), panorama de 71 outils, méthode et prompts, 88 ressources GitHub et Hugging Face, quiz, glossaire, recherche dans toute la formation. Installable comme application (fonctionne hors connexion une fois en ligne).
+- `academie-ia-src/` → sources du site ; reconstruire avec `node academie-ia-src/build.mjs`.
+- `Lancer-Academie-IA.bat` → lanceur Windows : menu pour ouvrir chaque page et installer les outils de pratique (Ollama, Python, Git, VS Code).
+- `formation-ia.html` → redirige vers `academie-ia/index.html`.
 
 ## Activer la messagerie (une seule fois)
 

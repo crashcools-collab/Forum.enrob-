@@ -3,15 +3,14 @@ setlocal EnableExtensions
 chcp 65001 >nul
 title Academie IA - Tout savoir sur l'IA
 cd /d "%~dp0"
+set "SITE=%~dp0academie-ia"
 
-if not exist "formation-ia.html" (
-  echo Le fichier formation-ia.html est introuvable.
-  echo Place ce lanceur dans le meme dossier que formation-ia.html.
+if not exist "%SITE%\index.html" (
+  echo Le dossier academie-ia est introuvable.
+  echo Place ce lanceur a cote du dossier academie-ia.
   pause
   exit /b 1
 )
-set "FICHIER=%~dp0formation-ia.html"
-set "URL=file:///%FICHIER:\=/%"
 
 :menu
 cls
@@ -21,17 +20,15 @@ echo        Du novice a l'expert - a jour au 17 octobre 2026
 echo ==========================================================
 echo.
 echo  OUVRIR LA FORMATION
-echo    1. Accueil et tableau de bord
-echo    2. Parcours par niveau
-echo    3. Les fondamentaux
-echo    4. Encyclopedie de l'IA
-echo    5. La pile de l'IA (des puces aux applications)
-echo    6. Histoire de l'IA (1943 - 2026)
-echo    7. Cours complets
+echo    1. Accueil et tableau de bord      10. Atelier interactif
+echo    2. Parcours par niveau             11. Bibliotheque de prompts
+echo    3. Les fondamentaux                12. GitHub, Hugging Face, cours
+echo    4. Encyclopedie de l'IA            13. Quiz final
+echo    5. La pile de l'IA                 14. Glossaire
+echo    6. Histoire de l'IA (1943-2026)    15. Securite et regles
+echo    7. Cours complets                  16. Recherche
 echo    8. Panorama des outils
 echo    9. Methode de prompt et prompt maitre
-echo   10. GitHub, Hugging Face et cours gratuits
-echo   11. Quiz final
 echo.
 echo  INSTALLER LES OUTILS POUR PRATIQUER
 echo   20. Ollama   (faire tourner une IA sur ton PC)
@@ -45,17 +42,22 @@ echo.
 set "choix="
 set /p "choix=Ton choix : "
 
-if "%choix%"=="1"  call :ouvrir accueil & goto menu
+if "%choix%"=="1"  call :ouvrir index & goto menu
 if "%choix%"=="2"  call :ouvrir niveaux & goto menu
-if "%choix%"=="3"  call :ouvrir bases & goto menu
-if "%choix%"=="4"  call :ouvrir encyclo & goto menu
+if "%choix%"=="3"  call :ouvrir fondamentaux & goto menu
+if "%choix%"=="4"  call :ouvrir encyclopedie & goto menu
 if "%choix%"=="5"  call :ouvrir pile & goto menu
 if "%choix%"=="6"  call :ouvrir histoire & goto menu
 if "%choix%"=="7"  call :ouvrir cours & goto menu
 if "%choix%"=="8"  call :ouvrir outils & goto menu
 if "%choix%"=="9"  call :ouvrir methode & goto menu
-if "%choix%"=="10" call :ouvrir ressources & goto menu
-if "%choix%"=="11" call :ouvrir quiz & goto menu
+if "%choix%"=="10" call :ouvrir atelier & goto menu
+if "%choix%"=="11" call :ouvrir bibliotheque & goto menu
+if "%choix%"=="12" call :ouvrir ressources & goto menu
+if "%choix%"=="13" call :ouvrir quiz & goto menu
+if "%choix%"=="14" call :ouvrir glossaire & goto menu
+if "%choix%"=="15" call :ouvrir securite & goto menu
+if "%choix%"=="16" call :ouvrir recherche & goto menu
 if "%choix%"=="20" call :installer Ollama.Ollama "Ollama" & goto menu
 if "%choix%"=="21" call :installer Python.Python.3.12 "Python 3.12" & goto menu
 if "%choix%"=="22" call :installer Git.Git "Git" & goto menu
@@ -65,9 +67,7 @@ if "%choix%"=="0"  exit /b 0
 goto menu
 
 :ouvrir
-rem Edge est present sur tous les Windows 10 et 11 et respecte l'ancre de section.
-start "" msedge "%URL%#%~1"
-if errorlevel 1 start "" "%FICHIER%"
+start "" "%SITE%\%~1.html"
 exit /b 0
 
 :installer

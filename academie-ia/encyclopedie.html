@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Encyclopédie de l&#39;IA · Académie IA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Académie IA : formation complète sur l'intelligence artificielle, du novice à l'expert, à jour au 17 octobre 2026.">
+<meta name="theme-color" content="#0D0D0D">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icone-192.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/icone-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<aside class="side">
+  <div class="hazard"></div>
+  <a class="brand" href="index.html" style="text-decoration:none">
+    <span class="logo">ACADÉMIE IA</span>
+    <small>Tout savoir sur l'intelligence artificielle</small>
+  </a>
+  <nav class="nav" aria-label="Pages de la formation">
+    <a href="index.html"><span class="ic">00</span> Accueil &amp; tableau de bord</a>
+    <a href="niveaux.html"><span class="ic">01</span> Parcours par niveau</a>
+    <a href="fondamentaux.html"><span class="ic">02</span> Les fondamentaux</a>
+    <a href="encyclopedie.html" class="active" aria-current="page"><span class="ic">03</span> Encyclopédie de l&#39;IA</a>
+    <a href="pile.html"><span class="ic">04</span> La pile de l&#39;IA</a>
+    <a href="histoire.html"><span class="ic">05</span> Histoire de l&#39;IA</a>
+    <a href="cours.html"><span class="ic">06</span> Cours complets</a>
+    <a href="outils.html"><span class="ic">07</span> Panorama des IA</a>
+    <a href="methode.html"><span class="ic">08</span> Méthode de prompt</a>
+    <a href="prompt-maitre.html"><span class="ic">09</span> Prompt maître</a>
+    <a href="atelier.html"><span class="ic">10</span> Atelier interactif</a>
+    <a href="bibliotheque.html"><span class="ic">11</span> Bibliothèque de prompts</a>
+    <a href="ressources.html"><span class="ic">12</span> GitHub, Hugging Face &amp; cours</a>
+    <a href="quiz.html"><span class="ic">13</span> Quiz final</a>
+    <div class="sep"></div>
+    <a href="glossaire.html"><span class="ic">A–Z</span> Glossaire</a>
+    <a href="securite.html"><span class="ic">!</span> Sécurité &amp; règles</a>
+    <a href="recherche.html"><span class="ic">⌕</span> Recherche</a>
+  </nav>
+  <div class="progress-box">
+    Ta progression : <b data-pg-txt>0 %</b>
+    <div class="bar"><i data-pg-bar></i></div>
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <h1>Encyclopédie de l&#39;IA</h1>
+    <form id="gSearch" role="search"><input type="search" id="gQ" placeholder="Chercher dans toute la formation…" aria-label="Chercher dans toute la formation"></form>
+  </header>
+  <main class="content">
+  <section class="view active" id="v-encyclo">
+    <p class="lead">Tout comprendre de l'intelligence artificielle : les définitions, le fonctionnement interne, les capacités et les limites, puis l'IA dans le monde (puces, énergie, économie, travail, droit, acteurs). Chaque chapitre indique son niveau.</p>
+    <div class="toolbar" style="margin-top:16px"><input type="search" id="encQ" placeholder="Chercher dans l'encyclopédie (ex. : attention, GPU, LoRA, droit d'auteur)…" aria-label="Chercher dans l'encyclopédie"><span class="count" id="encCount"></span></div>
+    <div class="filters" id="encLv"></div>
+    <div id="enc"></div>
+  </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="assets/data/meta.js"></script>
+<script src="assets/data/encyclo.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<body>
+
+<!-- RAIL DE NAVIGATION -->
+<aside class="side" id="side">
+  <div class="hazard"></div>
+  <div class="brand">
+    <span class="logo">ACADÉMIE IA</span>
+    <small>Tout savoir sur l'intelligence artificielle</small>
+  </div>
+  <nav class="nav" id="nav" aria-label="Sections de la formation">
+    <button data-v="accueil" class="active"><span class="ic">00</span> Accueil &amp; tableau de bord</button>
+    <button data-v="niveaux"><span class="ic">01</span> Parcours par niveau</button>
+    <button data-v="bases"><span class="ic">02</span> Les fondamentaux</button>
+    <button data-v="encyclo"><span class="ic">03</span> Encyclopédie de l'IA</button>
+    <button data-v="pile"><span class="ic">04</span> La pile de l'IA</button>
+    <button data-v="histoire"><span class="ic">05</span> Histoire de l'IA</button>
+    <button data-v="cours"><span class="ic">06</span> Cours complets</button>
+    <button data-v="outils"><span class="ic">07</span> Panorama des IA</button>
+    <button data-v="methode"><span class="ic">08</span> Méthode de prompt</button>
+    <button data-v="maitre"><span class="ic">09</span> Prompt maître</button>
+    <button data-v="atelier"><span class="ic">10</span> Atelier interactif</button>
+    <button data-v="biblio"><span class="ic">11</span> Bibliothèque de prompts</button>
+    <button data-v="ressources"><span class="ic">12</span> GitHub, Hugging Face &amp; cours</button>
+    <button data-v="quiz"><span class="ic">13</span> Quiz final</button>
+    <div class="sep"></div>
+    <button data-v="glossaire"><span class="ic">A–Z</span> Glossaire</button>
+    <button data-v="securite"><span class="ic">!</span> Sécurité &amp; règles</button>
+  </nav>
+  <div class="progress-box">
+    Ta progression : <b id="pgTxt">0 %</b>
+    <div class="bar"><i id="pgBar"></i></div>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <h1 id="vtitle">Accueil &amp; parcours</h1>
+    <span class="back">À jour au 17 octobre 2026</span>
+  </header>
+
+  <main class="content">
+
+  <!-- ================= ACCUEIL ================= -->
+  <section class="view active" id="v-accueil">
+    <div class="hero">
+      <div class="card hl stack">
+        <span class="chip o">Formation complète · du novice à l'expert · à jour au 17 octobre 2026</span>
+        <h2>Tout savoir sur l'IA, <em>de 1943 à aujourd'hui</em></h2>
+        <p class="lead">Tout le savoir sur l'IA en un seul endroit : comment elle fonctionne, des puces jusqu'aux applications, son histoire depuis 1943, les outils, la construction d'agents, l'automatisation, les sites web, la cybersécurité et les jeux vidéo. Cinq niveaux, du novice à l'expert.</p>
+        <div class="row">
+          <button class="btn" data-go="niveaux">Choisir mon niveau</button>
+          <button class="btn ghost" data-go="encyclo">Encyclopédie</button>
+          <button class="btn ghost" data-go="histoire">Histoire de l'IA</button>
+          <button class="btn ghost" data-go="cours">Tous les cours</button>
+          <button class="btn ghost" data-go="maitre">Voir le prompt maître</button>
+          <button class="btn ghost" data-go="biblio">Ouvrir la bibliothèque</button>
+        </div>
+      </div>
+      <div class="card stack">
+        <div class="stats">
+          <div class="stat"><b id="stChap">0</b><span>chapitres au total</span></div>
+          <div class="stat"><b id="stCours">0</b><span>cours complets</span></div>
+          <div class="stat"><b id="stHist">0</b><span>événements datés depuis 1943</span></div>
+          <div class="stat"><b id="stRes">0</b><span>ressources GitHub, Hugging Face et cours</span></div>
+          <div class="stat"><b id="stTools">0</b><span>outils IA présentés</span></div>
+          <div class="stat"><b id="stPrompts">0</b><span>prompts prêts à l'emploi</span></div>
+        </div>
+        <div>
+          <div class="row" style="justify-content:space-between"><span class="small muted">Progression globale</span><b class="small" id="pgTxt2" style="color:var(--jaune)">0 %</b></div>
+          <div class="bar"><i id="pgBar2"></i></div>
+        </div>
+        <p class="small muted">Ta progression, tes favoris et ton score sont enregistrés uniquement dans ce navigateur.</p>
+      </div>
+    </div>
+
+    <h2 class="sec">Ton tableau de bord</h2>
+    <div class="dash" id="dash"></div>
+
+    <h2 class="sec">Le parcours, dans l'ordre</h2>
+    <div class="path" id="path"></div>
+
+    <h2 class="sec">À savoir avant de commencer</h2>
+    <div class="grid">
+      <div class="callout"><b>Tout est daté et vérifié au 17 octobre 2026.</b> Modèles, produits, rachats et lois : la section Histoire de l'IA retrace tout ce qui s'est passé de 2017 à aujourd'hui, et chaque cours indique la situation actuelle de l'outil.</div>
+      <div class="callout info"><b>Ce qui fait la différence, c'est le prompt.</b> Le même outil donne un résultat médiocre ou excellent selon la façon dont on lui parle. La moitié de cette formation porte sur ce point.</div>
+      <div class="callout warn"><b>L'IA prépare, toi tu décides.</b> Un texte, un calcul ou une consigne produits par une IA se relisent et se vérifient toujours avant d'être utilisés, surtout pour la santé, l'argent, le droit et tout ce qui t'engage.</div>
+    </div>
+
+    <h2 class="sec">Quelle IA pour quelle tâche ?</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Tu veux…</th><th>Outils conseillés</th><th>Le réflexe à avoir</th></tr></thead>
+        <tbody>
+          <tr><td>Rédiger un mail, un compte rendu, une note</td><td>ChatGPT, Claude, Vibe (ex-Le Chat), Gemini, Copilot</td><td>Donner le contexte, le destinataire et le ton voulu</td></tr>
+          <tr><td>Résumer un long document (contrat, notice, rapport, cours)</td><td>Claude, NotebookLM, ChatGPT</td><td>Joindre le fichier et demander les passages exacts</td></tr>
+          <tr><td>Chercher une info récente avec sources</td><td>Perplexity, modes Recherche de ChatGPT, Gemini, Claude</td><td>Ouvrir les sources et vérifier qu'elles disent bien ça</td></tr>
+          <tr><td>Vérifier un calcul (budget, crédit, statistiques)</td><td>Assistant avec exécution de code (ChatGPT, Claude, Gemini)</td><td>Demander le détail du calcul, refaire l'ordre de grandeur</td></tr>
+          <tr><td>Travailler dans Excel, Word, Outlook, Teams</td><td>Microsoft 365 Copilot (licence entreprise)</td><td>Rester dans les outils validés par l'entreprise</td></tr>
+          <tr><td>Créer une image ou une affiche</td><td>GPT Image, Gemini, Midjourney, Firefly, Ideogram</td><td>Décrire sujet, style, cadrage, lumière et format</td></tr>
+          <tr><td>Faire une présentation</td><td>Gamma, Copilot PowerPoint, Canva</td><td>Donner le plan et le public, puis retoucher</td></tr>
+          <tr><td>Traduire un texte</td><td>DeepL, assistants généralistes</td><td>Faire relire un texte important par un locuteur natif</td></tr>
+          <tr><td>Automatiser une tâche répétitive</td><td>Power Automate, Zapier, Make, n8n</td><td>Commencer petit, garder une validation humaine</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">Programme d'entraînement sur 4 semaines</h2>
+    <p class="muted">Quinze à vingt minutes par jour suffisent. Coche chaque exercice quand il est fait : la progression se met à jour.</p>
+    <div class="grid" id="plan" style="margin-top:12px"></div>
+  </section>
+
+  <!-- ================= FONDAMENTAUX ================= -->
+  <section class="view" id="v-bases">
+    <p class="lead">Huit modules courts pour comprendre ce qu'est vraiment une IA générative. Chaque module se termine par un exercice pratique. Ouvre-les dans l'ordre et marque-les comme terminés.</p>
+    <div class="stack" id="mods" style="margin-top:18px"></div>
+  </section>
+
+  <!-- ================= NIVEAUX ================= -->
+  <section class="view" id="v-niveaux">
+    <p class="lead">Choisis ton niveau. Pour chacun, la liste de ce qu'il faut apprendre, dans l'ordre : chapitres, cours et ressources. Tu peux passer au niveau suivant quand tout est coché.</p>
+    <div class="filters" id="nivTabs" style="margin-top:16px"></div>
+    <div id="nivBody"></div>
+  </section>
+
+  <!-- ================= ENCYCLOPÉDIE ================= -->
+  <section class="view" id="v-encyclo">
+    <p class="lead">Tout comprendre de l'intelligence artificielle : les définitions, le fonctionnement interne, les capacités et les limites, puis l'IA dans le monde (puces, énergie, économie, travail, droit, acteurs). Chaque chapitre indique son niveau.</p>
+    <div class="toolbar" style="margin-top:16px"><input type="search" id="encQ" placeholder="Chercher dans l'encyclopédie (ex. : attention, GPU, LoRA, droit d'auteur)…" aria-label="Chercher dans l'encyclopédie"><span class="count" id="encCount"></span></div>
+    <div class="filters" id="encLv"></div>
+    <div id="enc"></div>
+  </section>
+
+  <!-- ================= PILE ================= -->
+  <section class="view" id="v-pile">
+    <p class="lead">Tout ce qu'il y a en dessous et au-dessus d'un assistant d'IA, du silicium jusqu'à la société. Clique sur un étage pour le détailler.</p>
+    <div class="pile" id="pileList"></div>
+  </section>
+
+  <!-- ================= HISTOIRE ================= -->
+  <section class="view" id="v-histoire">
+    <p class="lead">Tout ce qui s'est réellement passé dans l'IA, du premier modèle de neurone en 1943 jusqu'au 17 octobre 2026 : modèles, produits, rachats, lois et grands moments. Chaque événement est daté et expliqué.</p>
+
+    <h2 class="sec">Où en est-on au 17 octobre 2026</h2>
+    <div class="tbl-wrap"><table><thead><tr><th>Acteur</th><th>Modèles actuels</th><th>Produits</th></tr></thead><tbody id="etat"></tbody></table></div>
+
+    <h2 class="sec">Les 8 grandes tendances</h2>
+    <div class="grid" id="tendances"></div>
+
+    <h2 class="sec">La chronologie complète</h2>
+    <div class="toolbar">
+      <input type="search" id="hQ" placeholder="Chercher (ex. : Claude, GPT-6, rachat, AI Act)…" aria-label="Chercher dans la chronologie">
+      <select id="hActor" aria-label="Filtrer par acteur" style="width:auto"><option value="">Tous les acteurs</option></select>
+      <span class="count" id="hCount"></span>
+    </div>
+    <div class="filters" id="hYears"></div>
+    <div class="filters" id="hCats"></div>
+    <div class="tl" id="tl"></div>
+  </section>
+
+  <!-- ================= COURS ================= -->
+  <section class="view" id="v-cours">
+    <div id="coursList">
+      <p class="lead">Un cours complet pour chaque outil majeur : ce que c'est, comment le prendre en main, toutes ses fonctions importantes, des pas-à-pas, les pièges à éviter et un exercice. Coche « J'ai compris » à la fin de chaque chapitre.</p>
+      <div class="filters" id="coursCats"></div>
+      <div class="grid" id="coursGrid"></div>
+    </div>
+    <div id="coursDetail" hidden></div>
+  </section>
+
+  <!-- ================= OUTILS ================= -->
+  <section class="view" id="v-outils">
+    <p class="lead">Les principales IA du marché, classées par usage. Pour chacune : à quoi elle sert, ses points forts, ses limites et une astuce concrète.</p>
+    <div class="callout" style="margin-top:14px">Situation au 17 octobre 2026 : propriétaires, modèles et produits sont à jour (par exemple Cursor appartient à SpaceX, Le Chat s'appelle Vibe, Hugging Face est en cours de rachat par Nvidia). En entreprise, utilise en priorité les outils validés par ta direction informatique.</div>
+    <div class="toolbar" style="margin-top:16px">
+      <input type="search" id="toolQ" placeholder="Chercher un outil, un usage (ex. : traduction, vidéo, Excel)…" aria-label="Chercher un outil">
+      <select id="toolPrice" aria-label="Filtrer par prix" style="width:auto">
+        <option value="">Tous les prix</option>
+        <option value="Gratuit">Gratuit</option>
+        <option value="Freemium">Freemium</option>
+        <option value="Payant">Payant</option>
+        <option value="Open source">Open source</option>
+      </select>
+      <span class="count" id="toolCount"></span>
+    </div>
+    <div class="filters" id="toolCats"></div>
+    <div class="grid" id="tools"></div>
+  </section>
+
+  <!-- ================= MÉTHODE ================= -->
+  <section class="view" id="v-methode">
+    <p class="lead">Un prompt, c'est un cahier des charges. Si tu dis à un artisan « refais-moi la cuisine », tu ne sais pas ce que tu obtiendras. Si tu précises le budget, les matériaux, les dimensions et le délai, tu reçois exactement ce que tu voulais. Avec l'IA, c'est pareil.</p>
+
+    <h2 class="sec">Les 7 blocs d'un prompt professionnel</h2>
+    <p class="muted">Tous les blocs ne sont pas obligatoires. Plus la tâche est importante, plus tu en utilises. Les blocs 2, 3 et 6 sont ceux qui changent le plus le résultat.</p>
+    <div class="blocks" style="margin-top:12px">
+      <div class="blk"><div class="k"><i>1</i>Rôle</div><p>Qui l'IA doit incarner. « Tu es un coach sportif diplômé avec 15 ans d'expérience. »</p></div>
+      <div class="blk"><div class="k"><i>2</i>Contexte</div><p>La situation, les enjeux, qui tu es. « J'ai 40 ans, je débute la course à pied et j'ai trois séances de 30 minutes par semaine. »</p></div>
+      <div class="blk"><div class="k"><i>3</i>Tâche</div><p>Un verbe d'action précis. « Rédige », « compare », « résume en 5 points », « liste les risques ».</p></div>
+      <div class="blk"><div class="k"><i>4</i>Données</div><p>Le texte, les chiffres, le fichier à traiter, délimités par des guillemets triples """ … """.</p></div>
+      <div class="blk"><div class="k"><i>5</i>Contraintes</div><p>Ton, longueur, vocabulaire, ce qu'il faut éviter. « 150 mots maximum, pas de jargon, vouvoiement. »</p></div>
+      <div class="blk"><div class="k"><i>6</i>Format</div><p>La forme exacte du résultat : tableau, liste à puces, mail avec objet, plan en 3 parties, JSON.</p></div>
+      <div class="blk"><div class="k"><i>7</i>Contrôle</div><p>Comment l'IA doit se vérifier. « Signale ce dont tu n'es pas sûr. N'invente aucun chiffre. Relis-toi avant de répondre. »</p></div>
+    </div>
+
+    <h2 class="sec">Avant / après : la différence en pratique</h2>
+    <div class="stack" id="baList"></div>
+
+    <h2 class="sec">12 techniques avancées</h2>
+    <div class="grid" id="techs"></div>
+
+    <h2 class="sec">Prompts spécialisés par type d'IA</h2>
+    <div class="grid">
+      <div class="card stack">
+        <h3>Image</h3>
+        <p class="small muted">Structure : sujet + action + décor + style + cadrage + lumière + ambiance + format.</p>
+        <pre class="prompt">Photographie réaliste d'un phare breton pendant une tempête, vagues qui se brisent sur les rochers, fin de journée, lumière dorée rasante qui perce les nuages, plan large au ras de l'eau, profondeur de champ, format 16:9</pre>
+        <p class="small">Midjourney : ajoute des paramètres en fin de prompt, par exemple <code>--ar 16:9</code> pour le format. Pour corriger, modifie un seul élément à la fois.</p>
+      </div>
+      <div class="card stack">
+        <h3>Vidéo</h3>
+        <p class="small muted">Structure : plan + sujet + mouvement + mouvement de caméra + durée + ambiance sonore.</p>
+        <pre class="prompt">Plan aérien lent qui suit un voilier sur une mer calme au lever du soleil, la caméra recule doucement en montant, brume légère sur l'eau, bruit des vagues discret, 8 secondes, rendu réaliste</pre>
+        <p class="small">Une seule action par plan. Pour une vidéo longue, génère plusieurs plans courts et monte-les ensuite.</p>
+      </div>
+      <div class="card stack">
+        <h3>Code et Excel</h3>
+        <p class="small muted">Structure : outil et version + entrée exacte + sortie attendue + exemple + contraintes.</p>
+        <pre class="prompt">Dans Excel (Microsoft 365, version française), la colonne A contient des dates, la colonne B des dépenses en euros et la colonne C une catégorie (courses, transport, loisirs). Écris la formule qui calcule le total dépensé pour la catégorie choisie en cellule F1. Explique-la ligne par ligne et donne un exemple chiffré pour vérifier.</pre>
+        <p class="small">Précise toujours la langue d'Excel : les noms de fonctions et les séparateurs ( ; ou , ) changent.</p>
+      </div>
+      <div class="card stack">
+        <h3>Recherche</h3>
+        <p class="small muted">Structure : question précise + période + type de sources + format avec liens.</p>
+        <pre class="prompt">Quelles sont les principales évolutions de la réglementation européenne sur l'intelligence artificielle depuis 2024 ? Cite uniquement des sources officielles (textes de l'Union européenne, Commission européenne, CNIL), avec la date et le lien de chaque source. Indique clairement ce que tu n'as pas pu vérifier.</pre>
+        <p class="small">Ouvre toujours au moins deux sources toi-même. Un lien cité n'est pas une preuve.</p>
+      </div>
+    </div>
+
+    <h2 class="sec">Corriger une réponse décevante</h2>
+    <div class="grid">
+      <div class="card stack">
+        <h3>Ne recommence pas de zéro</h3>
+        <p>Dis précisément ce qui ne va pas, comme à un collègue : « Trop long, garde les 3 points les plus importants. » ou « Le ton est trop familier pour un courrier officiel. »</p>
+      </div>
+      <div class="card stack">
+        <h3>Donne un exemple</h3>
+        <p>Rien n'est plus efficace qu'un modèle : « Voici un compte rendu que j'aime, reproduis exactement cette structure. »</p>
+      </div>
+      <div class="card stack">
+        <h3>Change de conversation</h3>
+        <p>Après 20 ou 30 échanges, l'IA se perd. Demande-lui un résumé de ce qui est acquis, ouvre une nouvelle conversation et colle ce résumé.</p>
+      </div>
+    </div>
+
+    <h2 class="sec">Les erreurs les plus fréquentes</h2>
+    <div class="two">
+      <ul class="clean no">
+        <li>Écrire trois mots comme dans Google (« mail retard livraison »).</li>
+        <li>Ne pas dire à qui le texte est destiné.</li>
+        <li>Mélanger cinq demandes différentes dans un seul message.</li>
+        <li>Croire une référence de norme ou un chiffre sans vérifier.</li>
+        <li>Coller des données personnelles ou confidentielles dans une IA grand public.</li>
+      </ul>
+      <ul class="clean ok">
+        <li>Écrire comme si tu briefais un nouvel embauché compétent.</li>
+        <li>Préciser le destinataire, le ton et la longueur.</li>
+        <li>Découper un gros travail en étapes successives.</li>
+        <li>Demander à l'IA de signaler ses doutes et de montrer ses calculs.</li>
+        <li>Anonymiser : « le client », « l'entreprise X », « le projet A ».</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= PROMPT MAÎTRE ================= -->
+  <section class="view" id="v-maitre">
+    <p class="lead">Quatre prompts de niveau professionnel, rédigés avec soin et testables sur toutes les grandes IA. Le premier sert à fabriquer tous les autres : tu lui donnes ta demande en vrac, il te pose les bonnes questions puis écrit le prompt optimal à ta place.</p>
+    <div class="stack" id="masters" style="margin-top:18px"></div>
+
+    <h2 class="sec">Où coller le prompt système pour qu'il s'applique partout</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>IA</th><th>Où le mettre</th><th>Portée</th></tr></thead>
+        <tbody>
+          <tr><td>ChatGPT</td><td>Paramètres → Personnalisation → instructions personnalisées, ou les instructions d'un Projet</td><td>Toutes les conversations, ou un seul projet</td></tr>
+          <tr><td>Claude</td><td>Paramètres → Profil (préférences personnelles), ou les instructions d'un Projet</td><td>Toutes les conversations, ou un seul projet</td></tr>
+          <tr><td>Gemini</td><td>Créer un « Gem » avec ces instructions</td><td>Les conversations ouvertes avec ce Gem</td></tr>
+          <tr><td>Vibe (ex-Le Chat, Mistral)</td><td>Fonction d'instructions personnalisées ou d'agent, selon l'offre</td><td>Selon la fonction utilisée</td></tr>
+          <tr><td>Copilot et les autres</td><td>À défaut de réglage, colle-le au début de la conversation</td><td>La conversation en cours</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted" style="margin-top:8px">Les menus changent régulièrement de nom. Si tu ne trouves pas l'entrée, cherche « personnalisation » ou « instructions » dans les paramètres.</p>
+  </section>
+
+  <!-- ================= ATELIER ================= -->
+  <section class="view" id="v-atelier">
+    <p class="lead">Deux outils pour t'entraîner : le générateur construit un prompt structuré à partir de tes réponses, l'analyseur note un prompt que tu as écrit et te dit quoi améliorer.</p>
+
+    <h2 class="sec">Générateur de prompt</h2>
+    <div class="two">
+      <div class="card form-grid">
+        <div><label class="f" for="bType">Type de tâche</label>
+          <select id="bType">
+            <option value="rediger">Rédiger un texte (mail, courrier, note)</option>
+            <option value="resumer">Résumer un document</option>
+            <option value="analyser">Analyser ou comparer</option>
+            <option value="expliquer">Expliquer ou former</option>
+            <option value="calculer">Calculer ou vérifier des chiffres</option>
+            <option value="idees">Trouver des idées</option>
+            <option value="traduire">Traduire</option>
+            <option value="image">Créer une image</option>
+            <option value="code">Code, Excel ou automatisation</option>
+          </select></div>
+        <div><label class="f" for="bRole">Rôle de l'IA</label><input type="text" id="bRole"></div>
+        <div><label class="f" for="bCtx">Contexte</label><textarea id="bCtx" rows="3"></textarea></div>
+        <div><label class="f" for="bTask">Tâche précise</label><textarea id="bTask" rows="2"></textarea></div>
+        <div><label class="f" for="bData">Données à traiter (facultatif)</label><textarea id="bData" rows="3"></textarea></div>
+        <div class="two" style="gap:12px">
+          <div><label class="f" for="bAud">Destinataire</label><input type="text" id="bAud"></div>
+          <div><label class="f" for="bTone">Ton</label>
+            <select id="bTone"><option>professionnel et courtois</option><option>direct et factuel</option><option>pédagogique et simple</option><option>chaleureux</option><option>ferme mais respectueux</option><option>technique et précis</option></select></div>
+        </div>
+        <div class="two" style="gap:12px">
+          <div><label class="f" for="bLen">Longueur</label><input type="text" id="bLen"></div>
+          <div><label class="f" for="bFmt">Format</label>
+            <select id="bFmt"><option>texte rédigé avec paragraphes courts</option><option>mail avec objet, corps et formule de politesse</option><option>liste à puces</option><option>tableau</option><option>plan avec titres et sous-titres</option><option>étapes numérotées</option><option>JSON</option></select></div>
+        </div>
+        <div><label class="f" for="bCons">Contraintes et interdits</label><input type="text" id="bCons"></div>
+        <div><label class="f" for="bEx">Exemple du résultat attendu (facultatif)</label><textarea id="bEx" rows="2"></textarea></div>
+        <div class="stack" style="gap:8px">
+          <label class="check"><input type="checkbox" id="oAsk"> <span>Me poser des questions avant de répondre si une info manque</span></label>
+          <label class="check"><input type="checkbox" id="oVerif" checked> <span>Signaler les incertitudes, ne rien inventer</span></label>
+          <label class="check"><input type="checkbox" id="oSteps"> <span>Raisonner étape par étape et montrer les calculs</span></label>
+          <label class="check"><input type="checkbox" id="oVar"> <span>Proposer 3 versions différentes</span></label>
+          <label class="check"><input type="checkbox" id="oCrit"> <span>Se relire et s'auto-corriger avant de livrer</span></label>
+        </div>
+        <div class="row"><button class="btn ghost sm" id="bSample">Charger un exemple</button><button class="btn ghost sm" id="bClear">Tout effacer</button></div>
+      </div>
+      <div class="stack" style="position:sticky;top:90px">
+        <div class="row" style="justify-content:space-between"><h3>Ton prompt</h3><span class="count" id="bWords"></span></div>
+        <pre class="prompt-box" id="bOut"></pre>
+        <div class="row"><button class="btn" id="bCopy">Copier le prompt</button><button class="btn ghost" id="bToAna">L'analyser</button></div>
+      </div>
+    </div>
+
+    <h2 class="sec">Analyseur de prompt</h2>
+    <div class="two">
+      <div class="stack">
+        <label class="f" for="aIn">Colle ou écris ton prompt</label>
+        <textarea id="aIn" rows="10"></textarea>
+        <div class="row"><button class="btn ghost sm" id="aWeak">Exemple faible</button><button class="btn ghost sm" id="aStrong">Exemple solide</button></div>
+      </div>
+      <div class="card stack">
+        <div class="score">
+          <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle class="bgc" cx="50" cy="50" r="40"></circle><circle class="fg" id="aRing" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="251.3" transform="rotate(-90 50 50)"></circle><text x="50" y="50" id="aScore">0</text></svg>
+          <div><b id="aVerdict" style="font-size:17px">—</b><p class="small muted" id="aHint">Note sur 100, calculée selon les 7 blocs.</p></div>
+        </div>
+        <div class="crit" id="aCrit"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BIBLIOTHÈQUE ================= -->
+  <section class="view" id="v-biblio">
+    <p class="lead">Des prompts testés et prêts à copier. Remplace les passages entre <span style="color:var(--jaune);font-family:var(--f-mono)">[CROCHETS]</span> par tes informations avant de les envoyer.</p>
+    <div class="toolbar" style="margin-top:16px">
+      <input type="search" id="prQ" placeholder="Chercher un prompt (ex. : compte rendu, voyage, Excel, affiche)…" aria-label="Chercher un prompt">
+      <button class="btn ghost sm" id="prFavOnly" aria-pressed="false">★ Mes favoris</button>
+      <span class="count" id="prCount"></span>
+    </div>
+    <div class="filters" id="prCats"></div>
+    <div class="grid" id="prompts"></div>
+  </section>
+
+  <!-- ================= RESSOURCES ================= -->
+  <section class="view" id="v-ressources">
+    <p class="lead">Les meilleurs dépôts GitHub, modèles et cours Hugging Face, cours gratuits et plateformes pour progresser, triés par thème et par niveau.</p>
+    <div class="toolbar" style="margin-top:16px">
+      <input type="search" id="resQ" placeholder="Chercher (ex. : agent, local, fine-tuning, cybersécurité)…" aria-label="Chercher une ressource">
+      <select id="resSrc" aria-label="Filtrer par source" style="width:auto"><option value="">Toutes les sources</option><option>GitHub</option><option>Hugging Face</option><option value="autre">Cours et plateformes</option></select>
+      <select id="resLv" aria-label="Filtrer par niveau" style="width:auto"><option value="">Tous les niveaux</option></select>
+      <span class="count" id="resCount"></span>
+    </div>
+    <div class="filters" id="resCats"></div>
+    <div class="grid" id="res"></div>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section class="view" id="v-quiz">
+    <div class="row" style="justify-content:space-between">
+      <p class="lead" id="qzLead">Vérifie ce que tu as retenu.</p>
+      <div class="row"><span class="chip y" id="qzScore">Score : 0 / 0</span><span class="chip" id="qzBest">Meilleur : —</span><button class="btn ghost sm" id="qzReset">Recommencer</button></div>
+    </div>
+    <div class="stack" id="qz" style="margin-top:16px"></div>
+    <div class="callout ok" id="qzEnd" hidden style="margin-top:16px"></div>
+  </section>
+
+  <!-- ================= GLOSSAIRE ================= -->
+  <section class="view" id="v-glossaire">
+    <p class="lead">Le vocabulaire de l'IA expliqué simplement.</p>
+    <div class="toolbar" style="margin-block:16px"><input type="search" id="glQ" placeholder="Chercher un terme…" aria-label="Chercher un terme"><span class="count" id="glCount"></span></div>
+    <div class="gl" id="gl"></div>
+  </section>
+
+  <!-- ================= SÉCURITÉ ================= -->
+  <section class="view" id="v-securite">
+    <p class="lead">L'IA est un outil puissant, avec de vrais risques pour l'entreprise et pour toi. Ces règles passent avant tout le reste de la formation.</p>
+
+    <h2 class="sec">Les 8 règles d'or</h2>
+    <div class="grid">
+      <div class="card"><h3>1. Suivre la politique de l'entreprise</h3><p class="small">Si ton entreprise fournit un outil IA validé ou une charte d'usage, c'est la règle. Elle prime sur tout ce qui est écrit ici.</p></div>
+      <div class="card"><h3>2. Rien de confidentiel dans une IA grand public</h3><p class="small">Prix, offres, marchés, plans, contrats, données clients, informations internes : jamais dans un compte personnel gratuit.</p></div>
+      <div class="card"><h3>3. Aucune donnée personnelle</h3><p class="small">Noms, téléphones, adresses, arrêts maladie, évaluations, salaires de collègues : le RGPD s'applique. Anonymise toujours.</p></div>
+      <div class="card"><h3>4. Jamais de mots de passe ni d'accès</h3><p class="small">Aucun identifiant, code d'accès, clé API ou information de sécurité informatique dans une conversation.</p></div>
+      <div class="card"><h3>5. Tout vérifier</h3><p class="small">Chiffres, lois, dosages, dates, citations : l'IA peut se tromper avec assurance. Vérifie dans la source officielle.</p></div>
+      <div class="card"><h3>6. Santé, droit, argent : un professionnel décide</h3><p class="small">L'IA aide à comprendre un diagnostic, un contrat ou un placement. La décision se prend avec un médecin, un juriste ou un conseiller.</p></div>
+      <div class="card"><h3>7. Méfiance face aux fausses voix et vidéos</h3><p class="small">Une voix au téléphone peut être clonée. Une demande urgente de virement ou d'accès se vérifie toujours en rappelant la personne sur un numéro connu.</p></div>
+      <div class="card"><h3>8. Être transparent</h3><p class="small">Signale quand un document important a été produit avec l'aide de l'IA, et assume-le : c'est toi qui le signes.</p></div>
+    </div>
+
+    <h2 class="sec">Feu vert, feu orange, feu rouge</h2>
+    <div class="grid">
+      <div class="callout ok"><b>Feu vert : tu peux</b><ul class="clean ok small" style="margin-top:8px"><li>Reformuler un texte que tu as écrit, sans données sensibles</li><li>Te faire expliquer une notion, une formule Excel</li><li>Préparer un plan, une trame, une liste d'idées</li><li>Traduire des textes sans données sensibles</li><li>Créer des visuels génériques</li></ul></div>
+      <div class="callout"><b>Feu orange : avec précaution</b><ul class="clean small" style="margin-top:8px"><li>Résumer un document interne : uniquement dans un outil validé par l'entreprise</li><li>Rédiger un courrier à un client : anonymiser puis relire</li><li>Calculs importants (budget, crédit) : vérifier l'ordre de grandeur</li><li>Questions de santé ou de droit : confirmer avec un professionnel</li></ul></div>
+      <div class="callout warn"><b>Feu rouge : interdit</b><ul class="clean no small" style="margin-top:8px"><li>Coller un contrat, un prix, un marché dans une IA grand public</li><li>Données personnelles de collègues ou de clients</li><li>Mots de passe, accès, informations de sûreté</li><li>Prendre une décision médicale ou juridique sur la seule base d'une réponse IA</li><li>Cloner la voix ou l'image de quelqu'un sans son accord</li></ul></div>
+    </div>
+
+    <h2 class="sec">Comptes personnels et comptes entreprise</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th></th><th>Compte personnel gratuit</th><th>Offre entreprise (ex. : M365 Copilot, ChatGPT Enterprise, Claude for Work)</th></tr></thead>
+        <tbody>
+          <tr><td>Utilisation de tes données pour entraîner les modèles</td><td>Souvent possible par défaut, à désactiver dans les paramètres quand l'option existe</td><td>En général exclue par contrat</td></tr>
+          <tr><td>Contrôle par l'entreprise</td><td>Aucun</td><td>Gestion des accès, journalisation, conservation</td></tr>
+          <tr><td>Documents internes</td><td>À proscrire</td><td>Possible selon la charte interne</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted" style="margin-top:8px">Les conditions varient selon les éditeurs et changent : lis les conditions d'utilisation de l'offre réellement utilisée.</p>
+
+    <h2 class="sec">Le cadre légal en bref</h2>
+    <div class="grid">
+      <div class="card"><h3>RGPD</h3><p class="small">Toute donnée permettant d'identifier une personne est protégée. La saisir dans une IA est un traitement de données, avec les obligations qui vont avec. La CNIL publie des recommandations sur l'IA.</p></div>
+      <div class="card"><h3>Règlement européen sur l'IA (AI Act)</h3><p class="small">En vigueur depuis le 1er août 2024. Usages interdits depuis le 2 février 2025, règles pour les grands modèles depuis le 2 août 2025, obligation de signaler les contenus générés par IA depuis le 2 août 2026. L'« omnibus numérique » (en vigueur le 27 juillet 2026) a repoussé les règles des systèmes à haut risque au 2 décembre 2027, et ajoute au 2 décembre 2026 l'interdiction des images intimes truquées sans consentement.</p></div>
+      <div class="card"><h3>Droit d'auteur</h3><p class="small">Une image ou un texte généré peut reproduire une œuvre protégée. Pour un usage commercial ou public, préfère les outils qui garantissent des données d'entraînement sous licence et évite d'imiter un artiste ou une marque.</p></div>
+    </div>
+
+    <h2 class="sec">Check-list avant d'envoyer un prompt</h2>
+    <div class="stack" id="secCheck"></div>
+  </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>

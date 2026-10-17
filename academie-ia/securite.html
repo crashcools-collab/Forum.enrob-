@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sécurité &amp; règles · Académie IA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Académie IA : formation complète sur l'intelligence artificielle, du novice à l'expert, à jour au 17 octobre 2026.">
+<meta name="theme-color" content="#0D0D0D">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icone-192.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/icone-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<aside class="side">
+  <div class="hazard"></div>
+  <a class="brand" href="index.html" style="text-decoration:none">
+    <span class="logo">ACADÉMIE IA</span>
+    <small>Tout savoir sur l'intelligence artificielle</small>
+  </a>
+  <nav class="nav" aria-label="Pages de la formation">
+    <a href="index.html"><span class="ic">00</span> Accueil &amp; tableau de bord</a>
+    <a href="niveaux.html"><span class="ic">01</span> Parcours par niveau</a>
+    <a href="fondamentaux.html"><span class="ic">02</span> Les fondamentaux</a>
+    <a href="encyclopedie.html"><span class="ic">03</span> Encyclopédie de l&#39;IA</a>
+    <a href="pile.html"><span class="ic">04</span> La pile de l&#39;IA</a>
+    <a href="histoire.html"><span class="ic">05</span> Histoire de l&#39;IA</a>
+    <a href="cours.html"><span class="ic">06</span> Cours complets</a>
+    <a href="outils.html"><span class="ic">07</span> Panorama des IA</a>
+    <a href="methode.html"><span class="ic">08</span> Méthode de prompt</a>
+    <a href="prompt-maitre.html"><span class="ic">09</span> Prompt maître</a>
+    <a href="atelier.html"><span class="ic">10</span> Atelier interactif</a>
+    <a href="bibliotheque.html"><span class="ic">11</span> Bibliothèque de prompts</a>
+    <a href="ressources.html"><span class="ic">12</span> GitHub, Hugging Face &amp; cours</a>
+    <a href="quiz.html"><span class="ic">13</span> Quiz final</a>
+    <div class="sep"></div>
+    <a href="glossaire.html"><span class="ic">A–Z</span> Glossaire</a>
+    <a href="securite.html" class="active" aria-current="page"><span class="ic">!</span> Sécurité &amp; règles</a>
+    <a href="recherche.html"><span class="ic">⌕</span> Recherche</a>
+  </nav>
+  <div class="progress-box">
+    Ta progression : <b data-pg-txt>0 %</b>
+    <div class="bar"><i data-pg-bar></i></div>
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <h1>Sécurité &amp; règles</h1>
+    <form id="gSearch" role="search"><input type="search" id="gQ" placeholder="Chercher dans toute la formation…" aria-label="Chercher dans toute la formation"></form>
+  </header>
+  <main class="content">
+  <section class="view active" id="v-securite">
+    <p class="lead">L'IA est un outil puissant, avec de vrais risques pour l'entreprise et pour toi. Ces règles passent avant tout le reste de la formation.</p>
+
+    <h2 class="sec">Les 8 règles d'or</h2>
+    <div class="grid">
+      <div class="card"><h3>1. Suivre la politique de l'entreprise</h3><p class="small">Si ton entreprise fournit un outil IA validé ou une charte d'usage, c'est la règle. Elle prime sur tout ce qui est écrit ici.</p></div>
+      <div class="card"><h3>2. Rien de confidentiel dans une IA grand public</h3><p class="small">Prix, offres, marchés, plans, contrats, données clients, informations internes : jamais dans un compte personnel gratuit.</p></div>
+      <div class="card"><h3>3. Aucune donnée personnelle</h3><p class="small">Noms, téléphones, adresses, arrêts maladie, évaluations, salaires de collègues : le RGPD s'applique. Anonymise toujours.</p></div>
+      <div class="card"><h3>4. Jamais de mots de passe ni d'accès</h3><p class="small">Aucun identifiant, code d'accès, clé API ou information de sécurité informatique dans une conversation.</p></div>
+      <div class="card"><h3>5. Tout vérifier</h3><p class="small">Chiffres, lois, dosages, dates, citations : l'IA peut se tromper avec assurance. Vérifie dans la source officielle.</p></div>
+      <div class="card"><h3>6. Santé, droit, argent : un professionnel décide</h3><p class="small">L'IA aide à comprendre un diagnostic, un contrat ou un placement. La décision se prend avec un médecin, un juriste ou un conseiller.</p></div>
+      <div class="card"><h3>7. Méfiance face aux fausses voix et vidéos</h3><p class="small">Une voix au téléphone peut être clonée. Une demande urgente de virement ou d'accès se vérifie toujours en rappelant la personne sur un numéro connu.</p></div>
+      <div class="card"><h3>8. Être transparent</h3><p class="small">Signale quand un document important a été produit avec l'aide de l'IA, et assume-le : c'est toi qui le signes.</p></div>
+    </div>
+
+    <h2 class="sec">Feu vert, feu orange, feu rouge</h2>
+    <div class="grid">
+      <div class="callout ok"><b>Feu vert : tu peux</b><ul class="clean ok small" style="margin-top:8px"><li>Reformuler un texte que tu as écrit, sans données sensibles</li><li>Te faire expliquer une notion, une formule Excel</li><li>Préparer un plan, une trame, une liste d'idées</li><li>Traduire des textes sans données sensibles</li><li>Créer des visuels génériques</li></ul></div>
+      <div class="callout"><b>Feu orange : avec précaution</b><ul class="clean small" style="margin-top:8px"><li>Résumer un document interne : uniquement dans un outil validé par l'entreprise</li><li>Rédiger un courrier à un client : anonymiser puis relire</li><li>Calculs importants (budget, crédit) : vérifier l'ordre de grandeur</li><li>Questions de santé ou de droit : confirmer avec un professionnel</li></ul></div>
+      <div class="callout warn"><b>Feu rouge : interdit</b><ul class="clean no small" style="margin-top:8px"><li>Coller un contrat, un prix, un marché dans une IA grand public</li><li>Données personnelles de collègues ou de clients</li><li>Mots de passe, accès, informations de sûreté</li><li>Prendre une décision médicale ou juridique sur la seule base d'une réponse IA</li><li>Cloner la voix ou l'image de quelqu'un sans son accord</li></ul></div>
+    </div>
+
+    <h2 class="sec">Comptes personnels et comptes entreprise</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th></th><th>Compte personnel gratuit</th><th>Offre entreprise (ex. : M365 Copilot, ChatGPT Enterprise, Claude for Work)</th></tr></thead>
+        <tbody>
+          <tr><td>Utilisation de tes données pour entraîner les modèles</td><td>Souvent possible par défaut, à désactiver dans les paramètres quand l'option existe</td><td>En général exclue par contrat</td></tr>
+          <tr><td>Contrôle par l'entreprise</td><td>Aucun</td><td>Gestion des accès, journalisation, conservation</td></tr>
+          <tr><td>Documents internes</td><td>À proscrire</td><td>Possible selon la charte interne</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted" style="margin-top:8px">Les conditions varient selon les éditeurs et changent : lis les conditions d'utilisation de l'offre réellement utilisée.</p>
+
+    <h2 class="sec">Le cadre légal en bref</h2>
+    <div class="grid">
+      <div class="card"><h3>RGPD</h3><p class="small">Toute donnée permettant d'identifier une personne est protégée. La saisir dans une IA est un traitement de données, avec les obligations qui vont avec. La CNIL publie des recommandations sur l'IA.</p></div>
+      <div class="card"><h3>Règlement européen sur l'IA (AI Act)</h3><p class="small">En vigueur depuis le 1er août 2024. Usages interdits depuis le 2 février 2025, règles pour les grands modèles depuis le 2 août 2025, obligation de signaler les contenus générés par IA depuis le 2 août 2026. L'« omnibus numérique » (en vigueur le 27 juillet 2026) a repoussé les règles des systèmes à haut risque au 2 décembre 2027, et ajoute au 2 décembre 2026 l'interdiction des images intimes truquées sans consentement.</p></div>
+      <div class="card"><h3>Droit d'auteur</h3><p class="small">Une image ou un texte généré peut reproduire une œuvre protégée. Pour un usage commercial ou public, préfère les outils qui garantissent des données d'entraînement sous licence et évite d'imiter un artiste ou une marque.</p></div>
+    </div>
+
+    <h2 class="sec">Check-list avant d'envoyer un prompt</h2>
+    <div class="stack" id="secCheck"></div>
+  </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="assets/data/meta.js"></script>
+<script src="assets/data/fond.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
