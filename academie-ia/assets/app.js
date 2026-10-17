@@ -172,7 +172,7 @@ if ($('#tl')) {
 }
 
 /* ---------- Cours ---------- */
-const COURS_CATS = {'':'Tous', assistants:'Assistants IA', travail:'Travail & recherche', construire:'Construire avec l\'IA', dev:'Développeurs & open source', creation:'Création', securite:'Cybersécurité'};
+const COURS_CATS = {'':'Tous', assistants:'Assistants IA', travail:'Travail & recherche', construire:'Construire avec l\'IA', programmes:'Créer des programmes', dev:'Développeurs & open source', creation:'Création', securite:'Cybersécurité'};
 let coursCat = '', curCourse = null;
 function renderCoursList(){
   $('#coursCats').innerHTML = Object.entries(COURS_CATS).map(([k, v]) => '<button data-cc="' + k + '" class="' + (coursCat === k ? 'on' : '') + '">' + esc(v) + '</button>').join('');

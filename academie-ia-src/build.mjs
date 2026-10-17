@@ -11,7 +11,7 @@ const OUT = process.argv[2] || path.join(HERE, '..', 'academie-ia');
 const rd = f => fs.readFileSync(path.join(PARTS, f), 'utf8');
 
 /* ---------- 1. Charger toutes les données ---------- */
-const DATA_FILES = ['03a-cours.js','03b-cours.js','03c-histoire.js','03d1-encyclo.js','03d2-encyclo.js','03e-cours.js','03f-cours.js','03g-ressources.js','03h-cours.js','03i-encyclo.js','03j-cours.js','04-tools.js','05-prompts.js','06-misc.js','06b-extra.js','06c-extra.js'];
+const DATA_FILES = ['03a-cours.js','03b-cours.js','03c-histoire.js','03d1-encyclo.js','03d2-encyclo.js','03e-cours.js','03f-cours.js','03g-ressources.js','03h-cours.js','03i-encyclo.js','03j-cours.js','03k-programmes.js','04-tools.js','05-prompts.js','06-misc.js','06b-extra.js','06c-extra.js','06d-extra.js'];
 const NAMES = ['COURS','HIST','HIST_CATS','MAJ','ETAT','TENDANCES','ENCYCLO','ENCYCLO_PARTS','NIVEAUX','NIV_COURS','NIV_ENC','PILE','RES_CATS','RESSOURCES','TOOL_CATS','TOOLS','PR_CATS','PROMPTS','MODULES','BA','TECHS','MASTERS','QUIZ','GLOSS','PLAN','SECCHECK'];
 const D = vm.runInNewContext(DATA_FILES.map(rd).join('\n') + '\n;({' + NAMES.join(',') + '})', {}, {filename:'donnees.js'});
 
