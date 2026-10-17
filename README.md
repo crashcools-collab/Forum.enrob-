@@ -4,8 +4,13 @@
 Tableau de bord interne (fichier HTML unique) : forum, calendrier, calculatrice,
 bot maths (Mistral), documents, et **messagerie temps réel** pour l'équipe.
 
-## Fichier à héberger
-- `index.html` → c'est toute l'app. Rien d'autre n'est nécessaire.
+## Fichiers à héberger
+- `index.html` → c'est toute l'app.
+- `academie-ia/` → l'Académie IA, site complet sur l'intelligence artificielle (17 pages), à jour au 17 octobre 2026 : parcours en 5 niveaux, encyclopédie (37 chapitres), pile de l'IA, histoire de 1943 à aujourd'hui (172 événements), 41 cours (213 chapitres, dont une filière pour créer toute sorte de programme : scripts, logiciels, applications mobiles et web, extensions, outils en ligne de commande, objets connectés), panorama de 71 outils, méthode et prompts, 88 ressources GitHub et Hugging Face, quiz, glossaire, recherche dans toute la formation. Installable comme application (fonctionne hors connexion une fois en ligne).
+- `academie-ia-fichier-unique.html` → la même formation en un seul fichier HTML (pratique à envoyer ou à copier sur une clé USB), générée automatiquement avec le site.
+- `academie-ia-src/` → sources du site ; reconstruire avec `node academie-ia-src/build.mjs`.
+- `Lancer-Academie-IA.bat` → lanceur Windows : menu pour ouvrir chaque page et installer les outils de pratique (Ollama, Python, Git, VS Code).
+- `formation-ia.html` → redirige vers `academie-ia/index.html`.
 
 ## Activer la messagerie (une seule fois)
 

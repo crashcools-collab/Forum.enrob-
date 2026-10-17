@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Méthode de prompt · Académie IA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Académie IA : formation complète sur l'intelligence artificielle, du novice à l'expert, à jour au 17 octobre 2026.">
+<meta name="theme-color" content="#0D0D0D">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icone-192.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/icone-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<aside class="side">
+  <div class="hazard"></div>
+  <a class="brand" href="index.html" style="text-decoration:none">
+    <span class="logo">ACADÉMIE IA</span>
+    <small>Tout savoir sur l'intelligence artificielle</small>
+  </a>
+  <nav class="nav" aria-label="Pages de la formation">
+    <a href="index.html"><span class="ic">00</span> Accueil &amp; tableau de bord</a>
+    <a href="niveaux.html"><span class="ic">01</span> Parcours par niveau</a>
+    <a href="fondamentaux.html"><span class="ic">02</span> Les fondamentaux</a>
+    <a href="encyclopedie.html"><span class="ic">03</span> Encyclopédie de l&#39;IA</a>
+    <a href="pile.html"><span class="ic">04</span> La pile de l&#39;IA</a>
+    <a href="histoire.html"><span class="ic">05</span> Histoire de l&#39;IA</a>
+    <a href="cours.html"><span class="ic">06</span> Cours complets</a>
+    <a href="outils.html"><span class="ic">07</span> Panorama des IA</a>
+    <a href="methode.html" class="active" aria-current="page"><span class="ic">08</span> Méthode de prompt</a>
+    <a href="prompt-maitre.html"><span class="ic">09</span> Prompt maître</a>
+    <a href="atelier.html"><span class="ic">10</span> Atelier interactif</a>
+    <a href="bibliotheque.html"><span class="ic">11</span> Bibliothèque de prompts</a>
+    <a href="ressources.html"><span class="ic">12</span> GitHub, Hugging Face &amp; cours</a>
+    <a href="quiz.html"><span class="ic">13</span> Quiz final</a>
+    <div class="sep"></div>
+    <a href="glossaire.html"><span class="ic">A–Z</span> Glossaire</a>
+    <a href="securite.html"><span class="ic">!</span> Sécurité &amp; règles</a>
+    <a href="recherche.html"><span class="ic">⌕</span> Recherche</a>
+  </nav>
+  <div class="progress-box">
+    Ta progression : <b data-pg-txt>0 %</b>
+    <div class="bar"><i data-pg-bar></i></div>
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <h1>Méthode de prompt</h1>
+    <form id="gSearch" role="search"><input type="search" id="gQ" placeholder="Chercher dans toute la formation…" aria-label="Chercher dans toute la formation"></form>
+  </header>
+  <main class="content">
+  <section class="view active" id="v-methode">
+    <p class="lead">Un prompt, c'est un cahier des charges. Si tu dis à un artisan « refais-moi la cuisine », tu ne sais pas ce que tu obtiendras. Si tu précises le budget, les matériaux, les dimensions et le délai, tu reçois exactement ce que tu voulais. Avec l'IA, c'est pareil.</p>
+
+    <h2 class="sec">Les 7 blocs d'un prompt professionnel</h2>
+    <p class="muted">Tous les blocs ne sont pas obligatoires. Plus la tâche est importante, plus tu en utilises. Les blocs 2, 3 et 6 sont ceux qui changent le plus le résultat.</p>
+    <div class="blocks" style="margin-top:12px">
+      <div class="blk"><div class="k"><i>1</i>Rôle</div><p>Qui l'IA doit incarner. « Tu es un coach sportif diplômé avec 15 ans d'expérience. »</p></div>
+      <div class="blk"><div class="k"><i>2</i>Contexte</div><p>La situation, les enjeux, qui tu es. « J'ai 40 ans, je débute la course à pied et j'ai trois séances de 30 minutes par semaine. »</p></div>
+      <div class="blk"><div class="k"><i>3</i>Tâche</div><p>Un verbe d'action précis. « Rédige », « compare », « résume en 5 points », « liste les risques ».</p></div>
+      <div class="blk"><div class="k"><i>4</i>Données</div><p>Le texte, les chiffres, le fichier à traiter, délimités par des guillemets triples """ … """.</p></div>
+      <div class="blk"><div class="k"><i>5</i>Contraintes</div><p>Ton, longueur, vocabulaire, ce qu'il faut éviter. « 150 mots maximum, pas de jargon, vouvoiement. »</p></div>
+      <div class="blk"><div class="k"><i>6</i>Format</div><p>La forme exacte du résultat : tableau, liste à puces, mail avec objet, plan en 3 parties, JSON.</p></div>
+      <div class="blk"><div class="k"><i>7</i>Contrôle</div><p>Comment l'IA doit se vérifier. « Signale ce dont tu n'es pas sûr. N'invente aucun chiffre. Relis-toi avant de répondre. »</p></div>
+    </div>
+
+    <h2 class="sec">Avant / après : la différence en pratique</h2>
+    <div class="stack" id="baList"></div>
+
+    <h2 class="sec">12 techniques avancées</h2>
+    <div class="grid" id="techs"></div>
+
+    <h2 class="sec">Prompts spécialisés par type d'IA</h2>
+    <div class="grid">
+      <div class="card stack">
+        <h3>Image</h3>
+        <p class="small muted">Structure : sujet + action + décor + style + cadrage + lumière + ambiance + format.</p>
+        <pre class="prompt">Photographie réaliste d'un phare breton pendant une tempête, vagues qui se brisent sur les rochers, fin de journée, lumière dorée rasante qui perce les nuages, plan large au ras de l'eau, profondeur de champ, format 16:9</pre>
+        <p class="small">Midjourney : ajoute des paramètres en fin de prompt, par exemple <code>--ar 16:9</code> pour le format. Pour corriger, modifie un seul élément à la fois.</p>
+      </div>
+      <div class="card stack">
+        <h3>Vidéo</h3>
+        <p class="small muted">Structure : plan + sujet + mouvement + mouvement de caméra + durée + ambiance sonore.</p>
+        <pre class="prompt">Plan aérien lent qui suit un voilier sur une mer calme au lever du soleil, la caméra recule doucement en montant, brume légère sur l'eau, bruit des vagues discret, 8 secondes, rendu réaliste</pre>
+        <p class="small">Une seule action par plan. Pour une vidéo longue, génère plusieurs plans courts et monte-les ensuite.</p>
+      </div>
+      <div class="card stack">
+        <h3>Code et Excel</h3>
+        <p class="small muted">Structure : outil et version + entrée exacte + sortie attendue + exemple + contraintes.</p>
+        <pre class="prompt">Dans Excel (Microsoft 365, version française), la colonne A contient des dates, la colonne B des dépenses en euros et la colonne C une catégorie (courses, transport, loisirs). Écris la formule qui calcule le total dépensé pour la catégorie choisie en cellule F1. Explique-la ligne par ligne et donne un exemple chiffré pour vérifier.</pre>
+        <p class="small">Précise toujours la langue d'Excel : les noms de fonctions et les séparateurs ( ; ou , ) changent.</p>
+      </div>
+      <div class="card stack">
+        <h3>Recherche</h3>
+        <p class="small muted">Structure : question précise + période + type de sources + format avec liens.</p>
+        <pre class="prompt">Quelles sont les principales évolutions de la réglementation européenne sur l'intelligence artificielle depuis 2024 ? Cite uniquement des sources officielles (textes de l'Union européenne, Commission européenne, CNIL), avec la date et le lien de chaque source. Indique clairement ce que tu n'as pas pu vérifier.</pre>
+        <p class="small">Ouvre toujours au moins deux sources toi-même. Un lien cité n'est pas une preuve.</p>
+      </div>
+    </div>
+
+    <h2 class="sec">Corriger une réponse décevante</h2>
+    <div class="grid">
+      <div class="card stack">
+        <h3>Ne recommence pas de zéro</h3>
+        <p>Dis précisément ce qui ne va pas, comme à un collègue : « Trop long, garde les 3 points les plus importants. » ou « Le ton est trop familier pour un courrier officiel. »</p>
+      </div>
+      <div class="card stack">
+        <h3>Donne un exemple</h3>
+        <p>Rien n'est plus efficace qu'un modèle : « Voici un compte rendu que j'aime, reproduis exactement cette structure. »</p>
+      </div>
+      <div class="card stack">
+        <h3>Change de conversation</h3>
+        <p>Après 20 ou 30 échanges, l'IA se perd. Demande-lui un résumé de ce qui est acquis, ouvre une nouvelle conversation et colle ce résumé.</p>
+      </div>
+    </div>
+
+    <h2 class="sec">Les erreurs les plus fréquentes</h2>
+    <div class="two">
+      <ul class="clean no">
+        <li>Écrire trois mots comme dans Google (« mail retard livraison »).</li>
+        <li>Ne pas dire à qui le texte est destiné.</li>
+        <li>Mélanger cinq demandes différentes dans un seul message.</li>
+        <li>Croire une référence de norme ou un chiffre sans vérifier.</li>
+        <li>Coller des données personnelles ou confidentielles dans une IA grand public.</li>
+      </ul>
+      <ul class="clean ok">
+        <li>Écrire comme si tu briefais un nouvel embauché compétent.</li>
+        <li>Préciser le destinataire, le ton et la longueur.</li>
+        <li>Découper un gros travail en étapes successives.</li>
+        <li>Demander à l'IA de signaler ses doutes et de montrer ses calculs.</li>
+        <li>Anonymiser : « le client », « l'entreprise X », « le projet A ».</li>
+      </ul>
+    </div>
+  </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="assets/data/meta.js"></script>
+<script src="assets/data/methode.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

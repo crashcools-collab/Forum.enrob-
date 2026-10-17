@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Académie IA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Académie IA : formation complète sur l'intelligence artificielle, du novice à l'expert, à jour au 17 octobre 2026.">
+<meta name="theme-color" content="#0D0D0D">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icone-192.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/icone-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<aside class="side">
+  <div class="hazard"></div>
+  <a class="brand" href="index.html" style="text-decoration:none">
+    <span class="logo">ACADÉMIE IA</span>
+    <small>Tout savoir sur l'intelligence artificielle</small>
+  </a>
+  <nav class="nav" aria-label="Pages de la formation">
+    <a href="index.html" class="active" aria-current="page"><span class="ic">00</span> Accueil &amp; tableau de bord</a>
+    <a href="niveaux.html"><span class="ic">01</span> Parcours par niveau</a>
+    <a href="fondamentaux.html"><span class="ic">02</span> Les fondamentaux</a>
+    <a href="encyclopedie.html"><span class="ic">03</span> Encyclopédie de l&#39;IA</a>
+    <a href="pile.html"><span class="ic">04</span> La pile de l&#39;IA</a>
+    <a href="histoire.html"><span class="ic">05</span> Histoire de l&#39;IA</a>
+    <a href="cours.html"><span class="ic">06</span> Cours complets</a>
+    <a href="outils.html"><span class="ic">07</span> Panorama des IA</a>
+    <a href="methode.html"><span class="ic">08</span> Méthode de prompt</a>
+    <a href="prompt-maitre.html"><span class="ic">09</span> Prompt maître</a>
+    <a href="atelier.html"><span class="ic">10</span> Atelier interactif</a>
+    <a href="bibliotheque.html"><span class="ic">11</span> Bibliothèque de prompts</a>
+    <a href="ressources.html"><span class="ic">12</span> GitHub, Hugging Face &amp; cours</a>
+    <a href="quiz.html"><span class="ic">13</span> Quiz final</a>
+    <div class="sep"></div>
+    <a href="glossaire.html"><span class="ic">A–Z</span> Glossaire</a>
+    <a href="securite.html"><span class="ic">!</span> Sécurité &amp; règles</a>
+    <a href="recherche.html"><span class="ic">⌕</span> Recherche</a>
+  </nav>
+  <div class="progress-box">
+    Ta progression : <b data-pg-txt>0 %</b>
+    <div class="bar"><i data-pg-bar></i></div>
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <h1>Accueil &amp; tableau de bord</h1>
+    <form id="gSearch" role="search"><input type="search" id="gQ" placeholder="Chercher dans toute la formation…" aria-label="Chercher dans toute la formation"></form>
+  </header>
+  <main class="content">
+  <section class="view active" id="v-accueil">
+    <div class="hero">
+      <div class="card hl stack">
+        <span class="chip o">Formation complète · du novice à l'expert · à jour au 17 octobre 2026</span>
+        <h2>Tout savoir sur l'IA, <em>de 1943 à aujourd'hui</em></h2>
+        <p class="lead">Tout le savoir sur l'IA en un seul endroit : comment elle fonctionne, des puces jusqu'aux applications, son histoire depuis 1943, les outils, la création de toute sorte de programme (scripts, logiciels, applications mobiles et web, extensions, objets connectés), les agents, l'automatisation, la cybersécurité et les jeux vidéo. Cinq niveaux, du novice à l'expert.</p>
+        <div class="row">
+          <a class="btn" href="niveaux.html">Choisir mon niveau</a>
+          <a class="btn ghost" href="encyclopedie.html">Encyclopédie</a>
+          <a class="btn ghost" href="histoire.html">Histoire de l'IA</a>
+          <a class="btn ghost" href="cours.html">Tous les cours</a>
+          <a class="btn ghost" href="prompt-maitre.html">Voir le prompt maître</a>
+          <a class="btn ghost" href="bibliotheque.html">Ouvrir la bibliothèque</a>
+        </div>
+      </div>
+      <div class="card stack">
+        <div class="stats">
+          <div class="stat"><b id="stChap">0</b><span>chapitres au total</span></div>
+          <div class="stat"><b id="stCours">0</b><span>cours complets</span></div>
+          <div class="stat"><b id="stHist">0</b><span>événements datés depuis 1943</span></div>
+          <div class="stat"><b id="stRes">0</b><span>ressources GitHub, Hugging Face et cours</span></div>
+          <div class="stat"><b id="stTools">0</b><span>outils IA présentés</span></div>
+          <div class="stat"><b id="stPrompts">0</b><span>prompts prêts à l'emploi</span></div>
+        </div>
+        <div>
+          <div class="row" style="justify-content:space-between"><span class="small muted">Progression globale</span><b class="small" data-pg-txt style="color:var(--jaune)">0 %</b></div>
+          <div class="bar"><i data-pg-bar></i></div>
+        </div>
+        <p class="small muted">Ta progression, tes favoris et ton score sont enregistrés uniquement dans ce navigateur.</p>
+      </div>
+    </div>
+
+    <h2 class="sec">Ton tableau de bord</h2>
+    <div class="dash" id="dash"></div>
+
+    <h2 class="sec">Le parcours, dans l'ordre</h2>
+    <div class="path" id="path"></div>
+
+    <h2 class="sec">À savoir avant de commencer</h2>
+    <div class="grid">
+      <div class="callout"><b>Tout est daté et vérifié au 17 octobre 2026.</b> Modèles, produits, rachats et lois : la section Histoire de l'IA retrace tout ce qui s'est passé de 2017 à aujourd'hui, et chaque cours indique la situation actuelle de l'outil.</div>
+      <div class="callout info"><b>Ce qui fait la différence, c'est le prompt.</b> Le même outil donne un résultat médiocre ou excellent selon la façon dont on lui parle. La moitié de cette formation porte sur ce point.</div>
+      <div class="callout warn"><b>L'IA prépare, toi tu décides.</b> Un texte, un calcul ou une consigne produits par une IA se relisent et se vérifient toujours avant d'être utilisés, surtout pour la santé, l'argent, le droit et tout ce qui t'engage.</div>
+    </div>
+
+    <h2 class="sec">Quelle IA pour quelle tâche ?</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Tu veux…</th><th>Outils conseillés</th><th>Le réflexe à avoir</th></tr></thead>
+        <tbody>
+          <tr><td>Rédiger un mail, un compte rendu, une note</td><td>ChatGPT, Claude, Vibe (ex-Le Chat), Gemini, Copilot</td><td>Donner le contexte, le destinataire et le ton voulu</td></tr>
+          <tr><td>Résumer un long document (contrat, notice, rapport, cours)</td><td>Claude, NotebookLM, ChatGPT</td><td>Joindre le fichier et demander les passages exacts</td></tr>
+          <tr><td>Chercher une info récente avec sources</td><td>Perplexity, modes Recherche de ChatGPT, Gemini, Claude</td><td>Ouvrir les sources et vérifier qu'elles disent bien ça</td></tr>
+          <tr><td>Vérifier un calcul (budget, crédit, statistiques)</td><td>Assistant avec exécution de code (ChatGPT, Claude, Gemini)</td><td>Demander le détail du calcul, refaire l'ordre de grandeur</td></tr>
+          <tr><td>Travailler dans Excel, Word, Outlook, Teams</td><td>Microsoft 365 Copilot (licence entreprise)</td><td>Rester dans les outils validés par l'entreprise</td></tr>
+          <tr><td>Créer une image ou une affiche</td><td>GPT Image, Gemini, Midjourney, Firefly, Ideogram</td><td>Décrire sujet, style, cadrage, lumière et format</td></tr>
+          <tr><td>Faire une présentation</td><td>Gamma, Copilot PowerPoint, Canva</td><td>Donner le plan et le public, puis retoucher</td></tr>
+          <tr><td>Traduire un texte</td><td>DeepL, assistants généralistes</td><td>Faire relire un texte important par un locuteur natif</td></tr>
+          <tr><td>Automatiser une tâche répétitive</td><td>Power Automate, Zapier, Make, n8n</td><td>Commencer petit, garder une validation humaine</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">Programme d'entraînement sur 4 semaines</h2>
+    <p class="muted">Quinze à vingt minutes par jour suffisent. Coche chaque exercice quand il est fait : la progression se met à jour.</p>
+    <div class="grid" id="plan" style="margin-top:12px"></div>
+  </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="assets/data/meta.js"></script>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
