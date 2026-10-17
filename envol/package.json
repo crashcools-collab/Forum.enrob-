@@ -1,0 +1,15 @@
+{
+  "name": "envol",
+  "version": "0.1.0",
+  "description": "Ton hébergeur de sites perso, en français.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "demarrer": "node src/serveur.js",
+    "start": "node src/serveur.js",
+    "reinitialiser-mot-de-passe": "node outils/reinitialiser-mot-de-passe.js"
+  }
+}
