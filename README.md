@@ -4,8 +4,9 @@
 Tableau de bord interne (fichier HTML unique) : forum, calendrier, calculatrice,
 bot maths (Mistral), documents, et **messagerie temps réel** pour l'équipe.
 
-## Fichier à héberger
-- `index.html` → c'est toute l'app. Rien d'autre n'est nécessaire.
+## Fichiers à héberger
+- `index.html` → c'est toute l'app.
+- `formation-ia.html` → l'Académie IA : formation interactive (fondamentaux, cours détaillés sur Claude, ChatGPT, Gemini, Mistral, Copilot, Perplexity, NotebookLM, GitHub, Hugging Face, Cursor, API, images et vidéo, IA locale), panorama des outils, méthode de prompt, prompt maître, atelier, bibliothèque de prompts, quiz et glossaire. Accessible depuis le menu « Formation IA » de l'app. Progression et favoris stockés localement dans le navigateur.
 
 ## Activer la messagerie (une seule fois)
 
