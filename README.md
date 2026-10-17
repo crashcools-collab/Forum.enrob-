@@ -6,7 +6,7 @@ bot maths (Mistral), documents, et **messagerie temps réel** pour l'équipe.
 
 ## Fichiers à héberger
 - `index.html` → c'est toute l'app.
-- `formation-ia.html` → l'Académie IA : formation interactive à jour au 17 octobre 2026 (tableau de bord de progression, histoire de l'IA de 2017 à aujourd'hui avec 148 événements datés, fondamentaux, cours détaillés sur Claude, ChatGPT, Gemini, Mistral, Copilot, Perplexity, NotebookLM, GitHub, Hugging Face, Cursor, API, images et vidéo, IA locale), panorama des outils, méthode de prompt, prompt maître, atelier, bibliothèque de prompts, quiz et glossaire. Accessible depuis le menu « Formation IA » de l'app. Progression et favoris stockés localement dans le navigateur.
+- `formation-ia.html` → l'Académie IA, une formation complète et autonome sur l'intelligence artificielle, à jour au 17 octobre 2026 : parcours en 5 niveaux (novice à expert), encyclopédie de 27 chapitres, pile de l'IA (des puces aux applications), histoire datée de 1943 à aujourd'hui, 20 cours (ChatGPT, Claude, Gemini, Vibe, Copilot, GitHub, Hugging Face, Cursor, API, agents, automatisation, sites web, Claude Code, Codex, cybersécurité, jeux vidéo…), panorama des outils, méthode de prompt, atelier, bibliothèque de prompts, 88 ressources GitHub et Hugging Face, quiz et glossaire. Progression stockée localement dans le navigateur.
 
 ## Activer la messagerie (une seule fois)
 
