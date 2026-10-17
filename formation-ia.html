@@ -2641,6 +2641,704 @@ const RESSOURCES = [
 {n:'Documentation de Godot',u:'https://docs.godotengine.org',s:'Documentation',c:'jeux',v:2,d:"La documentation officielle, avec un tutoriel de premier jeu complet."}
 ];
 
+/* ====== COURS : compétences techniques et pratiques avancées ====== */
+COURS.push(
+{
+id:'python', n:'Python pour l\'IA', by:'Le langage de l\'IA', cat:'dev', lvl:'Novice → affirmé', dur:'4 h',
+pitch:"Le langage dans lequel presque toute l'IA est écrite : installer, écrire ses premiers scripts, utiliser les notebooks, manipuler des données, appeler un modèle par API, organiser un projet.",
+ch:[
+{t:"Pourquoi Python et comment l'installer", h:`
+<p><b>Python</b> est le langage de référence de l'IA : PyTorch, Transformers, scikit-learn, LangChain, les SDK d'OpenAI, d'Anthropic, de Google et de Mistral sont tous en Python. Il est lisible, gratuit, et une IA peut t'expliquer chaque ligne.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Option</th><th>Pour qui</th><th>Comment</th></tr></thead><tbody>
+<tr><td><b>Google Colab</b></td><td>Novice : rien à installer</td><td>colab.research.google.com, un notebook dans le navigateur avec GPU gratuit limité</td></tr>
+<tr><td><b>Installation classique</b></td><td>Débutant</td><td>python.org (cocher « Add Python to PATH » sous Windows), puis un éditeur comme VS Code</td></tr>
+<tr><td><b>uv</b></td><td>Apprenant et plus</td><td>Gestionnaire moderne et très rapide de versions de Python, d'environnements et de paquets</td></tr>
+</tbody></table></div>
+<pre class="code">python --version          # vérifier l'installation
+python -m venv .venv      # créer un environnement isolé pour le projet
+.venv\\Scripts\\activate    # l'activer sous Windows (source .venv/bin/activate sur Mac et Linux)
+pip install requests pandas   # installer des bibliothèques</pre>`},
+{t:"Les bases du langage en 15 minutes", h:`
+<pre class="code"># Variables et types
+prenom = "Léa"            # texte (str)
+age = 32                  # entier (int)
+taille = 1.68             # décimal (float)
+inscrit = True            # booléen
+
+# Listes et dictionnaires
+outils = ["ChatGPT", "Claude", "Gemini"]
+modele = {"nom": "Claude", "editeur": "Anthropic", "contexte": 1_000_000}
+
+# Conditions
+if age >= 18:
+    print("majeur")
+else:
+    print("mineur")
+
+# Boucles
+for outil in outils:
+    print(outil.upper())
+
+# Fonctions
+def cout_tokens(nb_tokens, prix_par_million):
+    return nb_tokens / 1_000_000 * prix_par_million
+
+print(cout_tokens(250_000, 4))   # 1.0</pre>
+<div class="callout info">Méthode efficace : écris un petit script, demande à une IA « explique-moi chaque ligne », modifie-le, casse-le, répare-le. On apprend Python en le pratiquant, pas en le lisant.</div>`},
+{t:"Les notebooks Jupyter", h:`
+<p>Un <b>notebook</b> mélange des cellules de code, leurs résultats (tableaux, graphiques) et du texte explicatif. C'est l'outil de travail standard en IA et en analyse de données.</p>
+<ul class="clean">
+<li><b>Google Colab</b> : gratuit, en ligne, avec accès limité à des GPU pour tester des modèles.</li>
+<li><b>Jupyter</b> en local : <code>pip install jupyterlab</code> puis <code>jupyter lab</code>.</li>
+<li><b>VS Code</b> et <b>Cursor</b> ouvrent directement les fichiers <code>.ipynb</code>.</li>
+<li>On exécute une cellule avec <kbd>Maj</kbd> + <kbd>Entrée</kbd> ; l'ordre d'exécution compte.</li>
+</ul>`},
+{t:"Manipuler des données avec pandas", h:`
+<pre class="code">import pandas as pd
+
+df = pd.read_csv("depenses.csv")          # aussi read_excel, read_json
+print(df.head())                          # 5 premières lignes
+print(df.describe())                      # statistiques de base
+par_cat = df.groupby("categorie")["montant"].sum().sort_values(ascending=False)
+print(par_cat)
+df[df["montant"] > 100].to_excel("grosses_depenses.xlsx", index=False)</pre>
+<p>Avec <b>matplotlib</b> ou <b>plotly</b>, une ligne suffit pour un graphique : <code>par_cat.plot(kind="bar")</code>. Les assistants qui exécutent du code (ChatGPT, Claude, Gemini) utilisent exactement ces bibliothèques quand tu leur donnes un fichier Excel.</p>`},
+{t:"Appeler un modèle d'IA depuis Python", h:`
+<pre class="code">pip install anthropic openai
+
+# Avec Claude
+import anthropic
+client = anthropic.Anthropic()            # clé dans la variable ANTHROPIC_API_KEY
+rep = client.messages.create(
+    model="claude-haiku-5-5", max_tokens=500,
+    messages=[{"role": "user", "content": "Trois idées de nom pour un club de lecture."}])
+print(rep.content[0].text)
+
+# Avec OpenAI
+from openai import OpenAI
+MODELE = "..."                            # nom exact : voir la liste des modèles dans la documentation d'OpenAI
+client = OpenAI()                         # clé dans la variable OPENAI_API_KEY
+rep = client.responses.create(model=MODELE, input="Trois idées de nom pour un club de lecture.")
+print(rep.output_text)</pre>
+<p class="small muted">Les noms exacts des modèles disponibles sont listés dans la documentation de chaque fournisseur ; ils changent à chaque nouvelle génération.</p>
+<div class="callout warn">Ne mets jamais une clé dans le code. Utilise des variables d'environnement ou un fichier <code>.env</code> ajouté au <code>.gitignore</code>.</div>`},
+{t:"Organiser un vrai projet", h:`
+<ul class="clean">
+<li>Un dossier par projet, un environnement virtuel par projet.</li>
+<li>Un fichier <code>requirements.txt</code> (ou <code>pyproject.toml</code>) qui liste les dépendances.</li>
+<li>Un <code>README.md</code> qui explique comment installer et lancer.</li>
+<li>Git dès le premier jour, avec un <code>.gitignore</code> qui exclut <code>.venv</code> et <code>.env</code>.</li>
+<li>Des petites fonctions, des noms clairs, et des tests avec <b>pytest</b> pour le code important.</li>
+</ul>
+<div class="ex"><b class="t">Projet</b><p>Écris un script qui lit un fichier texte, l'envoie à un modèle pour en tirer cinq points clés, et enregistre le résumé dans un nouveau fichier. Puis ajoute une boucle pour traiter tous les fichiers d'un dossier.</p></div>`}
+]},
+{
+id:'ml', n:'Machine learning classique', by:'scikit-learn, données, évaluation', cat:'dev', lvl:'Apprenant → expert', dur:'3 h',
+pitch:"Avant les LLM, il y a le machine learning qui fait tourner la banque, le commerce et l'industrie : régression, classification, arbres, évaluation, surapprentissage, avec scikit-learn.",
+ch:[
+{t:"Le principe et le vocabulaire", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Terme</th><th>Sens</th></tr></thead><tbody>
+<tr><td><b>Caractéristiques</b> (features, X)</td><td>Les informations d'entrée : surface, quartier, âge d'un logement</td></tr>
+<tr><td><b>Cible</b> (label, y)</td><td>Ce qu'on veut prédire : le prix</td></tr>
+<tr><td><b>Régression</b></td><td>Prédire un nombre (prix, température, ventes)</td></tr>
+<tr><td><b>Classification</b></td><td>Prédire une catégorie (spam ou non, type de client)</td></tr>
+<tr><td><b>Regroupement</b> (clustering)</td><td>Trouver des groupes sans étiquette</td></tr>
+<tr><td><b>Jeu d'entraînement / de test</b></td><td>On apprend sur une partie des données et on vérifie sur une autre, jamais vue</td></tr>
+</tbody></table></div>
+<p>Pour des données en tableau, le machine learning classique est souvent plus rapide, moins cher et plus fiable qu'un grand modèle de langage.</p>`},
+{t:"Les algorithmes essentiels", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Algorithme</th><th>Idée</th><th>Quand l'utiliser</th></tr></thead><tbody>
+<tr><td>Régression linéaire et logistique</td><td>Une droite (ou une courbe en S) qui sépare ou prédit</td><td>Point de départ, résultats explicables</td></tr>
+<tr><td>Arbre de décision</td><td>Une suite de questions oui / non</td><td>Règles lisibles par un humain</td></tr>
+<tr><td>Forêt aléatoire</td><td>Des centaines d'arbres qui votent</td><td>Robuste, peu de réglages</td></tr>
+<tr><td>Gradient boosting (XGBoost, LightGBM)</td><td>Des arbres qui corrigent les erreurs des précédents</td><td>Souvent le meilleur sur données en tableau</td></tr>
+<tr><td>k plus proches voisins</td><td>On regarde les exemples les plus ressemblants</td><td>Recommandation simple</td></tr>
+<tr><td>k-moyennes (k-means)</td><td>Regroupe les points autour de k centres</td><td>Segmentation de clients</td></tr>
+</tbody></table></div>`},
+{t:"Un premier modèle en dix lignes", h:`
+<pre class="code">pip install scikit-learn
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+X, y = load_iris(return_X_y=True)                    # 150 fleurs, 3 espèces
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+modele = RandomForestClassifier(random_state=42).fit(X_train, y_train)
+pred = modele.predict(X_test)
+print(accuracy_score(y_test, pred))
+print(classification_report(y_test, pred))</pre>`},
+{t:"Évaluer correctement", h:`
+<ul class="clean">
+<li><b>Exactitude</b> (accuracy) : part de bonnes réponses. Trompeuse si une classe est rare : un détecteur de fraude qui dit toujours « pas de fraude » a 99 % d'exactitude et ne sert à rien.</li>
+<li><b>Précision et rappel</b> : parmi les alertes, combien sont justes ; parmi les vrais cas, combien sont trouvés.</li>
+<li><b>Matrice de confusion</b> : le tableau des bonnes et mauvaises prédictions par classe.</li>
+<li><b>Erreur moyenne</b> (MAE, RMSE) pour la régression.</li>
+<li><b>Validation croisée</b> : on répète l'évaluation sur plusieurs découpages pour un résultat stable.</li>
+</ul>`},
+{t:"Les pièges classiques", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Piège</th><th>Symptôme</th><th>Remède</th></tr></thead><tbody>
+<tr><td><b>Surapprentissage</b></td><td>Excellent sur l'entraînement, mauvais sur le test : le modèle a appris par cœur</td><td>Plus de données, modèle plus simple, régularisation</td></tr>
+<tr><td><b>Fuite de données</b></td><td>Résultats trop beaux : une information du futur ou de la cible s'est glissée dans X</td><td>Vérifier chaque colonne, séparer avant tout traitement</td></tr>
+<tr><td><b>Données biaisées</b></td><td>Le modèle reproduit des discriminations</td><td>Analyser les résultats par groupe</td></tr>
+<tr><td><b>Dérive</b></td><td>Les performances baissent avec le temps</td><td>Surveiller et réentraîner régulièrement</td></tr>
+</tbody></table></div>
+<div class="ex"><b class="t">Exercice</b><p>Sur Kaggle, prends le jeu de données « Titanic », entraîne une forêt aléatoire pour prédire la survie, et fais-toi expliquer par une IA chaque étape et chaque métrique.</p></div>`}
+]},
+{
+id:'rag', n:'Le RAG de A à Z', by:'Faire répondre une IA à partir de tes documents', cat:'construire', lvl:'Affirmé → expert', dur:'3 h',
+pitch:"Construire un assistant qui répond à partir de milliers de documents : découpage, embeddings, bases vectorielles, recherche hybride, reranking, évaluation et pièges.", hk:['RAG'],
+ch:[
+{t:"Le principe en quatre étapes", h:`
+<ol class="steps">
+<li><b>Ingestion</b> : convertir les documents en texte propre (PDF, Word, pages web), avec des outils comme MarkItDown ou Docling.</li>
+<li><b>Découpage</b> (chunking) : couper en morceaux de quelques centaines de mots, avec un léger chevauchement, en respectant les titres et paragraphes.</li>
+<li><b>Indexation</b> : transformer chaque morceau en embedding et le stocker dans une base vectorielle, avec ses métadonnées (source, page, date).</li>
+<li><b>Réponse</b> : pour chaque question, chercher les morceaux les plus proches, les donner au modèle avec la consigne de répondre uniquement à partir d'eux et de citer les sources.</li>
+</ol>`},
+{t:"Un RAG minimal en Python", h:`
+<pre class="code">pip install sentence-transformers numpy
+
+from sentence_transformers import SentenceTransformer
+import numpy as np
+
+modele = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")  # bon en français
+morceaux = ["Le remboursement est possible sous 30 jours avec le ticket.",
+            "La garantie couvre les pannes pendant deux ans.",
+            "La livraison est gratuite dès 50 euros d'achat."]
+vecteurs = modele.encode(morceaux, normalize_embeddings=True)
+
+question = "Combien de temps dure la garantie ?"
+q = modele.encode([question], normalize_embeddings=True)[0]
+scores = vecteurs @ q                       # similarité cosinus
+meilleurs = [morceaux[i] for i in np.argsort(-scores)[:2]]
+
+prompt = ("Réponds uniquement à partir des extraits ci-dessous et cite-les. "
+          "Si la réponse n'y est pas, dis-le.\\n\\n" + "\\n".join(meilleurs) +
+          "\\n\\nQuestion : " + question)
+# … puis envoyer prompt à un modèle (voir le cours Python)</pre>`},
+{t:"Choisir sa base vectorielle", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Outil</th><th>Type</th><th>Idéal pour</th></tr></thead><tbody>
+<tr><td>Chroma</td><td>Bibliothèque légère</td><td>Prototypes, projets personnels</td></tr>
+<tr><td>FAISS</td><td>Bibliothèque de Meta</td><td>Recherche très rapide en mémoire</td></tr>
+<tr><td>pgvector</td><td>Extension de PostgreSQL</td><td>Garder vecteurs et données métier dans la même base (Supabase l'inclut)</td></tr>
+<tr><td>Qdrant, Weaviate, Milvus</td><td>Bases spécialisées</td><td>Gros volumes, filtres, production</td></tr>
+<tr><td>Pinecone</td><td>Service géré</td><td>Ne rien administrer</td></tr>
+</tbody></table></div>`},
+{t:"Améliorer la qualité", h:`
+<ul class="clean">
+<li><b>Recherche hybride</b> : combiner la recherche par le sens (vecteurs) et par mots-clés (BM25), indispensable pour les noms propres, références et codes.</li>
+<li><b>Reranking</b> : un second modèle reclasse les 20 ou 50 premiers résultats pour garder les plus pertinents.</li>
+<li><b>Réécriture de la question</b> : le modèle reformule ou décompose la question avant la recherche.</li>
+<li><b>Métadonnées et filtres</b> : date, type de document, service, langue.</li>
+<li><b>Morceaux contextualisés</b> : ajouter à chaque morceau un court résumé du document d'origine améliore nettement la recherche.</li>
+<li><b>RAG agentique</b> : l'agent décide lui-même quand et comment chercher, et peut chercher plusieurs fois.</li>
+</ul>`},
+{t:"Évaluer un RAG", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Mesure</th><th>Question posée</th></tr></thead><tbody>
+<tr><td>Rappel de la recherche</td><td>Les bons passages sont-ils dans les résultats ?</td></tr>
+<tr><td>Fidélité</td><td>La réponse s'appuie-t-elle uniquement sur les passages fournis ?</td></tr>
+<tr><td>Pertinence</td><td>La réponse répond-elle vraiment à la question ?</td></tr>
+<tr><td>Citations</td><td>Les sources citées sont-elles les bonnes ?</td></tr>
+</tbody></table></div>
+<p>Constitue 50 questions avec leur bonne réponse et le document source, et mesure à chaque modification. Des bibliothèques comme Ragas automatisent une partie de ces mesures.</p>
+<div class="ex"><b class="t">Projet</b><p>Construis un RAG sur la documentation d'un logiciel que tu utilises : 50 pages, une interface Gradio, des réponses avec citations. Mesure sa fidélité sur 20 questions.</p></div>`}
+]},
+{
+id:'promptpro', n:'Prompt engineering avancé', by:'Pour les experts', cat:'construire', lvl:'Apprenant → expert', dur:'2 h 30',
+pitch:"Au-delà des 7 blocs : prompts système de production, sorties structurées, chaînage, méta-prompting, évaluation des prompts, défense contre l'injection et conseils propres à chaque modèle.",
+ch:[
+{t:"Le prompt système de production", h:`
+<p>Dans une application, le prompt système est un véritable cahier des charges. Structure recommandée :</p>
+<pre class="code">&lt;role&gt;Qui est l'assistant, pour qui, dans quel but.&lt;/role&gt;
+&lt;contexte&gt;Informations stables : produit, public, ton, date du jour.&lt;/contexte&gt;
+&lt;regles&gt;
+1. Ce qu'il doit toujours faire.
+2. Ce qu'il ne doit jamais faire, et pourquoi.
+3. Quoi faire en cas de doute ou de demande hors sujet.
+&lt;/regles&gt;
+&lt;format&gt;Structure exacte de la réponse, longueur, langue.&lt;/format&gt;
+&lt;exemples&gt;Deux ou trois échanges types, dont un cas limite.&lt;/exemples&gt;</pre>
+<p>Expliquer <b>pourquoi</b> une règle existe aide le modèle à l'appliquer intelligemment dans les cas imprévus.</p>`},
+{t:"Sorties structurées et fiabilité", h:`
+<ul class="clean">
+<li><b>Sorties structurées</b> : les API d'OpenAI, d'Anthropic, de Google et de Mistral permettent d'imposer un schéma JSON. La réponse est alors toujours lisible par ton programme.</li>
+<li><b>Valeurs imposées</b> : donner la liste exacte des catégories possibles plutôt que laisser le modèle inventer.</li>
+<li><b>Auto-cohérence</b> : poser plusieurs fois la même question et garder la réponse majoritaire, pour les décisions importantes.</li>
+<li><b>Vérification séparée</b> : un second appel vérifie le premier (exactitude, respect des règles).</li>
+</ul>`},
+{t:"Chaînage et décomposition", h:`
+<ol class="steps">
+<li>Découpe une tâche complexe en étapes qui ont chacune un prompt simple : extraire, puis analyser, puis rédiger, puis relire.</li>
+<li>Chaque étape reçoit uniquement ce dont elle a besoin.</li>
+<li>Les étapes indépendantes peuvent tourner en parallèle.</li>
+<li>Tu peux tester et améliorer chaque étape séparément.</li>
+</ol>
+<p>C'est souvent plus fiable qu'un seul prompt géant, et moins cher si les étapes simples utilisent un petit modèle.</p>`},
+{t:"Évaluer ses prompts comme du code", h:`
+<ul class="clean">
+<li>Constitue un jeu d'essai : 30 à 100 entrées réelles et variées, avec le résultat attendu ou des critères.</li>
+<li>Note automatiquement ce qui peut l'être (format, présence d'une information) et utilise un modèle comme juge pour le reste, avec une grille précise.</li>
+<li>Change une seule chose à la fois et compare les scores.</li>
+<li>Versionne tes prompts dans Git comme du code.</li>
+</ul>`},
+{t:"Se défendre contre l'injection de prompt", h:`
+<ul class="clean no">
+<li>Tout texte venant de l'extérieur (page web, mail, document, message d'utilisateur) peut contenir des instructions malveillantes.</li>
+<li>Aucune instruction dans le prompt ne garantit à 100 % qu'elles seront ignorées.</li>
+</ul>
+<ul class="clean ok">
+<li>Délimite clairement les contenus externes et dis au modèle de les traiter comme des données.</li>
+<li>Limite les outils et les droits de l'agent ; exige une confirmation humaine pour les actions sensibles.</li>
+<li>Sépare les agents : celui qui lit des contenus externes ne doit pas avoir accès aux secrets.</li>
+<li>Surveille et journalise les appels d'outils.</li>
+</ul>`},
+{t:"Conseils propres à chaque famille de modèles", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Modèles</th><th>Conseils</th></tr></thead><tbody>
+<tr><td>Claude</td><td>Balises XML pour structurer, instructions précises et explicites, exemples ; donner un rôle dans le prompt système</td></tr>
+<tr><td>GPT</td><td>Consignes claires et hiérarchisées ; pour les modèles qui raisonnent, décrire l'objectif et les critères plutôt que les étapes de réflexion</td></tr>
+<tr><td>Gemini</td><td>Excellent avec beaucoup de contexte et de fichiers multimédias ; mettre la question après les documents</td></tr>
+<tr><td>Modèles de raisonnement en général</td><td>Moins de « réfléchis étape par étape », plus de contexte, de contraintes et de critères de réussite</td></tr>
+<tr><td>Petits modèles locaux</td><td>Consignes courtes, exemples, une seule tâche par prompt</td></tr>
+</tbody></table></div>
+<p>Chaque éditeur publie un guide officiel de prompt : c'est la meilleure source pour son propre modèle.</p>`}
+]},
+{
+id:'imagepro', n:'Les images comme un pro', by:'ComfyUI, ControlNet, LoRA, édition', cat:'creation', lvl:'Apprenant → expert', dur:'3 h',
+pitch:"Aller au-delà du simple prompt : contrôler la pose et la composition, garder un personnage cohérent, entraîner un style, retoucher, agrandir, et travailler en local avec ComfyUI.",
+ch:[
+{t:"Le prompt d'image avancé", h:`
+<ul class="clean">
+<li><b>Ordre</b> : sujet, action, décor, style, cadrage, objectif photo, lumière, palette, ambiance.</li>
+<li><b>Vocabulaire photo</b> : plan large, plan américain, gros plan, contre-plongée, 35 mm, 85 mm, faible profondeur de champ, heure dorée, lumière de studio.</li>
+<li><b>Vocabulaire artistique</b> : aquarelle, gravure, rendu 3D, illustration vectorielle, peinture à l'huile, pixel art.</li>
+<li><b>Prompt négatif</b> : ce qu'on ne veut pas (texte, flou, mains déformées), selon les outils.</li>
+<li><b>Graine</b> (seed) : fixer la graine permet de refaire la même image en changeant un seul détail.</li>
+</ul>`},
+{t:"Garder un personnage ou un produit cohérent", h:`
+<ul class="clean">
+<li><b>Édition par la conversation</b> : Nano Banana (Gemini), GPT Image et FLUX Kontext modifient une image existante en gardant le sujet.</li>
+<li><b>Image de référence</b> : Midjourney (modèle d'édition de la V8.2), Firefly et la plupart des outils acceptent des références de sujet et de style.</li>
+<li><b>Planche de personnage</b> : générer d'abord le personnage sous plusieurs angles, puis s'en servir comme référence.</li>
+<li><b>LoRA</b> : entraîner un petit adaptateur sur 15 à 30 images d'un personnage ou d'un style, pour les modèles ouverts.</li>
+</ul>`},
+{t:"ComfyUI et le contrôle total", h:`
+<p><b>ComfyUI</b> est l'outil open source de référence pour la génération locale : on relie des nœuds (modèle, prompt, échantillonneur, décodeur) dans un graphe. Les graphes s'enregistrent et se partagent.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Technique</th><th>Ce qu'elle permet</th></tr></thead><tbody>
+<tr><td>ControlNet</td><td>Imposer une pose, des contours, une profondeur ou un croquis</td></tr>
+<tr><td>IP-Adapter</td><td>S'inspirer du style ou du sujet d'une image de référence</td></tr>
+<tr><td>Inpainting / outpainting</td><td>Refaire une zone de l'image ou l'agrandir au-delà de ses bords</td></tr>
+<tr><td>Upscaling</td><td>Augmenter la résolution en ajoutant des détails</td></tr>
+<tr><td>Vidéo</td><td>Animer une image ou générer des clips avec des modèles ouverts</td></tr>
+</tbody></table></div>
+<p>Matériel : une carte graphique avec au moins 8 Go de mémoire pour les modèles courants, davantage pour les grands modèles et la vidéo.</p>`},
+{t:"Flux de travail professionnel", h:`
+<ol class="steps">
+<li>Brief : usage, format, public, contraintes de marque.</li>
+<li>Exploration : 20 à 50 propositions rapides pour trouver la direction.</li>
+<li>Sélection et itération sur 2 ou 3 pistes.</li>
+<li>Retouche : correction des détails (mains, texte, logos) par inpainting ou dans un logiciel de retouche.</li>
+<li>Agrandissement et export aux bons formats.</li>
+<li>Vérification des droits et mention « généré par IA » si l'image est diffusée.</li>
+</ol>`}
+]},
+{
+id:'voix', n:'L\'IA vocale et audio', by:'Transcription, synthèse, agents vocaux', cat:'creation', lvl:'Débutant → expert', dur:'2 h',
+pitch:"Transcrire, faire parler, traduire, dialoguer à voix haute, créer de la musique : les outils, les API d'agents vocaux, les modèles ouverts et les règles éthiques.",
+ch:[
+{t:"Les quatre familles de l'audio", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Famille</th><th>Outils</th></tr></thead><tbody>
+<tr><td><b>Reconnaissance vocale</b> (parole → texte)</td><td>Whisper et ses dérivés (faster-whisper), Voxtral de Mistral (2025), services de Google, Microsoft, ElevenLabs</td></tr>
+<tr><td><b>Synthèse vocale</b> (texte → parole)</td><td>ElevenLabs, voix d'OpenAI et de Google, modèles ouverts comme Kokoro</td></tr>
+<tr><td><b>Conversation vocale</b></td><td>ChatGPT Voice, Gemini Live ; pour les développeurs : API temps réel d'OpenAI, Live API de Gemini, agents conversationnels d'ElevenLabs</td></tr>
+<tr><td><b>Musique et sons</b></td><td>Suno, effets sonores d'ElevenLabs, modèles ouverts de génération audio</td></tr>
+</tbody></table></div>`},
+{t:"Transcrire en local et gratuitement", h:`
+<pre class="code">pip install openai-whisper      # nécessite aussi ffmpeg
+whisper reunion.mp3 --language French --model medium</pre>
+<p>Le modèle « medium » est un bon compromis ; « large » est plus précis mais plus lent. Les données ne quittent pas ton ordinateur. Pour un compte rendu, enchaîne avec un modèle de langage qui résume la transcription.</p>`},
+{t:"Construire un agent vocal", h:`
+<ol class="steps">
+<li>Choisis une architecture : soit un modèle vocal de bout en bout (latence faible, conversation naturelle), soit la chaîne transcription → modèle de langage → synthèse (plus de contrôle, plus de latence).</li>
+<li>Écris un prompt système adapté à l'oral : phrases courtes, pas de listes, confirmer les informations importantes.</li>
+<li>Ajoute des outils (prendre rendez-vous, chercher une commande).</li>
+<li>Gère les interruptions et les silences.</li>
+<li>Annonce clairement à l'interlocuteur qu'il parle à une IA.</li>
+</ol>`},
+{t:"Éthique et droit de la voix", h:`
+<ul class="clean no">
+<li>Cloner la voix d'une personne sans son accord écrit est interdit et dangereux (arnaques, usurpation).</li>
+<li>Enregistrer une conversation sans prévenir les participants est illégal dans de nombreux cas.</li>
+</ul>
+<ul class="clean ok">
+<li>Utilise les voix de synthèse fournies, ou ta propre voix.</li>
+<li>Signale les contenus audio générés par IA, comme l'impose l'AI Act européen.</li>
+</ul>`}
+]},
+{
+id:'vision', n:'Vision par ordinateur', by:'Classer, détecter, segmenter, lire', cat:'dev', lvl:'Affirmé → expert', dur:'2 h',
+pitch:"Apprendre aux machines à voir : classification d'images, détection d'objets avec YOLO, segmentation avec SAM, lecture de documents (OCR) et modèles de langage multimodaux.",
+ch:[
+{t:"Les tâches de la vision", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Tâche</th><th>Question</th><th>Exemple</th></tr></thead><tbody>
+<tr><td>Classification</td><td>Qu'y a-t-il sur l'image ?</td><td>Photo d'un chat</td></tr>
+<tr><td>Détection</td><td>Où sont les objets ?</td><td>Rectangles autour des voitures et piétons</td></tr>
+<tr><td>Segmentation</td><td>Quels pixels appartiennent à quel objet ?</td><td>Détourage parfait d'une personne</td></tr>
+<tr><td>OCR et compréhension de documents</td><td>Que dit le document ?</td><td>Lire une facture, un formulaire</td></tr>
+<tr><td>Estimation de pose</td><td>Comment le corps est-il positionné ?</td><td>Analyse de geste sportif</td></tr>
+</tbody></table></div>`},
+{t:"Détecter des objets avec YOLO", h:`
+<pre class="code">pip install ultralytics
+
+from ultralytics import YOLO
+modele = YOLO("yolo11n.pt")          # petit modèle pré-entraîné sur 80 types d'objets
+resultats = modele("rue.jpg")
+resultats[0].show()                  # affiche les détections
+for boite in resultats[0].boxes:
+    print(modele.names[int(boite.cls)], float(boite.conf))</pre>
+<p>On peut ensuite l'entraîner sur ses propres objets avec quelques centaines d'images annotées (outils d'annotation comme Label Studio ou Roboflow).</p>`},
+{t:"Segmentation, OCR et modèles multimodaux", h:`
+<ul class="clean">
+<li><b>Segment Anything</b> (SAM, Meta) découpe n'importe quel objet sur un simple clic ou une description.</li>
+<li><b>OCR moderne</b> : Mistral OCR, Docling, ou directement un modèle multimodal (Claude, GPT, Gemini) qui lit et comprend un document photographié.</li>
+<li><b>Modèles de langage multimodaux</b> : pour beaucoup de tâches, il suffit maintenant de demander « liste les produits visibles sur ce rayon et leur prix ». Les modèles spécialisés restent plus rapides et moins chers pour le temps réel et les gros volumes.</li>
+</ul>
+<div class="ex"><b class="t">Exercice</b><p>Compte automatiquement les voitures sur une vidéo de rue avec YOLO, puis compare avec la réponse d'un modèle multimodal sur quelques images.</p></div>`}
+]},
+{
+id:'etudier', n:'Apprendre et étudier avec l\'IA', by:'Méthodes, tuteurs, outils', cat:'travail', lvl:'Novice → apprenant', dur:'1 h 30',
+pitch:"Utiliser l'IA pour vraiment apprendre, pas pour tricher : modes d'apprentissage des assistants, méthodes efficaces, fiches, quiz, langues, et les pièges à éviter.",
+ch:[
+{t:"Les modes d'apprentissage des assistants", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Outil</th><th>Fonction</th></tr></thead><tbody>
+<tr><td>ChatGPT</td><td>Mode « Étudier » (juillet 2025) : guide par des questions au lieu de donner la réponse</td></tr>
+<tr><td>Claude</td><td>Mode d'apprentissage : explique et fait réfléchir plutôt que de faire à ta place</td></tr>
+<tr><td>Gemini</td><td>Apprentissage guidé (août 2025), avec images, vidéos et quiz</td></tr>
+<tr><td>NotebookLM</td><td>Fiches, quiz, cartes mentales et résumés audio à partir de tes cours</td></tr>
+<tr><td>Khanmigo (Khan Academy)</td><td>Tuteur conçu pour les élèves</td></tr>
+</tbody></table></div>`},
+{t:"Les méthodes qui marchent, boostées par l'IA", h:`
+<ul class="clean">
+<li><b>Méthode Feynman</b> : explique une notion à l'IA comme à un enfant, et demande-lui de pointer tes erreurs et tes trous.</li>
+<li><b>Récupération active</b> : fais-toi interroger plutôt que relire. « Pose-moi 10 questions sur ce chapitre, une à la fois. »</li>
+<li><b>Répétition espacée</b> : génère des fiches question / réponse et révise-les dans une application comme Anki.</li>
+<li><b>Exemples concrets</b> : demande trois exemples tirés de ta vie ou de ton domaine.</li>
+<li><b>Correction exigeante</b> : « Note ma réponse sur 10 comme un examinateur strict et explique ce qui manque. »</li>
+</ul>`},
+{t:"Apprendre une langue", h:`
+<ul class="clean">
+<li>Conversation orale quotidienne avec le mode vocal, en demandant d'être corrigé après chaque phrase.</li>
+<li>Jeu de rôle : commander au restaurant, entretien d'embauche, appel téléphonique.</li>
+<li>Textes adaptés à ton niveau sur des sujets qui t'intéressent, avec le vocabulaire nouveau en fin de texte.</li>
+<li>Explication des fautes récurrentes dans tes écrits.</li>
+</ul>`},
+{t:"Les pièges", h:`
+<ul class="clean no">
+<li>Faire faire ses devoirs : on obtient la note, pas la compétence, et c'est souvent sanctionné.</li>
+<li>Croire une explication fausse : vérifier les points importants dans le cours ou un manuel.</li>
+<li>Remplacer la réflexion : chercher d'abord seul quelques minutes, puis demander de l'aide.</li>
+</ul>
+<div class="ex"><b class="t">Exercice</b><p>Choisis un sujet que tu ne connais pas, active le mode d'apprentissage d'un assistant, et fais-toi enseigner les bases en 30 minutes. Le lendemain, demande un quiz sans relire.</p></div>`}
+]},
+{
+id:'entreprendre', n:'Entreprendre avec l\'IA', by:'Créer, vendre, gérer', cat:'travail', lvl:'Débutant → affirmé', dur:'2 h',
+pitch:"Utiliser l'IA à chaque étape d'un projet d'entreprise : idée, étude de marché, offre, site, marketing, relation client, gestion, et les limites légales.",
+ch:[
+{t:"De l'idée au projet", h:`
+<ol class="steps">
+<li><b>Générer et filtrer des idées</b> : demande 30 idées liées à tes compétences, puis fais-les classer par marché, coût de lancement et concurrence.</li>
+<li><b>Étude de marché</b> : recherche approfondie sur la taille du marché, les concurrents, les prix, avec sources.</li>
+<li><b>Interviews clients</b> : prépare les questions avec l'IA, mais parle à de vraies personnes. L'IA ne remplace pas le terrain.</li>
+<li><b>Modèle économique</b> : fais calculer coûts, prix, marge et seuil de rentabilité, en vérifiant les calculs.</li>
+<li><b>Avocat du diable</b> : demande les dix raisons pour lesquelles ton projet pourrait échouer.</li>
+</ol>`},
+{t:"Lancer et vendre", h:`
+<ul class="clean">
+<li>Site et page de vente : voir le cours « Créer un site web avec l'IA ».</li>
+<li>Identité : noms, slogans, logos (à vérifier auprès de l'INPI avant de les adopter).</li>
+<li>Contenus : articles, publications, vidéos courtes, newsletters.</li>
+<li>Publicité : variantes d'annonces à tester, analyse des résultats.</li>
+<li>Prospection : messages personnalisés, en respectant le RGPD.</li>
+</ul>`},
+{t:"Gérer au quotidien", h:`
+<ul class="clean">
+<li>Relation client : réponses aux questions fréquentes, assistant sur le site, tri des demandes.</li>
+<li>Administration : devis, factures, relances, courriers (relus par toi).</li>
+<li>Finances : analyse des dépenses, prévisions, tableaux de bord.</li>
+<li>Automatisations : voir le cours « Automatiser avec l'IA ».</li>
+</ul>
+<div class="callout warn">L'IA ne remplace ni un expert-comptable ni un avocat pour les statuts, la fiscalité, les contrats et les obligations légales. Elle t'aide à préparer tes questions et à comprendre leurs réponses.</div>`}
+]},
+{
+id:'localpro', n:'IA locale avancée', by:'Matériel, quantification, serveurs, interfaces', cat:'dev', lvl:'Affirmé → expert', dur:'2 h',
+pitch:"Monter sa propre station d'IA : choisir le matériel, comprendre la quantification, servir des modèles avec llama.cpp et vLLM, une interface type ChatGPT, et brancher le tout à ses agents.",
+ch:[
+{t:"Choisir son matériel", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Configuration</th><th>Ce qu'elle fait tourner confortablement</th></tr></thead><tbody>
+<tr><td>Portable récent, 16 Go de mémoire</td><td>Modèles de 3 à 8 milliards de paramètres, transcription Whisper</td></tr>
+<tr><td>Mac avec puce Apple et 32 à 64 Go de mémoire unifiée</td><td>Modèles de 14 à 32 milliards et plus ; la mémoire unifiée est un gros avantage</td></tr>
+<tr><td>PC avec carte graphique de 12 à 24 Go</td><td>Modèles de 14 à 32 milliards, génération d'images et de vidéos rapide</td></tr>
+<tr><td>Station avec plusieurs cartes ou serveur</td><td>Modèles de 70 milliards et plus, usage en équipe</td></tr>
+</tbody></table></div>
+<p>Règle approximative : en 4 bits, compte environ 0,6 Go de mémoire par milliard de paramètres, plus la place du contexte.</p>`},
+{t:"Quantification et formats", h:`
+<ul class="clean">
+<li><b>GGUF</b> : le format de llama.cpp, d'Ollama et de LM Studio. Les suffixes Q4_K_M, Q5_K_M, Q8_0 indiquent le niveau de compression.</li>
+<li><b>Q4_K_M</b> est le compromis courant ; Q8 est presque identique à l'original mais deux fois plus lourd.</li>
+<li><b>MLX</b> : format optimisé pour les puces Apple.</li>
+<li><b>AWQ, GPTQ, FP8</b> : formats pour les serveurs GPU et vLLM.</li>
+</ul>`},
+{t:"Servir et utiliser ses modèles", h:`
+<pre class="code"># llama.cpp : serveur compatible avec l'API OpenAI
+llama-server -m modele-Q4_K_M.gguf --port 8080
+
+# vLLM : serveur de production sur GPU
+pip install vllm
+vllm serve Qwen/Qwen3-8B</pre>
+<ul class="clean">
+<li>Ces serveurs exposent une API compatible OpenAI : la plupart des outils (Open WebUI, n8n, Continue, scripts) s'y branchent en changeant juste l'adresse.</li>
+<li><b>Open WebUI</b> donne une interface type ChatGPT, avec comptes, documents et outils.</li>
+<li>Pour un usage en équipe, place le serveur derrière une authentification ; ne l'expose jamais directement sur internet.</li>
+</ul>
+<div class="ex"><b class="t">Projet</b><p>Installe Ollama et Open WebUI, charge deux modèles de tailles différentes, ajoute tes documents, et compare qualité et vitesse sur dix questions.</p></div>`}
+]}
+);
+Object.assign(NIV_COURS, {python:2, ml:4, rag:5, promptpro:4, imagepro:4, voix:3, vision:5, etudier:1, entreprendre:2, localpro:5});
+
+/* ====== ENCYCLOPÉDIE : l'IA dans chaque domaine ====== */
+ENCYCLO_PARTS.domaines = 'L\'IA dans chaque domaine';
+ENCYCLO.push(
+{p:'domaines', t:"L'IA et la santé", s:"Imagerie, recherche de médicaments, assistants médicaux", h:`
+<ul class="clean">
+<li><b>Imagerie médicale</b> : c'est le premier domaine d'usage réel. Les autorités sanitaires américaines ont autorisé plusieurs centaines de dispositifs médicaux à base d'IA, en majorité en radiologie (détection de nodules, de fractures, de cancers du sein).</li>
+<li><b>Biologie et médicaments</b> : AlphaFold prédit la forme des protéines (prix Nobel de chimie 2024) ; AlphaFold 3 (2024) modélise aussi leurs interactions avec d'autres molécules. Des laboratoires utilisent l'IA pour concevoir de nouveaux candidats médicaments.</li>
+<li><b>Assistants pour soignants</b> : transcription automatique des consultations et rédaction des comptes rendus, pour rendre du temps au soin.</li>
+<li><b>Pour les patients</b> : comprendre un compte rendu, préparer ses questions, mais jamais remplacer un diagnostic.</li>
+</ul>
+<div class="callout warn">Les données de santé sont les plus sensibles qui soient. Ne les confie qu'à des services conçus et autorisés pour elles.</div>`},
+{p:'domaines', t:"L'IA et la science", s:"Quand l'IA accélère la découverte", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Domaine</th><th>Exemple</th></tr></thead><tbody>
+<tr><td>Biologie</td><td>AlphaFold : la structure de presque toutes les protéines connues mise à disposition des chercheurs</td></tr>
+<tr><td>Météo</td><td>Les modèles de prévision par IA, comme GraphCast de Google DeepMind (2023), rivalisent avec les modèles physiques en une fraction du temps de calcul</td></tr>
+<tr><td>Mathématiques</td><td>Des systèmes d'IA ont atteint en 2025 le niveau médaille d'or aux Olympiades internationales de mathématiques</td></tr>
+<tr><td>Matériaux</td><td>Découverte de nouveaux cristaux et matériaux candidats</td></tr>
+<tr><td>Recherche bibliographique</td><td>Agents qui lisent et synthétisent des centaines d'articles (Deep Research, Elicit, Consensus)</td></tr>
+</tbody></table></div>
+<p>Les laboratoires d'IA affichent tous l'ambition de créer des « scientifiques IA » capables de mener des expériences de bout en bout ; en 2026, l'IA reste surtout un accélérateur entre les mains des chercheurs.</p>`},
+{p:'domaines', t:"Robotique et IA incarnée", s:"Quand l'IA sort de l'écran", h:`
+<ul class="clean">
+<li><b>Modèles pour robots</b> : des modèles « vision-langage-action » comprennent une consigne en langage naturel et la transforment en mouvements. Google DeepMind a présenté Gemini Robotics en 2025.</li>
+<li><b>Humanoïdes</b> : de nombreuses entreprises développent des robots humanoïdes (Figure, Tesla avec Optimus, Unitree, Agility, Boston Dynamics), testés dans des usines et entrepôts.</li>
+<li><b>Open source</b> : Hugging Face a lancé LeRobot (2024), une bibliothèque et des bras robotisés à bas prix pour apprendre la robotique avec l'IA.</li>
+<li><b>Limites</b> : le monde physique est bien plus difficile que le texte : peu de données, sécurité des personnes, coût du matériel.</li>
+</ul>`},
+{p:'domaines', t:"Voitures autonomes et transports", s:"Le plus long chantier de l'IA", h:`
+<ul class="clean">
+<li>Les premiers grands défis de voitures autonomes datent de 2004 et 2005 (DARPA Grand Challenge).</li>
+<li><b>Waymo</b> (groupe Alphabet) exploite des robotaxis sans conducteur ouverts au public dans plusieurs villes américaines.</li>
+<li>Les approches diffèrent : capteurs multiples (lidar, radar, caméras) et cartes détaillées, ou caméras seules et apprentissage de bout en bout (approche de Tesla).</li>
+<li>Les niveaux d'autonomie vont de 0 (aucune aide) à 5 (aucun conducteur nécessaire, partout).</li>
+<li>Enjeux : sécurité, responsabilité en cas d'accident, réglementation, acceptation par le public.</li>
+</ul>`},
+{p:'domaines', t:"L'IA et l'éducation", s:"Tuteurs, triche et nouvelles compétences", h:`
+<ul class="clean">
+<li><b>Tuteurs personnels</b> : les modes d'apprentissage de ChatGPT, Claude et Gemini, ou Khanmigo, guident l'élève sans donner la réponse.</li>
+<li><b>Pour les enseignants</b> : préparer des cours, des exercices différenciés, des grilles de correction.</li>
+<li><b>Le défi de la triche</b> : les détecteurs de texte généré par IA ne sont pas fiables et produisent des faux positifs ; les évaluations évoluent vers l'oral, le travail en classe et l'analyse du processus.</li>
+<li><b>Nouvelles compétences</b> : savoir formuler une question, vérifier une source, garder son esprit critique et comprendre les limites de l'IA.</li>
+</ul>`},
+{p:'domaines', t:"L'IA et la création artistique", s:"Outil, collaborateur ou concurrent ?", h:`
+<ul class="clean">
+<li><b>Nouveaux outils</b> : images, vidéos, musique, voix, aide à l'écriture et au montage. Beaucoup de créateurs les intègrent dans leur processus.</li>
+<li><b>Débat sur l'entraînement</b> : les modèles ont appris sur des œuvres sans autorisation explicite des auteurs ; plusieurs procès sont en cours (presse, auteurs, studios de cinéma, banques d'images) et certains se sont conclus par des accords.</li>
+<li><b>Droit d'auteur sur les créations IA</b> : dans de nombreux pays, une œuvre produite entièrement par une IA, sans apport créatif humain suffisant, n'est pas protégée par le droit d'auteur.</li>
+<li><b>Transparence</b> : en Europe, les contenus générés doivent être signalés comme tels.</li>
+</ul>`},
+{p:'domaines', t:"L'IA en Chine", s:"Le second pôle mondial", h:`
+<ul class="clean">
+<li><b>Acteurs</b> : DeepSeek, Alibaba (Qwen), ByteDance (Doubao), Moonshot (Kimi), Zhipu, Baidu, Tencent (Hunyuan).</li>
+<li><b>Stratégie des poids ouverts</b> : de nombreux modèles chinois sont publiés librement et figurent parmi les plus téléchargés au monde.</li>
+<li><b>Efficacité</b> : contraints par les restrictions américaines sur les puces, les laboratoires chinois ont misé sur des architectures économes (mélange d'experts, entraînement optimisé).</li>
+<li><b>Réglementation</b> : la Chine encadre depuis 2023 les services d'IA générative, avec des obligations sur les contenus.</li>
+<li><b>Confidentialité</b> : les applications en ligne de ces éditeurs hébergent les données en Chine ; utiliser leurs modèles en local évite ce problème.</li>
+</ul>`},
+{p:'domaines', t:"L'IA en Europe et en France", s:"Réglementation, champions et souveraineté", h:`
+<ul class="clean">
+<li><b>Mistral AI</b> : le champion européen, avec la plus grosse levée de fonds de l'histoire de la tech européenne (3 milliards d'euros, septembre 2026).</li>
+<li><b>Hugging Face</b> : fondée par des Français, plateforme mondiale de l'IA ouverte, en cours de rachat par Nvidia.</li>
+<li><b>Recherche</b> : la France compte de nombreux chercheurs de premier plan (Yann LeCun notamment) et des laboratoires de grands groupes américains à Paris.</li>
+<li><b>Investissements</b> : au sommet de Paris de février 2025, la France a annoncé 109 milliards d'euros d'investissements dans l'IA, notamment dans des centres de données.</li>
+<li><b>AI Act</b> : l'Europe est la première à encadrer l'IA par une loi complète, assouplie en 2026 par l'omnibus numérique.</li>
+<li><b>Enjeu de souveraineté</b> : dépendance aux puces, aux clouds et aux modèles américains ; volonté de développer des alternatives européennes.</li>
+</ul>`},
+{p:'domaines', t:"Les grands débats sur l'avenir de l'IA", s:"AGI, risques, ouverture, emploi : les positions en présence", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Débat</th><th>Positions</th></tr></thead><tbody>
+<tr><td><b>L'IA générale arrive-t-elle ?</b></td><td>Les dirigeants d'OpenAI, d'Anthropic et de Google DeepMind l'annoncent pour les prochaines années ; d'autres chercheurs, comme Yann LeCun, estiment que les modèles de langage actuels n'y mèneront pas seuls.</td></tr>
+<tr><td><b>Risques graves</b></td><td>Geoffrey Hinton et Yoshua Bengio alertent sur des risques majeurs (perte de contrôle, armes) ; d'autres jugent ces craintes exagérées et préfèrent se concentrer sur les problèmes actuels (biais, désinformation, emploi).</td></tr>
+<tr><td><b>Ouvrir ou fermer les modèles</b></td><td>Les partisans de l'ouverture (Meta, Mistral, laboratoires chinois) mettent en avant l'innovation et l'indépendance ; d'autres craignent la diffusion de capacités dangereuses.</td></tr>
+<tr><td><b>Réguler</b></td><td>L'Europe a légiféré ; d'autres pays préfèrent des engagements volontaires pour ne pas freiner l'innovation.</td></tr>
+<tr><td><b>Emploi</b></td><td>Transformation des métiers et gains de productivité pour les uns, risque de suppression massive d'emplois pour les autres.</td></tr>
+</tbody></table></div>
+<div class="callout ok"><b>À retenir :</b> personne ne connaît l'avenir de l'IA. Les meilleurs experts sont en désaccord : méfie-toi de quiconque présente une prédiction comme une certitude.</div>`}
+);
+NIV_ENC.push(2, 3, 3, 2, 2, 2, 3, 2, 3);
+
+/* ====== COURS : deep learning, vidéo, métiers ====== */
+COURS.push(
+{
+id:'pytorch', n:'Deep learning en pratique', by:'PyTorch, de zéro à un premier réseau', cat:'dev', lvl:'Affirmé → expert', dur:'3 h',
+pitch:"Écrire et entraîner soi-même des réseaux de neurones avec PyTorch : tenseurs, gradient automatique, boucle d'entraînement, réseaux d'images, et la recette d'un mini-GPT.",
+ch:[
+{t:"Tenseurs et gradient automatique", h:`
+<p><b>PyTorch</b> (créé par Meta, géré par la PyTorch Foundation) est le framework utilisé par la plupart des laboratoires. Ses deux briques : les <b>tenseurs</b> (des tableaux de nombres à plusieurs dimensions, calculés sur GPU) et l'<b>autograd</b> (le calcul automatique des gradients).</p>
+<pre class="code">pip install torch
+
+import torch
+x = torch.tensor([2.0, 3.0], requires_grad=True)
+y = (x ** 2).sum()        # y = x1² + x2²
+y.backward()              # calcule dy/dx automatiquement
+print(x.grad)             # tensor([4., 6.])  car la dérivée de x² est 2x
+
+appareil = "cuda" if torch.cuda.is_available() else "cpu"   # "mps" sur Mac</pre>`},
+{t:"La boucle d'entraînement", h:`
+<pre class="code">import torch, torch.nn as nn
+
+# Données factices : apprendre y = 3x + 1
+X = torch.linspace(-1, 1, 200).unsqueeze(1)
+y = 3 * X + 1 + 0.1 * torch.randn_like(X)
+
+modele = nn.Sequential(nn.Linear(1, 16), nn.ReLU(), nn.Linear(16, 1))
+perte_fn = nn.MSELoss()
+optimiseur = torch.optim.Adam(modele.parameters(), lr=0.01)
+
+for epoque in range(500):
+    pred = modele(X)                 # 1. prédire
+    perte = perte_fn(pred, y)        # 2. mesurer l'erreur
+    optimiseur.zero_grad()           # 3. remettre les gradients à zéro
+    perte.backward()                 # 4. calculer les gradients
+    optimiseur.step()                # 5. ajuster les poids
+    if epoque % 100 == 0:
+        print(epoque, perte.item())</pre>
+<p>Ces cinq lignes sont le cœur de tout entraînement, du petit réseau jusqu'aux plus grands modèles de langage.</p>`},
+{t:"Un réseau qui reconnaît des images", h:`
+<pre class="code">pip install torchvision
+
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+import torch.nn as nn, torch
+
+donnees = datasets.MNIST("data", train=True, download=True, transform=transforms.ToTensor())
+lot = DataLoader(donnees, batch_size=64, shuffle=True)
+
+reseau = nn.Sequential(
+    nn.Conv2d(1, 16, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+    nn.Conv2d(16, 32, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+    nn.Flatten(), nn.Linear(32 * 7 * 7, 10))
+opt = torch.optim.Adam(reseau.parameters(), lr=1e-3)
+
+for images, chiffres in lot:            # une époque
+    perte = nn.functional.cross_entropy(reseau(images), chiffres)
+    opt.zero_grad(); perte.backward(); opt.step()</pre>
+<p>En une époque, ce petit réseau convolutif reconnaît les chiffres manuscrits avec une précision d'environ 98 %, comme les réseaux de Yann LeCun à la fin des années 1980, mais en quelques secondes.</p>`},
+{t:"Les notions qui font progresser", h:`
+<ul class="clean">
+<li><b>Normalisation</b> (BatchNorm, LayerNorm) : stabilise l'entraînement.</li>
+<li><b>Dropout</b> et régularisation : limitent le surapprentissage.</li>
+<li><b>Taux d'apprentissage</b> : le réglage le plus important ; on l'augmente au début puis on le fait décroître.</li>
+<li><b>Transfert d'apprentissage</b> : partir d'un modèle pré-entraîné au lieu de partir de zéro.</li>
+<li><b>Précision mixte</b> : calculer en 16 bits pour aller deux fois plus vite.</li>
+<li><b>Suivi des expériences</b> : TensorBoard ou Weights &amp; Biases pour visualiser les courbes.</li>
+</ul>`},
+{t:"Vers un mini-GPT", h:`
+<ol class="steps">
+<li>Découper un texte en tokens (au début, des caractères).</li>
+<li>Créer des embeddings et des positions.</li>
+<li>Empiler des blocs Transformer : attention multi-têtes, couche linéaire, normalisation, connexions résiduelles.</li>
+<li>Entraîner à prédire le token suivant avec l'entropie croisée.</li>
+<li>Générer du texte en tirant les tokens un par un.</li>
+</ol>
+<p>Le dépôt nanoGPT et la vidéo « Let's build GPT » d'Andrej Karpathy suivent exactement ce chemin en quelques centaines de lignes ; nanochat va jusqu'à un assistant complet. Voir la section Ressources.</p>`}
+]},
+{
+id:'video', n:'La vidéo IA de A à Z', by:'Du prompt au montage final', cat:'creation', lvl:'Débutant → expert', dur:'2 h 30',
+pitch:"Créer des vidéos avec l'IA : choisir son générateur, écrire un prompt de plan, garder des personnages cohérents, ajouter voix et musique, monter, et respecter les règles.",
+ch:[
+{t:"Les générateurs en octobre 2026", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Outil</th><th>Points forts</th></tr></thead><tbody>
+<tr><td>Gemini Omni et Veo 3.1 (Google, via Gemini et Flow)</td><td>Réalisme, son et dialogues intégrés, création à partir de n'importe quelle entrée</td></tr>
+<tr><td>Sora 2 (OpenAI)</td><td>Scènes cohérentes avec son, application dédiée</td></tr>
+<tr><td>Runway</td><td>Suite professionnelle complète : génération, retouche, effets</td></tr>
+<tr><td>Kling, Luma, Hailuo et autres</td><td>Bonne qualité de mouvement, tarifs variés</td></tr>
+<tr><td>Modèles ouverts dans ComfyUI</td><td>Contrôle total et génération en local avec une bonne carte graphique</td></tr>
+<tr><td>HeyGen, Synthesia</td><td>Avatars qui parlent, vidéos de formation, traduction avec synchronisation labiale</td></tr>
+</tbody></table></div>`},
+{t:"Écrire un prompt de plan", h:`
+<p>Structure : <b>type de plan</b> + <b>sujet</b> + <b>action</b> + <b>décor</b> + <b>mouvement de caméra</b> + <b>lumière</b> + <b>ambiance sonore</b> + <b>style</b> + <b>durée</b>.</p>
+<pre class="prompt">Travelling latéral lent, plan moyen. Une cycliste traverse un pont métallique sous une pluie fine, à la tombée de la nuit. Reflets des lampadaires sur la chaussée mouillée, brume légère. Son : pluie, sonnette de vélo au loin. Style cinéma réaliste, couleurs froides. 8 secondes.</pre>
+<ul class="clean">
+<li>Une seule action principale par plan.</li>
+<li>Décris le mouvement de caméra avec le vocabulaire du cinéma : travelling, panoramique, plan fixe, zoom, drone, caméra à l'épaule.</li>
+<li>Pour les dialogues, écris la réplique exacte entre guillemets et qui la prononce.</li>
+</ul>`},
+{t:"Cohérence et narration", h:`
+<ol class="steps">
+<li>Écris un script et découpe-le en plans de 5 à 10 secondes (storyboard).</li>
+<li>Crée d'abord des images de référence des personnages et des lieux avec un générateur d'images.</li>
+<li>Utilise ces images comme point de départ (image vers vidéo) pour garder la cohérence.</li>
+<li>Génère plusieurs versions par plan et garde la meilleure.</li>
+<li>Assemble, ajoute voix, musique et bruitages, étalonne les couleurs.</li>
+</ol>`},
+{t:"Son, montage et diffusion", h:`
+<ul class="clean">
+<li><b>Voix</b> : ElevenLabs ou les voix intégrées ; <b>musique</b> : Suno (vérifie les droits de ton offre).</li>
+<li><b>Montage</b> : DaVinci Resolve (gratuit), CapCut, Premiere Pro, Descript.</li>
+<li><b>Sous-titres</b> automatiques pour les réseaux sociaux.</li>
+<li><b>Formats</b> : 16:9 pour YouTube, 9:16 pour les formats courts verticaux.</li>
+<li><b>Mention obligatoire</b> : signale qu'il s'agit d'une vidéo générée ou modifiée par IA ; les plateformes et l'AI Act l'exigent.</li>
+</ul>
+<div class="callout warn">Jamais de vidéo réaliste d'une personne réelle sans son accord : c'est un deepfake, avec des risques juridiques sérieux.</div>
+<div class="ex"><b class="t">Projet</b><p>Réalise un court-métrage de 30 secondes : un script de 4 plans, des images de référence, la génération des plans, une voix off, une musique, et le montage final.</p></div>`}
+]},
+{
+id:'metiers', n:'Les métiers de l\'IA', by:'Carrières, compétences, formations', cat:'travail', lvl:'Novice → expert', dur:'1 h 30',
+pitch:"Tous les métiers de l'IA, des plus accessibles aux plus techniques : ce qu'ils font, les compétences demandées, comment se former et comment construire un portfolio.",
+ch:[
+{t:"La carte des métiers", h:`
+<div class="tbl-wrap"><table><thead><tr><th>Métier</th><th>Ce qu'il fait</th><th>Compétences clés</th></tr></thead><tbody>
+<tr><td><b>Ingénieur IA</b> (AI engineer)</td><td>Construit des applications et des agents avec des modèles existants</td><td>Python ou TypeScript, API, RAG, agents, évaluation</td></tr>
+<tr><td><b>Ingénieur machine learning</b></td><td>Entraîne, affine et déploie des modèles</td><td>PyTorch, données, MLOps, GPU</td></tr>
+<tr><td><b>Data scientist</b></td><td>Analyse les données et construit des modèles prédictifs</td><td>Statistiques, Python, scikit-learn, communication</td></tr>
+<tr><td><b>Data engineer</b></td><td>Construit les flux et les bases de données qui alimentent l'IA</td><td>SQL, pipelines, cloud</td></tr>
+<tr><td><b>MLOps / plateforme</b></td><td>Fait tourner les modèles de façon fiable en production</td><td>Cloud, conteneurs, surveillance, coûts</td></tr>
+<tr><td><b>Chercheur en IA</b></td><td>Invente de nouvelles méthodes</td><td>Mathématiques, doctorat le plus souvent, publications</td></tr>
+<tr><td><b>Spécialiste sécurité de l'IA</b></td><td>Teste et protège les systèmes d'IA</td><td>Cybersécurité, red teaming, injection de prompt</td></tr>
+<tr><td><b>Chef de produit IA</b></td><td>Définit ce que le produit doit faire et mesure son succès</td><td>Compréhension des modèles, utilisateurs, évaluation</td></tr>
+<tr><td><b>Automatisation et intégration</b></td><td>Déploie l'IA dans les processus d'une entreprise</td><td>n8n, Make, Power Automate, connaissance métier</td></tr>
+<tr><td><b>Formateur et consultant IA</b></td><td>Forme les équipes et accompagne l'adoption</td><td>Pédagogie, panorama des outils, gouvernance</td></tr>
+<tr><td><b>Juriste et éthicien de l'IA</b></td><td>Conformité AI Act, RGPD, droit d'auteur, politiques d'usage</td><td>Droit, compréhension technique</td></tr>
+<tr><td><b>Créateur de contenu IA</b></td><td>Images, vidéos, musique et publicités générées</td><td>Direction artistique, maîtrise des outils</td></tr>
+</tbody></table></div>`},
+{t:"Se former", h:`
+<ul class="clean">
+<li><b>Gratuit</b> : les cours de la section Ressources (Hugging Face, fast.ai, Karpathy, DeepLearning.AI, Elements of AI, Google).</li>
+<li><b>Diplômes</b> : écoles d'ingénieurs et masters en IA et science des données ; formations professionnelles et reconversions courtes en développement IA.</li>
+<li><b>Certifications</b> des grands clouds (AWS, Microsoft, Google) pour les métiers techniques.</li>
+<li><b>Pratique</b> : compétitions Kaggle, contributions open source sur GitHub et Hugging Face.</li>
+</ul>`},
+{t:"Construire un portfolio qui convainc", h:`
+<ol class="steps">
+<li>Trois à cinq projets concrets qui résolvent de vrais problèmes, plutôt que des tutoriels recopiés.</li>
+<li>Pour chaque projet : un dépôt GitHub propre, un README clair, une démo en ligne (un Space Hugging Face ou un site).</li>
+<li>Des résultats mesurés : précision, temps gagné, coût.</li>
+<li>Un article ou une courte vidéo qui explique ta démarche.</li>
+<li>Une présence active : contributions open source, publications sur ce que tu apprends.</li>
+</ol>
+<div class="ex"><b class="t">Exercice</b><p>Choisis un métier de la liste, demande à une IA un plan de formation de six mois adapté à ton niveau et à ton temps disponible, puis lance le premier projet de ton portfolio cette semaine.</p></div>`}
+]}
+);
+Object.assign(NIV_COURS, {pytorch:5, video:3, metiers:1});
+
 /* ====== PANORAMA DES OUTILS ====== */
 const TOOL_CATS = {
   chat:'Assistants généralistes', recherche:'Recherche & sources', bureau:'Bureautique & écriture',
@@ -3375,6 +4073,81 @@ GLOSS.push(
 ["TPU","Tensor Processing Unit : puce spécialisée de Google pour l'IA."],
 ["Webhook","Adresse web qu'une application appelle pour déclencher automatiquement une action."],
 ["Zéro confiance","Approche de sécurité où aucun accès n'est accordé par défaut, même à l'intérieur du réseau."]
+);
+
+/* ====== QUIZ ET GLOSSAIRE : troisième lot ====== */
+QUIZ.splice(QUIZ.length - 1, 0,
+{q:"Quel langage domine le développement de l'IA ?",o:["JavaScript","Python","C#","PHP"],a:1,e:"PyTorch, Transformers, scikit-learn et les SDK des grands fournisseurs sont en Python."},
+{q:"Un modèle excellent sur ses données d'entraînement mais mauvais sur de nouvelles données souffre de :",o:["Sous-apprentissage","Surapprentissage","Quantification","Hallucination"],a:1,e:"Il a appris par cœur au lieu de généraliser."},
+{q:"Dans un RAG, à quoi sert le reranking ?",o:["Traduire les documents","Reclasser les passages trouvés pour garder les plus pertinents","Compresser le modèle","Chiffrer la base"],a:1,e:"Un second modèle juge plus finement la pertinence des premiers résultats."},
+{q:"Quelle recherche faut-il ajouter aux vecteurs pour bien retrouver des noms propres et des références ?",o:["La recherche par mots-clés (hybride)","La recherche d'images","La traduction","Aucune"],a:0,e:"Les embeddings captent le sens ; les mots-clés retrouvent les termes exacts."},
+{q:"Quelles sont les cinq étapes d'une boucle d'entraînement PyTorch ?",o:["Prédire, mesurer l'erreur, remettre les gradients à zéro, rétropropager, ajuster","Télécharger, installer, lancer, fermer, recommencer","Écrire, traduire, résumer, publier, archiver","Aucune de ces réponses"],a:0,e:"Ces cinq lignes sont au cœur de tout entraînement, du petit réseau au grand modèle."},
+{q:"Quel outil détecte des objets dans une image en temps réel ?",o:["YOLO","Suno","Excel","NotebookLM"],a:0,e:"La famille YOLO est la référence de la détection d'objets rapide."},
+{q:"Pour garder un personnage identique d'une image à l'autre, on utilise :",o:["Une image de référence ou un LoRA","Un prompt plus court","Un format carré","Une autre langue"],a:0,e:"Références de sujet, édition conversationnelle ou adaptateur LoRA entraîné sur le personnage."},
+{q:"Que permet ControlNet ?",o:["Imposer une pose, des contours ou une composition à une image générée","Contrôler un robot","Bloquer les virus","Traduire une vidéo"],a:0,e:"C'est l'un des outils de contrôle les plus utilisés avec les modèles ouverts."},
+{q:"Quel format de fichier utilisent Ollama et llama.cpp ?",o:["GGUF","MP4","DOCX","PNG"],a:0,e:"GGUF contient un modèle quantifié prêt à tourner sur un ordinateur ordinaire."},
+{q:"Approximativement, combien de mémoire faut-il pour un modèle de 8 milliards de paramètres en 4 bits ?",o:["Environ 500 Mo","Environ 5 Go","Environ 50 Go","Environ 500 Go"],a:1,e:"Compter environ 0,6 Go par milliard de paramètres en 4 bits, plus le contexte."},
+{q:"Que faut-il faire avant de cloner la voix de quelqu'un ?",o:["Rien","Obtenir son accord écrit","Payer un abonnement","Changer de pays"],a:1,e:"Sans consentement, c'est interdit et c'est la base des arnaques par deepfake vocal."},
+{q:"Quel est le premier domaine médical d'usage réel de l'IA ?",o:["La chirurgie autonome","L'imagerie médicale","La psychiatrie","La pharmacie en ligne"],a:1,e:"La majorité des dispositifs médicaux à base d'IA autorisés concernent la radiologie."},
+{q:"Qu'a obtenu AlphaFold ?",o:["Un Oscar","Le prix Nobel de chimie 2024","Une médaille olympique","Le prix Goncourt"],a:1,e:"Demis Hassabis et John Jumper l'ont reçu avec David Baker."},
+{q:"Quelle entreprise exploite des robotaxis sans conducteur ouverts au public aux États-Unis ?",o:["Waymo","Netflix","Spotify","Dropbox"],a:0,e:"Waymo appartient au groupe Alphabet, maison mère de Google."},
+{q:"Les détecteurs de texte écrit par IA sont-ils fiables ?",o:["Oui, à 100 %","Non, ils produisent des faux positifs","Seulement en anglais","Seulement pour les poèmes"],a:1,e:"Ils accusent parfois à tort des textes écrits par des humains."},
+{q:"Quel métier construit des applications et des agents avec des modèles existants ?",o:["Ingénieur IA","Chercheur en IA","Data engineer","Juriste"],a:0,e:"Le métier le plus demandé depuis 2024, accessible sans doctorat."},
+{q:"Quel est le plus gros apport de l'IA à la vidéo générée en 2025 et 2026 ?",o:["Le son et les dialogues intégrés","Le noir et blanc","Les vidéos de 3 heures","La 3D relief"],a:0,e:"Veo 3, Sora 2 puis Gemini Omni génèrent l'image et le son ensemble."},
+{q:"Une œuvre entièrement générée par IA, sans apport créatif humain, est-elle protégée par le droit d'auteur ?",o:["Toujours","En général non, dans de nombreux pays","Seulement en Chine","Seulement les images"],a:1,e:"Le droit d'auteur protège la création humaine."},
+{q:"Quelle méthode d'apprentissage consiste à expliquer une notion simplement pour repérer ses lacunes ?",o:["La méthode Feynman","La méthode Coué","La méthode agile","La méthode Montessori"],a:0,e:"Explique à l'IA comme à un enfant et demande-lui de pointer ce qui manque."},
+{q:"Que veut dire « transfert d'apprentissage » ?",o:["Partir d'un modèle déjà entraîné au lieu de repartir de zéro","Copier un modèle sur une clé USB","Traduire un cours","Changer de professeur"],a:0,e:"C'est ce qui permet d'obtenir de bons résultats avec peu de données."}
+);
+GLOSS.push(
+["AGI","Intelligence artificielle générale : une IA capable de faire tout ce qu'un humain fait intellectuellement. Objectif affiché de plusieurs laboratoires, définition débattue."],
+["Alignement","Faire en sorte qu'une IA agisse selon les intentions et les valeurs humaines, de façon sûre."],
+["Attention","Mécanisme du Transformer qui relie chaque token aux autres tokens pertinents du texte."],
+["Autorégressif","Qui génère un élément après l'autre en s'appuyant sur ce qui précède, comme les modèles de langage."],
+["Benchmark","Test standardisé qui sert à comparer les modèles."],
+["Boîte noire","Système dont on voit les entrées et les sorties sans comprendre le fonctionnement interne."],
+["Chunking","Découpage des documents en morceaux pour un RAG."],
+["Classification","Tâche qui consiste à prédire une catégorie."],
+["Computer use","Capacité d'un agent à voir l'écran et à utiliser la souris et le clavier."],
+["ControlNet","Technique qui impose une pose, des contours ou une composition à une image générée."],
+["Descente de gradient","Méthode d'apprentissage qui ajuste les poids par petits pas dans la direction qui réduit l'erreur."],
+["Données synthétiques","Données produites par une IA pour en entraîner une autre."],
+["Entropie croisée","Fonction de perte qui mesure l'écart entre la prédiction et la bonne réponse."],
+["Époque","Un passage complet sur toutes les données d'entraînement."],
+["Few-shot","Donner quelques exemples dans le prompt pour montrer ce qui est attendu."],
+["Function calling","Capacité d'un modèle à demander l'exécution d'une fonction décrite par un schéma."],
+["GAN","Réseau antagoniste : deux réseaux s'affrontent, l'un crée, l'autre détecte le faux."],
+["Garde-fous","Règles, filtres et validations qui empêchent une IA de produire ou de faire quelque chose de dangereux."],
+["Gradient","Direction et intensité de la modification à appliquer à chaque poids pour réduire l'erreur."],
+["Inpainting","Régénérer une zone précise d'une image."],
+["Interprétabilité","Recherche qui vise à comprendre ce qui se passe à l'intérieur des réseaux de neurones."],
+["Jailbreak","Tentative de contourner les règles de sécurité d'un modèle par un prompt détourné."],
+["Kaggle","Plateforme de compétitions et de jeux de données en science des données."],
+["Latence","Temps d'attente avant la réponse d'un modèle."],
+["Lois d'échelle","Constat que les modèles s'améliorent de façon prévisible avec plus de données, de paramètres et de calcul."],
+["MLOps","Ensemble des pratiques pour déployer et maintenir des modèles en production."],
+["Modèle de fondation","Grand modèle généraliste pré-entraîné, adaptable à de nombreuses tâches."],
+["Modèle de monde","Modèle qui simule un environnement et son évolution, comme Genie 3."],
+["Notebook","Document qui mélange code, résultats et texte, comme Jupyter ou Colab."],
+["OCR","Reconnaissance optique de caractères : lire le texte d'une image ou d'un document scanné."],
+["Overfitting","Surapprentissage : le modèle apprend par cœur au lieu de généraliser."],
+["Pré-entraînement","Première phase d'entraînement d'un modèle, sur d'immenses quantités de données."],
+["Prompt caching","Mise en cache d'un long début de prompt identique pour réduire le coût et la latence."],
+["PyTorch","Framework d'apprentissage profond le plus utilisé par les laboratoires."],
+["Red teaming","Attaquer volontairement un modèle avant sa sortie pour trouver ses failles."],
+["Régression","Tâche qui consiste à prédire un nombre."],
+["Reranking","Reclassement des résultats d'une recherche par un second modèle plus précis."],
+["Rétropropagation","Calcul des gradients de l'erreur à travers toutes les couches d'un réseau."],
+["Segmentation","Identification des pixels qui appartiennent à chaque objet d'une image."],
+["Sortie structurée","Réponse imposée dans un format précis, souvent un schéma JSON."],
+["Sycophancy","Flagornerie : tendance d'un modèle à donner raison à l'utilisateur pour lui plaire."],
+["System card","Fiche publiée par un éditeur qui décrit les capacités, tests et risques d'un modèle."],
+["Tenseur","Tableau de nombres à plusieurs dimensions, l'objet de base du deep learning."],
+["Test de Turing","Test proposé en 1950 : une machine est-elle indiscernable d'un humain dans une conversation ?"],
+["Top-p","Réglage qui limite le tirage du prochain token aux tokens les plus probables."],
+["Transfert d'apprentissage","Partir d'un modèle déjà entraîné pour l'adapter à une nouvelle tâche."],
+["Vision-langage-action","Modèle qui comprend une image et une consigne et produit des actions pour un robot."],
+["YOLO","Famille de modèles de détection d'objets en temps réel."],
+["Zero-shot","Demander une tâche sans donner d'exemple."]
 );
 
 /* ====== MOTEUR ====== */
