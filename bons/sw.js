@@ -1,7 +1,7 @@
 // Service worker : permet d'ouvrir l'appli sans réseau sur le chantier.
 // Fichiers de l'appli : réseau d'abord (pour avoir les mises à jour), cache si hors ligne.
-// Polices Google : cache d'abord. L'API Mistral n'est jamais mise en cache.
-const CACHE = 'bons-enrobe-v1';
+// Polices Google : cache d'abord.
+const CACHE = 'bons-enrobe-v2';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable.png'];
 
 self.addEventListener('install', e => {

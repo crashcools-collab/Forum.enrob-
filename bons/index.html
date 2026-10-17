@@ -63,7 +63,6 @@ label{font-size:12px;color:var(--txt-mute);font-weight:700;display:block;margin-
 input,select,textarea{background:var(--anthra);border:1px solid var(--line);color:var(--txt);min-height:50px;padding:12px 13px;border-radius:10px;font-family:'Manrope';font-size:17px;width:100%;outline:none}
 textarea{min-height:80px;resize:vertical}
 input:focus,select:focus,textarea:focus{border-color:var(--orange)}
-input.ia{border-color:var(--jaune);background:#1d1800}
 .field{margin-bottom:12px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .big input{font-size:26px;font-weight:800;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;letter-spacing:.5px}
@@ -84,7 +83,6 @@ input.ia{border-color:var(--jaune);background:#1d1800}
 .bon .d b{color:var(--txt)}
 .tag{font-size:11px;font-weight:800;padding:2px 7px;border-radius:6px;background:var(--anthra-3);border:1px solid var(--line);white-space:nowrap}
 .tag.warn{color:var(--warn);border-color:var(--warn)}
-.tag.ia{color:var(--jaune);border-color:var(--jaune)}
 .chip{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:20px;background:var(--orange);color:#000;vertical-align:middle;margin-left:6px}
 .datebar{display:flex;gap:8px;align-items:center;margin-bottom:14px}
 .datebar input{text-align:center;font-weight:700}
@@ -110,12 +108,6 @@ input.ia{border-color:var(--jaune);background:#1d1800}
 .sheet-h h3{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:20px;text-transform:uppercase;letter-spacing:1px}
 .x{background:var(--anthra-3);border:1px solid var(--line);color:var(--txt);width:44px;height:44px;border-radius:10px;font-size:20px;cursor:pointer}
 .photo-prev{width:100%;max-height:260px;object-fit:contain;background:#000;border-radius:10px;border:1px solid var(--line);margin-bottom:12px;cursor:zoom-in}
-.ia-status{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;padding:10px 12px;border-radius:10px;margin-bottom:12px;background:var(--anthra-3);border:1px solid var(--line)}
-.ia-status.busy{color:var(--jaune);border-color:var(--jaune)}
-.ia-status.ok{color:var(--ok);border-color:var(--ok)}
-.ia-status.err{color:var(--warn);border-color:var(--warn)}
-.spin{width:18px;height:18px;border:3px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp 1s linear infinite;flex-shrink:0}
-@keyframes sp{to{transform:rotate(360deg)}}
 #viewer{align-items:center;background:rgba(0,0,0,.95)}
 #viewer img{max-width:100%;max-height:100%;object-fit:contain}
 .toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 24px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--txt);color:#000;font-weight:800;padding:12px 18px;border-radius:10px;z-index:60;display:none;max-width:90vw;text-align:center}
@@ -204,19 +196,6 @@ input.ia{border-color:var(--jaune);background:#1d1800}
       <button class="btn block" onclick="saveSettings()">Enregistrer</button>
     </div>
 
-    <h2 class="sec">Lecture automatique des bons (IA Mistral)</h2>
-    <div class="card">
-      <div class="field"><label>Clé API Mistral</label><input id="sKey" type="password" placeholder="Reprise de l'appli OS si déjà saisie" autocomplete="off"></div>
-      <div class="field"><label>Modèle (doit lire les images)</label><input id="sModel" list="models" placeholder="mistral-small-latest">
-        <datalist id="models"><option value="mistral-small-latest"><option value="mistral-medium-latest"><option value="pixtral-large-latest"></datalist></div>
-      <div class="row">
-        <button class="btn grow" onclick="saveSettings()">Enregistrer</button>
-        <button class="btn ghost grow" onclick="testKey()">Tester la clé</button>
-      </div>
-      <p class="muted" id="keyInfo" style="margin-top:10px"></p>
-      <p class="muted" style="margin-top:10px">La clé reste dans ce téléphone. Sans clé ou sans réseau, la saisie à la main fonctionne toujours.</p>
-    </div>
-
     <h2 class="sec">Installer sur le téléphone</h2>
     <div class="card">
       <button class="btn block" id="installBtn" style="display:none;margin-bottom:12px" onclick="doInstall()">📲 Installer l'appli</button>
@@ -254,7 +233,7 @@ input.ia{border-color:var(--jaune);background:#1d1800}
   <div class="sheet">
     <div class="sheet-h"><h3 id="bonTitle">Nouveau bon</h3><button class="x" onclick="closeModal('bonModal')">✕</button></div>
     <img class="photo-prev" id="bonPhoto" alt="Photo du bon" style="display:none" onclick="viewPhoto(this.src)">
-    <div id="iaStatus"></div>
+    <p class="muted" id="bonHint" style="margin-bottom:12px">Tape le tonnage du bon, le reste est facultatif. La photo est gardée comme preuve.</p>
     <div class="field"><label>Chantier</label><select id="fCh" onchange="if(this.value==='__new')openChantier(null,true)"></select></div>
     <div class="grid2">
       <div class="field big"><label>Tonnage net (t)</label><input id="fT" inputmode="decimal" placeholder="0,00"></div>
@@ -273,7 +252,6 @@ input.ia{border-color:var(--jaune);background:#1d1800}
     <div class="field"><label>Remarque</label><input id="fNote" placeholder="ex. camion en retard, enrobé froid…"></div>
     <button class="btn block" style="min-height:60px;font-size:18px" onclick="saveBon()">✔ Valider le bon</button>
     <div class="row" style="margin-top:10px">
-      <button class="btn ghost sm grow" id="btnRelire" onclick="relireIA()">↻ Relire avec l'IA</button>
       <button class="btn ghost sm grow" id="btnPhoto" onclick="document.getElementById('galIn').click()">🖼 Choisir une photo</button>
       <button class="btn danger sm grow" id="btnDel" onclick="deleteBon()">Supprimer</button>
     </div>
@@ -321,8 +299,7 @@ input.ia{border-color:var(--jaune);background:#1d1800}
    Données : localStorage (bons, chantiers) + IndexedDB (photos)
    ========================================================= */
 const KEY = 'colas_bons_v1';
-const MAIN_KEY = 'colas_os_v1';      // appli OS : on y reprend la clé Mistral si elle existe
-const DEFAULTS = {chef:'', densite:2.35, tolerance:10, tempMin:'', mistralKey:'', model:'mistral-small-latest', courant:null};
+const DEFAULTS = {chef:'', densite:2.35, tolerance:10, tempMin:'', courant:null};
 let S = {chantiers:[], bons:[], jours:{}, settings:{...DEFAULTS}};
 let curDay = today();
 let draft = null;          // bon en cours de saisie
@@ -350,10 +327,6 @@ function load(){
 }
 function save(){
   try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('⚠ Mémoire pleine : fais une sauvegarde puis efface les vieux bons',4000)}
-}
-function mistralKey(){
-  if(S.settings.mistralKey)return S.settings.mistralKey;
-  try{return JSON.parse(localStorage.getItem(MAIN_KEY)||'{}').settings?.mistralKey||''}catch(e){return ''}
 }
 
 let idb = null;
@@ -424,7 +397,6 @@ function shiftDay(n){const x=new Date(curDay+'T12:00');x.setDate(x.getDate()+n);
 function bonRow(b,showCh){
   const tags=[];
   if(tempAlert(b))tags.push('<span class="tag warn">'+esc(fr(num(b.tempArrivee)??num(b.tempDepart),0))+' °C</span>');
-  if(b.needsIA)tags.push('<span class="tag ia">à lire IA</span>');
   if(b.photoId)tags.push('<span class="tag">📷</span>');
   const desc=[showCh?'<b>'+esc(chName(b.chantierId))+'</b>':'', b.numero?'n° <b>'+esc(b.numero)+'</b>':'', esc(b.formule||''), b.camion?esc(b.camion):''].filter(Boolean).join(' · ');
   return '<div class="bon" onclick="editBon(\''+b.id+'\')"><span class="h">'+esc(b.heureArrivee||'--:--')+'</span><span class="d">'+(desc||'<i>bon sans détail</i>')+'</span>'+tags.join('')+'<span class="t">'+fr(num(b.tonnage))+' t</span></div>';
@@ -441,8 +413,6 @@ function renderJour(){
   const cur=S.settings.courant;
   if(curDay===today()&&cur&&chantier(cur)&&!ids.includes(cur))ids.unshift(cur);
   let h='';
-  const pending=S.bons.filter(b=>b.needsIA&&b.photoId).length;
-  if(pending&&navigator.onLine&&mistralKey())h+='<div class="banner">'+pending+' bon(s) photographié(s) hors réseau pas encore lus. <button class="btn sm" style="margin-top:8px" onclick="lireEnAttente()">Les lire maintenant</button></div>';
   h+='<div class="stats"><div class="stat"><b>'+list.length+'</b><small>camions</small></div><div class="stat"><b>'+fr(sumT(list),1)+'</b><small>tonnes</small></div><div class="stat"><b>'+ids.length+'</b><small>chantier'+(ids.length>1?'s':'')+'</small></div></div>';
   if(!list.length)h+='<div class="card empty"><div class="ico">📷</div><p><b>Aucun bon '+(curDay===today()?'aujourd\'hui':'ce jour-là')+'.</b><br><span class="muted">Appuie sur <b style="color:var(--orange)">+</b> en bas pour photographier un bon.</span></p><button class="btn ghost sm" style="margin-top:14px" onclick="newBon(null)">✍ Saisir un bon à la main</button></div>';
   ids.forEach(cid=>{
@@ -477,10 +447,10 @@ async function onPhoto(input){
   if(!f)return;
   let dataUrl;
   try{dataUrl=await compress(f)}catch(e){toast('Photo illisible, réessaie');return}
-  if(draft&&$('bonModal').classList.contains('open')){draft._photo=dataUrl;draft._photoChanged=true;fillForm();lancerIA();return}
+  if(draft&&$('bonModal').classList.contains('open')){readForm();draft._photo=dataUrl;draft._photoChanged=true;fillForm();return}
   newBon(dataUrl);
 }
-// Réduit la photo (≈1600 px, JPEG) : assez nette pour l'IA, légère pour le téléphone
+// Réduit la photo (≈1600 px, JPEG) : lisible pour vérifier le bon, légère pour le téléphone
 function compress(file){
   return new Promise((res,rej)=>{
     const url=URL.createObjectURL(file);const img=new Image();
@@ -495,15 +465,15 @@ function compress(file){
 function newBon(photo){
   if(!S.chantiers.length){openChantier();return}
   const cur=S.settings.courant&&chantier(S.settings.courant)?S.settings.courant:S.chantiers.find(c=>c.actif!==false)?.id||S.chantiers[0].id;
-  draft={id:uid(),isNew:true,chantierId:cur,date:curDay===today()?today():curDay,heureArrivee:curDay===today()?nowHM():'',_photo:photo,_photoChanged:!!photo,_ia:{}};
+  draft={id:uid(),isNew:true,chantierId:cur,date:curDay===today()?today():curDay,heureArrivee:curDay===today()?nowHM():'',_photo:photo,_photoChanged:!!photo};
   fillForm();openModal('bonModal');
-  if(photo)lancerIA();else setIA('');
+  setTimeout(()=>$('fT').focus(),300);
 }
 async function editBon(id){
   const b=S.bons.find(x=>x.id===id);if(!b)return;
-  draft={...b,isNew:false,_ia:{},_photo:null,_photoChanged:false};
+  draft={...b,isNew:false,_photo:null,_photoChanged:false};
   if(b.photoId){try{draft._photo=await getPhoto(b.photoId)}catch(e){}}
-  fillForm();setIA(b.needsIA?'<div class="ia-status">Ce bon n\'a pas encore été lu par l\'IA.</div>':'');openModal('bonModal');
+  fillForm();openModal('bonModal');
 }
 const FIELDS={fNum:'numero',fT:'tonnage',fForm:'formule',fHc:'heureChargement',fHa:'heureArrivee',fTd:'tempDepart',fTa:'tempArrivee',fCam:'camion',fDate:'date',fCent:'centrale',fNote:'note'};
 function fillForm(){
@@ -511,9 +481,8 @@ function fillForm(){
   const sel=$('fCh');
   sel.innerHTML=S.chantiers.filter(c=>c.actif!==false||c.id===draft.chantierId).map(c=>'<option value="'+c.id+'">'+esc(c.nom)+'</option>').join('')+'<option value="__new">+ Nouveau chantier…</option>';
   sel.value=draft.chantierId;
-  for(const [el,k] of Object.entries(FIELDS)){const v=draft[k];$(el).value=(k==='tonnage'||k==='tempDepart'||k==='tempArrivee')&&v!==null&&v!==undefined&&v!==''?String(v).replace('.',','):(v??'');$(el).classList.toggle('ia',!!draft._ia[k])}
+  for(const [el,k] of Object.entries(FIELDS)){const v=draft[k];$(el).value=(k==='tonnage'||k==='tempDepart'||k==='tempArrivee')&&v!==null&&v!==undefined&&v!==''?String(v).replace('.',','):(v??'')}
   const ph=$('bonPhoto');if(draft._photo){ph.src=draft._photo;ph.style.display='block'}else{ph.removeAttribute('src');ph.style.display='none'}
-  $('btnRelire').style.display=draft._photo?'':'none';
   $('btnPhoto').textContent=draft._photo?'📷 Changer la photo':'📷 Ajouter une photo';
   $('btnDel').style.display=draft.isNew?'none':'';
   const fl=[...new Set(S.bons.map(b=>b.formule).concat(S.chantiers.map(c=>c.formule)).filter(Boolean))];
@@ -541,8 +510,7 @@ async function saveBon(){
     try{await putPhoto(pid,draft._photo);draft.photoId=pid}catch(e){toast('⚠ Photo non enregistrée (mémoire pleine ?)',4000)}
     try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
   }
-  const {isNew,_ia,_photo,_photoChanged,...bon}=draft;
-  if(bon.needsIA&&Object.keys(_ia).length)bon.needsIA=false;
+  const {isNew,_photo,_photoChanged,...bon}=draft;
   if(isNew){bon.createdAt=Date.now();S.bons.push(bon)}else{const i=S.bons.findIndex(b=>b.id===bon.id);if(i>=0)S.bons[i]=bon}
   S.settings.courant=bon.chantierId;
   save();closeModal('bonModal');draft=null;
@@ -556,105 +524,6 @@ async function deleteBon(){
   S.bons=S.bons.filter(b=>b.id!==draft.id);
   if(draft.photoId){try{await delPhoto(draft.photoId)}catch(e){}}
   save();closeModal('bonModal');draft=null;renderJour();if($('v-histo').classList.contains('active'))renderHisto();toast('Bon supprimé');
-}
-
-/* =========================================================
-   LECTURE DU BON PAR L'IA (Mistral, modèle vision)
-   ========================================================= */
-const PROMPT_IA=`Tu lis la photo d'un bon de livraison d'enrobé bitumineux (centrale d'enrobage vers chantier routier).
-Réponds UNIQUEMENT avec un objet JSON contenant exactement ces clés :
-- "numero" : numéro du bon (texte)
-- "tonnage" : poids NET livré en tonnes (nombre). S'il y a brut / tare / net, prends le NET. Si le poids est en kg, convertis en tonnes.
-- "formule" : désignation du produit (ex. "BBSG 0/10 classe 3 35/50")
-- "date" : date du bon au format AAAA-MM-JJ
-- "heure_chargement" : heure de pesée ou de sortie de la centrale, format HH:MM
-- "temperature" : température de l'enrobé au départ en °C (nombre)
-- "camion" : immatriculation du camion
-- "centrale" : nom de la centrale ou du fournisseur
-Mets null pour toute valeur absente ou illisible. N'invente jamais une valeur.`;
-function setIA(html){$('iaStatus').innerHTML=html}
-async function callMistral(dataUrl){
-  const key=mistralKey();
-  const res=await fetch('https://api.mistral.ai/v1/chat/completions',{
-    method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-    body:JSON.stringify({model:S.settings.model||DEFAULTS.model,temperature:0,response_format:{type:'json_object'},
-      messages:[{role:'user',content:[{type:'text',text:PROMPT_IA},{type:'image_url',image_url:dataUrl}]}]})
-  });
-  if(res.status===401)throw new Error('clé Mistral refusée');
-  if(!res.ok)throw new Error('erreur Mistral '+res.status);
-  const d=await res.json();
-  let txt=d.choices?.[0]?.message?.content||'';
-  if(Array.isArray(txt))txt=txt.map(p=>p.text||'').join('');
-  txt=txt.replace(/```json|```/g,'').trim();
-  const m=txt.match(/\{[\s\S]*\}/);
-  return JSON.parse(m?m[0]:txt);
-}
-// Nettoie la réponse de l'IA et la convertit vers les champs du bon
-function normalise(r){
-  const o={};
-  const s=v=>v===null||v===undefined?'':String(v).trim();
-  if(s(r.numero))o.numero=s(r.numero);
-  let t=num(r.tonnage);if(t!==null){if(t>100)t=t/1000;if(t>0)o.tonnage=Math.round(t*100)/100}
-  if(s(r.formule))o.formule=s(r.formule);
-  if(/^\d{4}-\d{2}-\d{2}$/.test(s(r.date)))o.date=s(r.date);
-  const hm=s(r.heure_chargement).match(/(\d{1,2})\s*[:hH]\s*(\d{2})/);if(hm)o.heureChargement=pad(+hm[1])+':'+hm[2];
-  const tp=num(r.temperature);if(tp!==null&&tp>40&&tp<250)o.tempDepart=tp;
-  if(s(r.camion))o.camion=s(r.camion).toUpperCase();
-  if(s(r.centrale))o.centrale=s(r.centrale);
-  return o;
-}
-async function lancerIA(force){
-  if(!draft||!draft._photo)return;
-  // Sans clé : la photo sert de preuve, le chef tape juste le tonnage (le reste est facultatif)
-  if(!mistralKey()){setIA('<div class="ia-status">Tape le tonnage du bon, le reste est facultatif. La photo est gardée comme preuve.</div>');setTimeout(()=>$('fT').focus(),300);return}
-  if(!navigator.onLine){draft.needsIA=true;setIA('<div class="ia-status err">Hors réseau : valide le bon avec au moins le tonnage, l\'IA le relira plus tard.</div>');return}
-  readForm();
-  setIA('<div class="ia-status busy"><span class="spin"></span>L\'IA lit le bon… tu peux déjà vérifier.</div>');
-  const id=draft.id;
-  try{
-    const o=normalise(await callMistral(draft._photo));
-    if(!draft||draft.id!==id)return;
-    readForm();
-    let n=0;
-    for(const [k,v] of Object.entries(o)){
-      // On ne remplace jamais ce que le chef a déjà tapé (sauf relecture demandée)
-      if(force||draft[k]===''||draft[k]===null||draft[k]===undefined){draft[k]=v;draft._ia[k]=true;n++}
-    }
-    draft.needsIA=false;fillForm();
-    setIA(n?'<div class="ia-status ok">✔ '+n+' champ(s) remplis par l\'IA (en jaune) : vérifie-les avant de valider.</div>':'<div class="ia-status err">L\'IA n\'a rien pu lire : photo floue ? Remplis à la main ou reprends la photo.</div>');
-    if(!o.tonnage)$('fT').focus();
-  }catch(e){
-    if(!draft||draft.id!==id)return;
-    draft.needsIA=true;
-    setIA('<div class="ia-status err">Lecture impossible ('+esc(e.message)+'). Remplis à la main.</div>');
-  }
-}
-function relireIA(){lancerIA(true)}
-async function lireEnAttente(){
-  const list=S.bons.filter(b=>b.needsIA&&b.photoId);let ok=0;
-  toast('Lecture de '+list.length+' bon(s)…',8000);
-  for(const b of list){
-    try{
-      const ph=await getPhoto(b.photoId);if(!ph)continue;
-      const o=normalise(await callMistral(ph));
-      // Hors réseau, le chef a saisi à la main : on complète seulement les champs vides
-      for(const [k,v] of Object.entries(o))if(b[k]===''||b[k]===null||b[k]===undefined)b[k]=v;
-      b.needsIA=false;ok++;
-    }catch(e){}
-  }
-  save();renderJour();toast(ok+' bon(s) complété(s) par l\'IA');
-}
-async function testKey(){
-  saveSettings(true);
-  const key=mistralKey();if(!key){$('keyInfo').textContent='Aucune clé.';return}
-  $('keyInfo').textContent='Test en cours…';
-  try{
-    const r=await fetch('https://api.mistral.ai/v1/models',{headers:{'Authorization':'Bearer '+key}});
-    if(!r.ok)throw new Error(r.status===401?'clé refusée':'erreur '+r.status);
-    const d=await r.json();const m=S.settings.model||DEFAULTS.model;
-    const found=(d.data||[]).find(x=>x.id===m||(x.aliases||[]).includes(m));
-    $('keyInfo').textContent=found?('✔ Clé valide. Modèle « '+m+' » disponible'+(found.capabilities&&found.capabilities.vision===false?' mais il ne lit pas les images : choisis-en un autre.':'.')):('✔ Clé valide, mais le modèle « '+m+' » est introuvable sur ce compte.');
-  }catch(e){$('keyInfo').textContent='✖ '+e.message}
 }
 
 /* =========================================================
@@ -810,8 +679,6 @@ async function printReport(list,title){
 function renderSettings(){
   const s=S.settings;
   $('sChef').value=s.chef||'';$('sDens').value=String(s.densite??'').replace('.',',');$('sTol').value=String(s.tolerance??'').replace('.',',');$('sTmin').value=String(s.tempMin??'').replace('.',',');
-  $('sKey').value=s.mistralKey||'';$('sModel').value=s.model||'';
-  $('keyInfo').textContent=!s.mistralKey&&mistralKey()?'Clé reprise de l\'appli OS Équipe Enrobé.':'';
   $('installBtn').style.display=installEvt?'':'none';
   storageInfo();
 }
@@ -821,8 +688,6 @@ function saveSettings(silent){
   s.densite=num($('sDens').value)||DEFAULTS.densite;
   s.tolerance=num($('sTol').value)??DEFAULTS.tolerance;
   s.tempMin=num($('sTmin').value)??'';
-  s.mistralKey=$('sKey').value.trim();
-  s.model=$('sModel').value.trim()||DEFAULTS.model;
   save();if(silent!==true){renderSettings();toast('✔ Réglages enregistrés')}
 }
 async function storageInfo(){
@@ -834,7 +699,7 @@ async function exportJSON(){
   toast('Préparation de la sauvegarde…');
   const photos={};
   for(const b of S.bons)if(b.photoId){try{const p=await getPhoto(b.photoId);if(p)photos[b.photoId]=p}catch(e){}}
-  const data={app:'bons-enrobe',version:1,date:new Date().toISOString(),state:{...S,settings:{...S.settings,mistralKey:''}},photos};
+  const data={app:'bons-enrobe',version:1,date:new Date().toISOString(),state:S,photos};
   download('sauvegarde_bons_'+today()+'.json',new Blob([JSON.stringify(data)],{type:'application/json'}));
 }
 function importJSON(input){
@@ -845,8 +710,7 @@ function importJSON(input){
       const d=JSON.parse(r.result);
       if(d.app!=='bons-enrobe'||!d.state)throw 0;
       if(!confirm('Remplacer les données de ce téléphone par cette sauvegarde ('+(d.state.bons||[]).length+' bons) ?'))return;
-      const key=S.settings.mistralKey;
-      S={chantiers:d.state.chantiers||[],bons:d.state.bons||[],jours:d.state.jours||{},settings:{...DEFAULTS,...(d.state.settings||{}),mistralKey:key}};
+      S={chantiers:d.state.chantiers||[],bons:d.state.bons||[],jours:d.state.jours||{},settings:{...DEFAULTS,...(d.state.settings||{})}};
       for(const [id,p] of Object.entries(d.photos||{}))await putPhoto(id,p);
       save();renderSettings();renderJour();toast('✔ Sauvegarde restaurée');
     }catch(e){alert('Ce fichier n\'est pas une sauvegarde des bons.')}
@@ -856,8 +720,7 @@ function importJSON(input){
 async function wipeAll(){
   if(!confirm('Effacer TOUS les bons, chantiers et photos de ce téléphone ?'))return;
   if(!confirm('Vraiment ? As-tu fait une sauvegarde ?'))return;
-  const key=S.settings.mistralKey;
-  S={chantiers:[],bons:[],jours:{},settings:{...DEFAULTS,mistralKey:key}};save();
+  S={chantiers:[],bons:[],jours:{},settings:{...DEFAULTS}};save();
   try{await idbDo('readwrite',st=>st.clear())}catch(e){}
   renderSettings();toast('Données effacées');
 }

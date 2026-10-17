@@ -53,14 +53,12 @@ Appli pour téléphone, à part de l'OS, pour gérer les bons de livraison d'enr
 Lien : `https://<compte>.github.io/<dépôt>/bons/` (également accessible depuis le menu de l'OS).
 
 - **Photo du bon** avec le bouton + : la photo est gardée comme preuve.
-- **Lecture automatique** du bon (facultative) : avec une clé Mistral, l'IA remplit n° de bon, tonnage net,
-  formule, heure, température, camion. Sans clé, on tape juste le tonnage : tous les calculs marchent sans IA.
+- **Saisie rapide** : on tape le tonnage (le reste est facultatif). Aucune IA, tout est calculé dans le téléphone.
 - **Totaux du jour** par chantier : camions, tonnes, t/camion, épaisseur moyenne (cm et kg/m²)
   comparée à l'épaisseur prévue (densité et tolérance réglables).
 - **Alertes** : n° de bon en double, tonnage anormal, température sous le seuil choisi.
 - **Envoi au bureau** : récap texte (WhatsApp, SMS, partage), export CSV pour Excel, rapport PDF avec photos.
-- **Sans réseau** : l'appli s'ouvre hors ligne une fois installée ; les bons photographiés hors réseau
-  sont lus par l'IA au retour du réseau.
+- **Sans réseau** : l'appli s'ouvre et fonctionne hors ligne une fois installée.
 
 ### Installer sur le téléphone du chef
 1. Ouvrir le lien dans Chrome (Android) ou Safari (iPhone).
@@ -68,5 +66,4 @@ Lien : `https://<compte>.github.io/<dépôt>/bons/` (également accessible depui
 3. L'icône « Bons » apparaît comme une appli normale.
 
 ### Données
-Tout reste **dans le téléphone** (localStorage + IndexedDB pour les photos), rien n'est envoyé sauf la photo
-à Mistral quand la lecture IA est activée. Faire une **sauvegarde** (Réglages → Sauvegarder) chaque semaine.
+Tout reste **dans le téléphone** (localStorage + IndexedDB pour les photos), rien n'est envoyé sur Internet. Faire une **sauvegarde** (Réglages → Sauvegarder) chaque semaine.
