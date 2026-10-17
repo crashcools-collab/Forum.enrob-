@@ -193,6 +193,25 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
 .pr.open pre.prompt{max-height:none}
 .mod-body h3{color:var(--txt)}
 @media (max-width:900px){details.mod{scroll-margin-top:110px}}
+/* Chronologie */
+.tl{display:flex;flex-direction:column;gap:0}
+.tl-year{font-family:var(--f-display);font-size:44px;line-height:1;color:var(--orange);margin-block:26px 10px;letter-spacing:1px;font-variant-numeric:tabular-nums}
+.tl-year small{font-family:var(--f-body);font-size:13px;color:var(--mute);letter-spacing:0;margin-left:10px}
+.ev{display:grid;grid-template-columns:118px minmax(0,1fr);gap:14px;padding-block:12px;border-left:2px solid var(--line);margin-left:6px;padding-left:16px;position:relative}
+.ev::before{content:"";position:absolute;left:-7px;top:18px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--orange)}
+.ev.c-loi::before{border-color:var(--warn)}.ev.c-entreprise::before{border-color:var(--jaune)}.ev.c-societe::before{border-color:var(--info)}.ev.c-produit::before{border-color:var(--ok)}
+.ev .dt{font-family:var(--f-mono);font-size:12.5px;color:var(--mute);padding-top:3px;font-variant-numeric:tabular-nums}
+.ev b{font-size:15.5px}
+.ev p{font-size:14px;color:var(--mute);margin-top:3px}
+.ev .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+@media (max-width:600px){.ev{grid-template-columns:minmax(0,1fr);gap:2px}.tl-year{font-size:36px}}
+/* Tableau de bord */
+.dash{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.dash .card{padding:14px;display:flex;flex-direction:column;gap:6px;cursor:pointer;text-align:left;transition:.15s}
+.dash .card:hover{border-color:var(--orange)}
+.dash .card b{font-size:14.5px}
+.dash .card .pc{font-family:var(--f-display);font-size:24px;color:var(--jaune);line-height:1;font-variant-numeric:tabular-nums}
+.dash .card.full .pc{color:var(--ok)}
 .mod-body .tbl-wrap table{min-width:560px}
 .pr .acts{display:flex;gap:6px;flex-wrap:wrap}
 .fav{background:none;border:1px solid var(--line);border-radius:8px;width:34px;height:34px;cursor:pointer;color:var(--mute);font-size:16px;flex-shrink:0}
@@ -266,13 +285,14 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
   <nav class="nav" id="nav" aria-label="Sections de la formation">
     <button data-v="accueil" class="active"><span class="ic">00</span> Accueil &amp; parcours</button>
     <button data-v="bases"><span class="ic">01</span> Les fondamentaux</button>
-    <button data-v="cours"><span class="ic">02</span> Cours par outil</button>
-    <button data-v="outils"><span class="ic">03</span> Panorama des IA</button>
-    <button data-v="methode"><span class="ic">04</span> Méthode de prompt</button>
-    <button data-v="maitre"><span class="ic">05</span> Prompt maître</button>
-    <button data-v="atelier"><span class="ic">06</span> Atelier interactif</button>
-    <button data-v="biblio"><span class="ic">07</span> Bibliothèque</button>
-    <button data-v="quiz"><span class="ic">08</span> Quiz final</button>
+    <button data-v="histoire"><span class="ic">02</span> Histoire de l'IA</button>
+    <button data-v="cours"><span class="ic">03</span> Cours par outil</button>
+    <button data-v="outils"><span class="ic">04</span> Panorama des IA</button>
+    <button data-v="methode"><span class="ic">05</span> Méthode de prompt</button>
+    <button data-v="maitre"><span class="ic">06</span> Prompt maître</button>
+    <button data-v="atelier"><span class="ic">07</span> Atelier interactif</button>
+    <button data-v="biblio"><span class="ic">08</span> Bibliothèque</button>
+    <button data-v="quiz"><span class="ic">09</span> Quiz final</button>
     <div class="sep"></div>
     <button data-v="glossaire"><span class="ic">A–Z</span> Glossaire</button>
     <button data-v="securite"><span class="ic">!</span> Sécurité &amp; règles</button>
@@ -296,11 +316,12 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
   <section class="view active" id="v-accueil">
     <div class="hero">
       <div class="card hl stack">
-        <span class="chip o">Formation complète · niveau débutant à expert</span>
-        <h2>Utiliser l'IA <em>comme un pro</em>, du bureau au chantier</h2>
-        <p class="lead">Comprendre comment marchent les IA, maîtriser en profondeur Claude, ChatGPT, Gemini, Mistral, Copilot, GitHub, Hugging Face et Cursor, choisir le bon outil pour chaque tâche et obtenir des résultats fiables.</p>
+        <span class="chip o">Formation complète · à jour au 17 octobre 2026</span>
+        <h2>Tout savoir sur l'IA, <em>de 2017 à aujourd'hui</em></h2>
+        <p class="lead">L'histoire complète de l'IA et la situation au 17 octobre 2026, des cours approfondis sur Claude, ChatGPT, Gemini, Mistral, Copilot, GitHub, Hugging Face et Cursor, et la méthode pour obtenir des résultats fiables.</p>
         <div class="row">
           <button class="btn" data-go="bases">Commencer la formation</button>
+          <button class="btn ghost" data-go="histoire">Histoire de l'IA</button>
           <button class="btn ghost" data-go="cours">Voir les cours par outil</button>
           <button class="btn ghost" data-go="maitre">Voir le prompt maître</button>
           <button class="btn ghost" data-go="biblio">Ouvrir la bibliothèque</button>
@@ -321,12 +342,15 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
       </div>
     </div>
 
+    <h2 class="sec">Ton tableau de bord</h2>
+    <div class="dash" id="dash"></div>
+
     <h2 class="sec">Le parcours, dans l'ordre</h2>
     <div class="path" id="path"></div>
 
     <h2 class="sec">À savoir avant de commencer</h2>
     <div class="grid">
-      <div class="callout"><b>Aucune formation ne couvre « toutes » les IA.</b> De nouveaux outils sortent chaque semaine et beaucoup disparaissent. Ici, tu trouves les outils majeurs de chaque catégorie, et surtout la méthode, qui reste valable quand les outils changent.</div>
+      <div class="callout"><b>Tout est daté et vérifié au 17 octobre 2026.</b> Modèles, produits, rachats et lois : la section Histoire de l'IA retrace tout ce qui s'est passé de 2017 à aujourd'hui, et chaque cours indique la situation actuelle de l'outil.</div>
       <div class="callout info"><b>Ce qui fait la différence, c'est le prompt.</b> Le même outil donne un résultat médiocre ou excellent selon la façon dont on lui parle. La moitié de cette formation porte sur ce point.</div>
       <div class="callout warn"><b>L'IA prépare, toi tu décides.</b> Un texte, un calcul ou une consigne produits par une IA se relisent et se vérifient toujours avant d'être utilisés, surtout pour la sécurité, les quantités et tout ce qui engage l'entreprise.</div>
     </div>
@@ -336,7 +360,7 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
       <table>
         <thead><tr><th>Tu veux…</th><th>Outils conseillés</th><th>Le réflexe à avoir</th></tr></thead>
         <tbody>
-          <tr><td>Rédiger un mail, un compte rendu, une note</td><td>ChatGPT, Claude, Le Chat, Gemini, Copilot</td><td>Donner le contexte, le destinataire et le ton voulu</td></tr>
+          <tr><td>Rédiger un mail, un compte rendu, une note</td><td>ChatGPT, Claude, Vibe (ex-Le Chat), Gemini, Copilot</td><td>Donner le contexte, le destinataire et le ton voulu</td></tr>
           <tr><td>Résumer un long document (CCTP, notice, rapport)</td><td>Claude, NotebookLM, ChatGPT</td><td>Joindre le fichier et demander les passages exacts</td></tr>
           <tr><td>Chercher une info récente avec sources</td><td>Perplexity, modes Recherche de ChatGPT, Gemini, Claude</td><td>Ouvrir les sources et vérifier qu'elles disent bien ça</td></tr>
           <tr><td>Vérifier un calcul de quantités</td><td>Assistant avec exécution de code (ChatGPT, Claude, Gemini)</td><td>Demander le détail du calcul, refaire l'ordre de grandeur</td></tr>
@@ -360,6 +384,27 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
     <div class="stack" id="mods" style="margin-top:18px"></div>
   </section>
 
+  <!-- ================= HISTOIRE ================= -->
+  <section class="view" id="v-histoire">
+    <p class="lead">Tout ce qui s'est réellement passé dans l'IA, de l'invention du Transformer en 2017 jusqu'au 17 octobre 2026 : modèles, produits, rachats, lois et grands moments. Chaque événement est daté et expliqué.</p>
+
+    <h2 class="sec">Où en est-on au 17 octobre 2026</h2>
+    <div class="tbl-wrap"><table><thead><tr><th>Acteur</th><th>Modèles actuels</th><th>Produits</th></tr></thead><tbody id="etat"></tbody></table></div>
+
+    <h2 class="sec">Les 8 grandes tendances</h2>
+    <div class="grid" id="tendances"></div>
+
+    <h2 class="sec">La chronologie complète</h2>
+    <div class="toolbar">
+      <input type="search" id="hQ" placeholder="Chercher (ex. : Claude, GPT-6, rachat, AI Act)…" aria-label="Chercher dans la chronologie">
+      <select id="hActor" aria-label="Filtrer par acteur" style="width:auto"><option value="">Tous les acteurs</option></select>
+      <span class="count" id="hCount"></span>
+    </div>
+    <div class="filters" id="hYears"></div>
+    <div class="filters" id="hCats"></div>
+    <div class="tl" id="tl"></div>
+  </section>
+
   <!-- ================= COURS ================= -->
   <section class="view" id="v-cours">
     <div id="coursList">
@@ -373,7 +418,7 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
   <!-- ================= OUTILS ================= -->
   <section class="view" id="v-outils">
     <p class="lead">Les principales IA du marché, classées par usage. Pour chacune : à quoi elle sert, ses points forts, ses limites et une astuce concrète.</p>
-    <div class="callout" style="margin-top:14px">Les prix, les quotas gratuits et les noms de modèles changent tous les mois. Les indications ci-dessous restent générales (gratuit, freemium, payant) : vérifie toujours l'offre du moment sur le site officiel. En entreprise, utilise en priorité les outils validés par ta direction informatique.</div>
+    <div class="callout" style="margin-top:14px">Situation au 17 octobre 2026 : propriétaires, modèles et produits sont à jour (par exemple Cursor appartient à SpaceX, Le Chat s'appelle Vibe, Hugging Face est en cours de rachat par Nvidia). En entreprise, utilise en priorité les outils validés par ta direction informatique.</div>
     <div class="toolbar" style="margin-top:16px">
       <input type="search" id="toolQ" placeholder="Chercher un outil, un usage (ex. : traduction, vidéo, Excel)…" aria-label="Chercher un outil">
       <select id="toolPrice" aria-label="Filtrer par prix" style="width:auto">
@@ -487,7 +532,7 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
           <tr><td>ChatGPT</td><td>Paramètres → Personnalisation → instructions personnalisées, ou les instructions d'un Projet</td><td>Toutes les conversations, ou un seul projet</td></tr>
           <tr><td>Claude</td><td>Paramètres → Profil (préférences personnelles), ou les instructions d'un Projet</td><td>Toutes les conversations, ou un seul projet</td></tr>
           <tr><td>Gemini</td><td>Créer un « Gem » avec ces instructions</td><td>Les conversations ouvertes avec ce Gem</td></tr>
-          <tr><td>Le Chat (Mistral)</td><td>Fonction d'instructions personnalisées ou d'agent, selon l'offre</td><td>Selon la fonction utilisée</td></tr>
+          <tr><td>Vibe (ex-Le Chat, Mistral)</td><td>Fonction d'instructions personnalisées ou d'agent, selon l'offre</td><td>Selon la fonction utilisée</td></tr>
           <tr><td>Copilot et les autres</td><td>À défaut de réglage, colle-le au début de la conversation</td><td>La conversation en cours</td></tr>
         </tbody>
       </table>
@@ -578,7 +623,7 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
   <!-- ================= QUIZ ================= -->
   <section class="view" id="v-quiz">
     <div class="row" style="justify-content:space-between">
-      <p class="lead">Vérifie ce que tu as retenu. 14 bonnes réponses sur 20 valident la formation.</p>
+      <p class="lead" id="qzLead">Vérifie ce que tu as retenu.</p>
       <div class="row"><span class="chip y" id="qzScore">Score : 0 / 0</span><span class="chip" id="qzBest">Meilleur : —</span><button class="btn ghost sm" id="qzReset">Recommencer</button></div>
     </div>
     <div class="stack" id="qz" style="margin-top:16px"></div>
@@ -631,7 +676,7 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
     <h2 class="sec">Le cadre légal en bref</h2>
     <div class="grid">
       <div class="card"><h3>RGPD</h3><p class="small">Toute donnée permettant d'identifier une personne est protégée. La saisir dans une IA est un traitement de données, avec les obligations qui vont avec. La CNIL publie des recommandations sur l'IA.</p></div>
-      <div class="card"><h3>Règlement européen sur l'IA (AI Act)</h3><p class="small">Entré en vigueur en 2024, il s'applique progressivement entre 2025 et 2027 : interdiction de certains usages, obligations de transparence (contenus générés), règles renforcées pour les systèmes à haut risque.</p></div>
+      <div class="card"><h3>Règlement européen sur l'IA (AI Act)</h3><p class="small">En vigueur depuis le 1er août 2024. Usages interdits depuis le 2 février 2025, règles pour les grands modèles depuis le 2 août 2025, obligation de signaler les contenus générés par IA depuis le 2 août 2026. L'« omnibus numérique » (en vigueur le 27 juillet 2026) a repoussé les règles des systèmes à haut risque au 2 décembre 2027, et ajoute au 2 décembre 2026 l'interdiction des images intimes truquées sans consentement.</p></div>
       <div class="card"><h3>Droit d'auteur</h3><p class="small">Une image ou un texte généré peut reproduire une œuvre protégée. Pour un usage commercial ou public, préfère les outils qui garantissent des données d'entraînement sous licence et évite d'imiter un artiste ou une marque.</p></div>
     </div>
 
@@ -649,18 +694,27 @@ details.mod[open] summary .arrow{transform:rotate(90deg)}
 const COURS = [
 {
 id:'chatgpt', n:'ChatGPT', by:'OpenAI', cat:'assistants', lvl:'Débutant → avancé', dur:'2 h',
-pitch:"L'assistant le plus utilisé au monde. Rédaction, analyse de fichiers, recherche web, images, voix, projets, GPTs personnalisés et mode agent.",
+pitch:"L'assistant le plus utilisé au monde : plus de 1,2 milliard d'utilisateurs par semaine. GPT-6, ChatGPT Work, Codex, recherche, images, voix, projets et GPTs.", hk:['OpenAI'],
 ch:[
 {t:"Présentation : ce qu'est ChatGPT", h:`
 <p>ChatGPT est l'assistant conversationnel d'<b>OpenAI</b>, lancé en novembre 2022. Il fonctionne sur le site <a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a>, sur des applications iPhone, Android, Windows et macOS, et sur un navigateur dédié (ChatGPT Atlas) selon les plateformes.</p>
-<p>Il repose sur les modèles <b>GPT</b> d'OpenAI. Un mode automatique choisit entre une réponse rapide et une réflexion plus longue pour les questions difficiles. Selon ton offre, tu peux forcer le mode « réflexion » (Thinking) pour une tâche complexe.</p>
+<p><b>Les modèles au 17 octobre 2026.</b> Depuis le 7 octobre 2026, ChatGPT fonctionne avec la famille <b>GPT-6</b> :</p>
+<div class="tbl-wrap"><table><thead><tr><th>Modèle</th><th>Rôle</th><th>Qui l'a</th></tr></thead><tbody>
+<tr><td><b>GPT-6 Astra</b> (3 sept. 2026)</td><td>Le plus puissant d'OpenAI ; premier à atteindre son seuil interne « critique » en cybersécurité</td><td>Offres payantes et API</td></tr>
+<tr><td><b>GPT-6.1 Sol</b> (29 sept. 2026)</td><td>Presque au niveau d'Astra pour le code et le travail pro, moins cher</td><td>API, ChatGPT Work, Codex</td></tr>
+<tr><td><b>GPT-6 Sol</b> (22 sept. 2026)</td><td>Le modèle de tous les jours, deux fois moins d'erreurs factuelles que le précédent selon OpenAI</td><td>Plus, Pro, Business, Enterprise</td></tr>
+<tr><td><b>GPT-6 Luna</b></td><td>Version légère et rapide</td><td>Gratuit et Go</td></tr>
+<tr><td><b>GPT-6 Pro</b></td><td>Réflexion maximale pour les problèmes difficiles</td><td>Pro</td></tr>
+</tbody></table></div>
+<p>Les réponses utilisent l'<b>Intelligent UI</b> : texte, visuels et outils interactifs mélangés. Les modèles précédents (GPT-5.5, GPT-5.6) ont été retirés de ChatGPT en octobre 2026.</p>
 <div class="tbl-wrap"><table><thead><tr><th>Offre</th><th>Pour qui</th><th>Ce que ça change</th></tr></thead><tbody>
-<tr><td>Gratuite</td><td>Découvrir</td><td>Accès aux fonctions principales avec des quotas limités</td></tr>
+<tr><td>Gratuite</td><td>Découvrir</td><td>GPT-6 Luna, fonctions principales avec quotas limités</td></tr>
+<tr><td>Go</td><td>Petit budget</td><td>Plus de quotas que la version gratuite, à prix réduit</td></tr>
 <tr><td>Plus</td><td>Usage personnel régulier</td><td>Quotas plus élevés, modèles avancés, recherche approfondie, agent</td></tr>
 <tr><td>Pro</td><td>Usage intensif</td><td>Quotas très élevés et modèles les plus puissants</td></tr>
 <tr><td>Business, Enterprise</td><td>Entreprises</td><td>Administration, données exclues de l'entraînement, sécurité renforcée</td></tr>
 </tbody></table></div>
-<p class="small muted">Les prix et quotas évoluent souvent : consulte la page des offres sur le site.</p>`},
+<p class="small"><b>Publicité :</b> depuis le 9 février 2026, des annonces apparaissent dans les offres gratuite et Go aux États-Unis, puis au Canada, en Australie, en Nouvelle-Zélande et au Royaume-Uni. Les offres payantes n'en ont pas.</p>`},
 {t:"Prise en main de l'interface", h:`
 <ul class="clean">
 <li><b>Barre latérale</b> : nouvelle conversation, historique, recherche dans tes conversations, Projets, GPTs.</li>
@@ -680,6 +734,8 @@ ch:[
 <tr><td>Projets</td><td>Dossier avec ses fichiers, ses instructions et ses conversations</td><td>Un projet par grand chantier</td></tr>
 <tr><td>Mémoire</td><td>Retient tes préférences d'une conversation à l'autre</td><td>« Je travaille dans une équipe enrobé, je préfère des réponses courtes »</td></tr>
 <tr><td>GPTs</td><td>Assistants spécialisés que tu crées ou trouves dans le catalogue</td><td>Un GPT « Rédacteur de comptes rendus de chantier »</td></tr>
+<tr><td>ChatGPT Work</td><td>Agent lancé en juillet 2026 : travaille des heures sur tes fichiers et applications connectées, produit documents, tableurs et présentations</td><td>« Prépare le bilan mensuel à partir des fichiers du dossier Chantiers »</td></tr>
+<tr><td>Codex</td><td>Agent de code d'OpenAI dans ChatGPT, le terminal, l'éditeur et le cloud</td><td>Corriger un bug dans le code de l'OS Enrobé</td></tr>
 <tr><td>Agent</td><td>ChatGPT utilise un navigateur virtuel pour accomplir une tâche en plusieurs étapes</td><td>Comparer trois fournisseurs d'EPI et remplir un tableau</td></tr>
 <tr><td>Connecteurs et applications</td><td>Accéder à Gmail, Google Drive, SharePoint, etc. et à des applications tierces</td><td>Chercher un document dans ton Drive</td></tr>
 <tr><td>Tâches planifiées</td><td>Faire exécuter une demande à heure fixe</td><td>Chaque lundi 7 h, rappel des points de la semaine</td></tr>
@@ -723,15 +779,17 @@ ch:[
 ]},
 {
 id:'claude', n:'Claude', by:'Anthropic', cat:'assistants', lvl:'Débutant → avancé', dur:'2 h 30',
-pitch:"Excellent en rédaction, analyse de longs documents et code. Projets, artefacts, réflexion étendue, recherche, connecteurs, création de fichiers et Claude Code.",
+pitch:"Fable 5.1, Opus 5.5, Sonnet 5.5, Haiku 5.5. Excellent en rédaction, longs documents et code. Projets, artefacts, Cowork, Claude Code, connecteurs, création de fichiers.", hk:['Anthropic'],
 ch:[
 {t:"Présentation : Anthropic et la famille Claude", h:`
 <p><b>Anthropic</b> est une entreprise américaine fondée en 2021 par d'anciens chercheurs d'OpenAI, dont Dario et Daniela Amodei. Elle met l'accent sur la sécurité et la fiabilité des modèles. Claude est disponible sur <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a>, en applications de bureau (Windows, macOS) et mobiles, et via une API pour les développeurs.</p>
-<p>Les modèles existent en trois gammes, renouvelées régulièrement :</p>
-<div class="tbl-wrap"><table><thead><tr><th>Gamme</th><th>Profil</th><th>Quand l'utiliser</th></tr></thead><tbody>
-<tr><td><b>Opus</b></td><td>Le plus puissant</td><td>Analyse difficile, code complexe, travail long et exigeant</td></tr>
-<tr><td><b>Sonnet</b></td><td>Équilibre vitesse et qualité</td><td>La plupart des tâches du quotidien</td></tr>
-<tr><td><b>Haiku</b></td><td>Le plus rapide et économique</td><td>Tâches simples, gros volumes, réponses instantanées</td></tr>
+<p><b>Les modèles au 17 octobre 2026 :</b></p>
+<div class="tbl-wrap"><table><thead><tr><th>Modèle</th><th>Profil</th><th>Quand l'utiliser</th></tr></thead><tbody>
+<tr><td><b>Fable 5.1</b> (1er sept. 2026)</td><td>Le plus capable accessible au public, avec des garde-fous qui renvoient les demandes sensibles (cyber, biologie) vers un autre modèle</td><td>Raisonnement très difficile, travail autonome de plusieurs heures</td></tr>
+<tr><td><b>Opus 5.5</b> (22 sept. 2026)</td><td>Au niveau de Fable 5.1 sur la plupart des tâches, 40 % moins cher qu'Opus 5</td><td>Code complexe, agents, travail exigeant</td></tr>
+<tr><td><b>Sonnet 5.5</b> (28 sept. 2026)</td><td>Équilibre vitesse et qualité, 30 % plus rapide que Sonnet 5</td><td>La plupart des tâches du quotidien</td></tr>
+<tr><td><b>Haiku 5.5</b> (7 oct. 2026)</td><td>Le plus rapide et économique, un million de tokens de contexte</td><td>Tâches simples, gros volumes</td></tr>
+<tr><td><b>Mythos 5.1</b></td><td>Même famille que Fable, sans les garde-fous, réservé aux partenaires de cybersécurité (Project Glasswing)</td><td>Non accessible au grand public</td></tr>
 </tbody></table></div>
 <p>Offres : gratuite, Pro, Max (usage intensif), Team et Enterprise pour les entreprises.</p>`},
 {t:"Prise en main de l'interface", h:`
@@ -751,6 +809,7 @@ ch:[
 <tr><td>Recherche web et Research</td><td>Réponses sourcées ; Research mène une enquête multi-sources plus longue</td><td>État de l'art sur le recyclage des enrobés</td></tr>
 <tr><td>Connecteurs</td><td>Lire tes e-mails, ton agenda, ton Drive, ou d'autres outils via le protocole MCP</td><td>« Résume les mails reçus sur le chantier cette semaine »</td></tr>
 <tr><td>Mémoire</td><td>Se souvenir du contexte de tes conversations passées, selon l'offre ; désactivable</td><td>Reprendre un sujet sans tout réexpliquer</td></tr>
+<tr><td>Claude Cowork</td><td>Agent qui travaille des heures dans tes dossiers et applications. Disponible sur Mac et Windows depuis avril 2026, sur le web et le mobile depuis juillet 2026</td><td>« Range ce dossier de photos de chantier par date et fais-en un rapport »</td></tr>
 <tr><td>Compétences (Skills)</td><td>Dossiers d'instructions et de scripts que Claude charge quand la tâche le demande</td><td>Une compétence « charte graphique de l'entreprise »</td></tr>
 </tbody></table></div>
 <div class="callout">Claude ne génère pas de photos ou d'illustrations comme le fait un générateur d'images. Il peut en revanche dessiner des schémas, des graphiques et des visuels simples en code (SVG, HTML).</div>`},
@@ -794,14 +853,24 @@ ch:[
 ]},
 {
 id:'gemini', n:'Gemini', by:'Google', cat:'assistants', lvl:'Débutant → intermédiaire', dur:'1 h 30',
-pitch:"L'IA de Google, intégrée à Gmail, Docs, Drive, Android et Chrome. Deep Research, Gems, Gemini Live, images et vidéos.",
+pitch:"Gemini 4 Argon depuis le 13 octobre 2026. Intégré à Gmail, Docs, Android, Chrome et à la nouvelle Siri d'Apple. Deep Research, Gems, Gemini Omni, Gemini Spark.", hk:['Google'],
 ch:[
 {t:"Présentation", h:`
 <p>Gemini est développé par <b>Google DeepMind</b>. On l'utilise sur <a href="https://gemini.google.com" target="_blank" rel="noopener">gemini.google.com</a>, dans l'application Gemini (qui remplace l'Assistant Google sur Android), dans Chrome et dans les applications Google Workspace (Gmail, Docs, Sheets, Drive, Meet).</p>
-<p>Offres : gratuite, <b>Google AI Pro</b> et <b>Google AI Ultra</b> pour les particuliers ; Gemini est inclus dans de nombreuses offres Google Workspace pour les entreprises. Les modèles existent en versions <b>Pro</b> (raisonnement poussé) et <b>Flash</b> (rapide).</p>`},
+<p>Offres : gratuite, <b>Google AI Plus</b>, <b>Google AI Pro</b> et <b>Google AI Ultra</b> pour les particuliers ; Gemini est inclus dans de nombreuses offres Google Workspace pour les entreprises. L'application dépassait 900 millions d'utilisateurs mensuels en mai 2026.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Modèle (au 17 octobre 2026)</th><th>Profil</th></tr></thead><tbody>
+<tr><td><b>Gemini 4 Argon</b></td><td>Le plus avancé de Google. Lancé le 30 septembre 2026 pour des partenaires cybersécurité, disponible depuis le 13 octobre dans l'app (offres Pro et Ultra), l'API et AI Mode</td></tr>
+<tr><td><b>Gemini 3.1 Pro</b> (19 févr. 2026)</td><td>Raisonnement poussé</td></tr>
+<tr><td><b>Gemini 3 Flash</b> (17 déc. 2025)</td><td>Rapide et économique</td></tr>
+<tr><td><b>Gemini Omni</b> (mai 2026)</td><td>Crée à partir de n'importe quelle entrée, d'abord des vidéos (app Gemini et Flow)</td></tr>
+<tr><td><b>Nano Banana</b></td><td>Création et retouche d'images</td></tr>
+</tbody></table></div>
+<p>Depuis iOS 27 (septembre 2026), la nouvelle <b>Siri AI</b> d'Apple repose sur des modèles construits en collaboration avec Gemini.</p>`},
 {t:"Les fonctions clés", h:`
 <div class="tbl-wrap"><table><thead><tr><th>Fonction</th><th>À quoi elle sert</th></tr></thead><tbody>
 <tr><td>Deep Research</td><td>Enquête automatique sur des dizaines de sources, rapport structuré exportable dans Google Docs</td></tr>
+<tr><td>Gemini Spark</td><td>Agent personnel annoncé en mai 2026 qui agit pour toi en continu, sous ta direction</td></tr>
+<tr><td>Notebooks</td><td>Espaces de projet dans Gemini, synchronisés avec NotebookLM</td></tr>
 <tr><td>Gems</td><td>Assistants personnalisés avec leurs propres instructions et fichiers</td></tr>
 <tr><td>Canvas</td><td>Rédiger ou coder dans un espace d'édition, transformer en page web, quiz ou présentation</td></tr>
 <tr><td>Gemini Live</td><td>Conversation vocale fluide, avec partage de caméra ou d'écran sur mobile</td></tr>
@@ -821,21 +890,28 @@ ch:[
 <ul class="clean">
 <li><b>NotebookLM</b> : l'outil de Google pour travailler sur tes propres documents (voir son cours dédié).</li>
 <li><b>Google AI Studio</b> (aistudio.google.com) : tester gratuitement les modèles Gemini, régler les paramètres, obtenir une clé API.</li>
-<li><b>Flow</b> : outil de création vidéo basé sur Veo.</li>
+<li><b>Flow</b> : outil de création vidéo (Veo, Gemini Omni).</li>
+<li><b>Antigravity</b> : environnement de développement à agents lancé en novembre 2025 avec Gemini 3.</li>
 <li><b>Mode IA de Google Recherche</b> : réponses générées dans le moteur de recherche, à vérifier comme les autres.</li>
 </ul>
 <div class="ex"><b class="t">Exercice</b><p>Lance une Deep Research : « Quelles sont les bonnes pratiques de mise en œuvre des enrobés par temps froid ? Sources professionnelles uniquement. » Exporte le rapport dans Docs et vérifie deux sources.</p></div>`}
 ]},
 {
-id:'mistral', n:'Le Chat', by:'Mistral AI', cat:'assistants', lvl:'Débutant → intermédiaire', dur:'1 h',
-pitch:"L'IA française. Rapide, recherche web, analyse de documents, agents, bibliothèques. C'est aussi le moteur du Bot Maths de l'OS Enrobé.",
+id:'mistral', n:'Vibe (ex-Le Chat)', by:'Mistral AI', cat:'assistants', lvl:'Débutant → intermédiaire', dur:'1 h',
+pitch:"L'IA française, renommée Vibe en 2026 : modes Chat, Work et Code. Mistral Medium 3.5, Large 4. C'est aussi le moteur du Bot Maths de l'OS Enrobé.", hk:['Mistral AI'],
 ch:[
 {t:"Présentation", h:`
-<p><b>Mistral AI</b> est une entreprise française fondée à Paris en 2023 par Arthur Mensch, Guillaume Lample et Timothée Lacroix. Son assistant s'appelle <b>Le Chat</b> (<a href="https://chat.mistral.ai" target="_blank" rel="noopener">chat.mistral.ai</a>, applications mobiles). Mistral publie aussi des modèles en <b>poids ouverts</b>, utilisables librement selon leur licence.</p>
-<p>Atout principal pour une entreprise européenne : un acteur soumis au droit européen, avec un hébergement en Europe mis en avant. Offres : gratuite, Pro, Team et Enterprise.</p>`},
+<p><b>Mistral AI</b> est une entreprise française fondée à Paris en 2023 par Arthur Mensch, Guillaume Lample et Timothée Lacroix. Son assistant, <b>Le Chat</b>, a été renommé <b>Vibe</b> à la mi-2026. Même adresse : <a href="https://chat.mistral.ai" target="_blank" rel="noopener">chat.mistral.ai</a>, et les conversations sont conservées.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Mode</th><th>Usage</th></tr></thead><tbody>
+<tr><td><b>Vibe Chat</b></td><td>La discussion classique de l'ancien Le Chat</td></tr>
+<tr><td><b>Vibe Work</b></td><td>Agent pour les tâches longues ; demande ton accord avant d'envoyer un message, écrire un document ou modifier des données</td></tr>
+<tr><td><b>Vibe Code</b></td><td>Agent de code : ligne de commande, extension VS Code, interface web, agents à distance en parallèle</td></tr>
+</tbody></table></div>
+<p><b>Modèles au 17 octobre 2026 :</b> Mistral Medium 3.5 (modèle par défaut, 128 milliards de paramètres, poids ouverts), Mistral Large 4 (aperçu depuis le 6 octobre 2026, 1 000 milliards de paramètres, poids ouverts annoncés), Mistral Small 4, Mistral OCR 4.</p>
+<p>Le 8 septembre 2026, Mistral a levé 3 milliards d'euros, menés par Samsung : la plus grosse levée de fonds de l'histoire de la tech européenne. Atout principal : un acteur soumis au droit européen. Offres : gratuite, Pro, Team et Enterprise.</p>`},
 {t:"Les fonctions clés", h:`
 <ul class="clean">
-<li><b>Réponses très rapides</b> et recherche web avec sources.</li>
+<li><b>Réponses très rapides</b> et recherche web avec sources (mode Chat).</li>
 <li><b>Analyse de documents</b> : PDF, images, documents scannés grâce à une reconnaissance de texte (OCR) de bonne qualité.</li>
 <li><b>Canvas</b> pour rédiger et modifier un document ou du code.</li>
 <li><b>Bibliothèques</b> : déposer des documents et interroger ce fonds.</li>
@@ -850,11 +926,11 @@ ch:[
 <li>Dans l'OS Enrobé, onglet <b>Réglages → API Mistral</b>, colle la clé. Elle reste stockée dans ton navigateur.</li>
 </ol>
 <div class="callout warn">Une clé API est un secret, comme un mot de passe : ne la publie jamais sur GitHub, ne l'envoie pas par message. Si elle fuit, supprime-la dans la console et crée-en une autre.</div>
-<div class="ex"><b class="t">Exercice</b><p>Pose la même question technique à Le Chat, ChatGPT et Claude. Compare la précision, la clarté et la rapidité. Note laquelle tu préfères pour quel usage.</p></div>`}
+<div class="ex"><b class="t">Exercice</b><p>Pose la même question technique à Vibe, ChatGPT et Claude. Compare la précision, la clarté et la rapidité. Note laquelle tu préfères pour quel usage.</p></div>`}
 ]},
 {
 id:'copilot', n:'Microsoft Copilot', by:'Microsoft', cat:'travail', lvl:'Débutant → intermédiaire', dur:'1 h 30',
-pitch:"L'IA dans Word, Excel, PowerPoint, Outlook et Teams. C'est souvent l'outil autorisé en entreprise : à maîtriser en priorité.",
+pitch:"L'IA dans Word, Excel, PowerPoint, Outlook et Teams, avec les modèles d'OpenAI et d'Anthropic. C'est souvent l'outil autorisé en entreprise : à maîtriser en priorité.", hk:['Microsoft'],
 ch:[
 {t:"Les différents Copilot", h:`
 <div class="tbl-wrap"><table><thead><tr><th>Version</th><th>Où</th><th>Pour qui</th></tr></thead><tbody>
@@ -863,7 +939,8 @@ ch:[
 <tr><td>Microsoft 365 Copilot</td><td>Dans Word, Excel, PowerPoint, Outlook, Teams</td><td>Licence entreprise payante : accès à tes mails, fichiers et réunions</td></tr>
 <tr><td>Copilot Studio</td><td>Plateforme de création d'agents</td><td>Services informatiques et utilisateurs avancés</td></tr>
 </tbody></table></div>
-<p>Avec la licence entreprise, Copilot travaille avec tes données Microsoft 365 et respecte les droits d'accès existants : il ne voit que ce que tu peux déjà ouvrir.</p>`},
+<p>Avec la licence entreprise, Copilot travaille avec tes données Microsoft 365 et respecte les droits d'accès existants : il ne voit que ce que tu peux déjà ouvrir.</p>
+<p><b>En 2026 :</b> Microsoft 365 Copilot laisse choisir entre les modèles d'OpenAI (GPT-5.6) et d'Anthropic (Claude Opus 4.8). <b>Copilot Cowork</b>, disponible depuis juin 2026 et propulsé par Claude, réalise des tâches longues en plusieurs étapes.</p>`},
 {t:"Copilot application par application", h:`
 <div class="tbl-wrap"><table><thead><tr><th>Application</th><th>Ce qu'il fait</th><th>Demande type</th></tr></thead><tbody>
 <tr><td>Outlook</td><td>Résumer un long fil, rédiger une réponse, ajuster le ton</td><td>« Résume ce fil et propose une réponse qui accepte le report au lundi. »</td></tr>
@@ -883,7 +960,7 @@ ch:[
 ]},
 {
 id:'perplexity', n:'Perplexity', by:'Perplexity AI', cat:'travail', lvl:'Débutant', dur:'45 min',
-pitch:"Le moteur de réponse qui cite ses sources. Idéal pour chercher une information fiable et récente.",
+pitch:"Le moteur de réponse qui cite ses sources. Idéal pour chercher une information fiable et récente.", hk:['Perplexity'],
 ch:[
 {t:"Présentation et usage", h:`
 <p><a href="https://www.perplexity.ai" target="_blank" rel="noopener">Perplexity</a> combine un moteur de recherche et une IA : il lit des pages web et rédige une réponse avec des numéros de sources cliquables. Offres gratuite et Pro. L'éditeur propose aussi un navigateur, Comet.</p>
@@ -913,6 +990,8 @@ ch:[
 <li><b>Discussion</b> sur les sources, avec citations cliquables.</li>
 <li><b>Résumé audio</b> : une émission de type podcast où deux voix discutent de tes documents, en français.</li>
 <li><b>Résumé vidéo</b>, <b>carte mentale</b>, <b>guide d'étude</b>, <b>fiches</b> et <b>quiz</b>.</li>
+<li><b>Depuis juin 2026</b> : raisonnement avancé, exécution de code dans un ordinateur cloud sécurisé, création de graphiques, tableurs et diaporamas à partir des sources.</li>
+<li>Synchronisé avec les <b>Notebooks</b> de l'application Gemini.</li>
 <li>Offre gratuite, et version étendue avec les abonnements Google.</li>
 </ul>`},
 {t:"Pas à pas : réviser une documentation technique", h:`
@@ -930,7 +1009,7 @@ ch:[
 COURS.push(
 {
 id:'github', n:'GitHub', by:'Microsoft', cat:'dev', lvl:'Débutant → avancé', dur:'3 h',
-pitch:"Tout comprendre : Git, dépôts, commits, branches, pull requests, GitHub Pages pour héberger l'OS Enrobé, Actions, Copilot et sécurité.",
+pitch:"Tout comprendre : Git, dépôts, commits, branches, pull requests, GitHub Pages pour héberger l'OS Enrobé, Actions, Copilot et ses agents, sécurité.", hk:['GitHub'],
 ch:[
 {t:"Git et GitHub : la différence", h:`
 <div class="two">
@@ -1031,6 +1110,7 @@ jobs:
 {t:"GitHub Copilot et Codespaces", h:`
 <ul class="clean">
 <li><b>GitHub Copilot</b> : suggestions de code pendant que tu tapes, chat pour expliquer ou corriger, revue automatique des pull requests, et <b>agent de code</b> à qui tu peux assigner une issue : il crée une branche, code et ouvre une PR. Offres gratuite (limitée), Pro, Pro+, Business et Enterprise. Plusieurs modèles au choix (OpenAI, Anthropic, Google).</li>
+<li><b>Ce qui est arrivé en 2026</b> : les agents <b>Claude</b> (Anthropic) et <b>Codex</b> (OpenAI) travaillent directement dans GitHub aux côtés de l'agent Copilot (février 2026) ; <b>Copilot CLI</b>, l'agent dans le terminal, est disponible pour tous (février 2026) ; le <b>bac à sable local</b>, qui limite l'accès des agents aux fichiers, au réseau et aux identifiants, est disponible pour tous (octobre 2026) ; <b>Gemini 4 Argon</b> est proposé dans Copilot depuis le 13 octobre 2026.</li>
 <li><b>Codespaces</b> : un ordinateur de développement complet dans le navigateur, prêt en quelques secondes, avec un quota gratuit mensuel.</li>
 <li><b>Copilot dans github.com</b> : poser des questions sur un dépôt (« Comment fonctionne la messagerie dans ce projet ? »).</li>
 </ul>`},
@@ -1049,7 +1129,7 @@ jobs:
 ]},
 {
 id:'huggingface', n:'Hugging Face', by:'Hugging Face', cat:'dev', lvl:'Intermédiaire → avancé', dur:'2 h 30',
-pitch:"La plateforme de l'IA open source : plus d'un million de modèles, des jeux de données, des démos à essayer, les bibliothèques Transformers et Diffusers.",
+pitch:"La plateforme de l'IA open source, en cours de rachat par Nvidia : plus d'un million de modèles, des jeux de données, des démos, les bibliothèques Transformers et Diffusers.", hk:['Hugging Face'],
 ch:[
 {t:"Présentation : le « GitHub de l'IA »", h:`
 <p><b>Hugging Face</b> est une entreprise fondée en 2016 par trois Français, Clément Delangue, Julien Chaumond et Thomas Wolf. Sa plateforme <a href="https://huggingface.co" target="_blank" rel="noopener">huggingface.co</a> est le lieu central de l'IA ouverte : chercheurs, entreprises (Meta, Google, Mistral, Alibaba, OpenAI…) et particuliers y publient leurs modèles.</p>
@@ -1058,7 +1138,8 @@ ch:[
 <tr><td><b>Datasets</b></td><td>Jeux de données pour entraîner ou évaluer des modèles</td></tr>
 <tr><td><b>Spaces</b></td><td>Applications de démonstration à essayer dans le navigateur, sans rien installer</td></tr>
 <tr><td><b>Docs et Learn</b></td><td>Documentation et cours gratuits (LLM, agents, vision, audio…)</td></tr>
-</tbody></table></div>`},
+</tbody></table></div>
+<div class="callout"><b>Actualité 2026.</b> Le 3 septembre 2026, Nvidia a confirmé le rachat de Hugging Face pour environ 12,9 milliards de dollars, en promettant que la plateforme restera ouverte à tout l'écosystème. En juillet 2026, Hugging Face a subi une intrusion touchant des données et identifiants internes : si tu as un compte, renouvelle tes jetons d'accès. L'entreprise fait aussi de la robotique open source (Pollen Robotics, rachetée en 2025).</div>`},
 {t:"Lire une fiche de modèle (model card)", h:`
 <p>Chaque modèle a une page avec sa fiche. Avant de l'utiliser, regarde :</p>
 <ul class="clean">
@@ -1128,11 +1209,19 @@ print(traducteur("Le compactage de la couche de roulement est terminé."))</pre>
 ]},
 {
 id:'cursor', n:'Cursor', by:'Anysphere', cat:'dev', lvl:'Intermédiaire → avancé', dur:'2 h',
-pitch:"L'éditeur de code avec IA intégrée : autocomplétion intelligente, édition en langage naturel, agent qui modifie plusieurs fichiers et lance des commandes.",
+pitch:"L'éditeur de code avec IA le plus populaire, propriété de SpaceX depuis août 2026 : autocomplétion, édition en langage naturel, agents qui modifient plusieurs fichiers.", hk:['Cursor'],
 ch:[
 {t:"Présentation", h:`
 <p><a href="https://cursor.com" target="_blank" rel="noopener">Cursor</a> est un éditeur de code construit à partir de VS Code, édité par la société Anysphere. Il garde l'apparence, les raccourcis et les extensions de VS Code, et y intègre l'IA partout. Il fonctionne sous Windows, macOS et Linux.</p>
-<p>Offres : gratuite (limitée), Pro et offres supérieures pour un usage intensif, Teams et Enterprise. Tu choisis le modèle utilisé : modèles d'Anthropic, d'OpenAI, de Google, ou les modèles maison de Cursor.</p>`},
+<p>Offres : gratuite (limitée), Pro et offres supérieures pour un usage intensif, Teams et Enterprise. Tu choisis le modèle utilisé parmi ceux proposés, dont <b>Composer</b>, le modèle maison de Cursor (octobre 2025).</p>
+<div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Ce qui s'est passé</th></tr></thead><tbody>
+<tr><td>Novembre 2025</td><td>Levée de 2,3 milliards de dollars, valorisation 29,3 milliards</td></tr>
+<tr><td>Février 2026</td><td>2 milliards de dollars de revenus annuels</td></tr>
+<tr><td>16 juin 2026</td><td>SpaceX annonce le rachat de Cursor pour 60 milliards de dollars en actions</td></tr>
+<tr><td>14 août 2026</td><td>Rachat finalisé : Cursor appartient à SpaceX, qui possède aussi xAI et Grok</td></tr>
+<tr><td>29 août 2026</td><td>OpenAI annonce couper l'accès de Cursor à ses modèles, coupure prévue le 12 novembre 2026</td></tr>
+</tbody></table></div>
+<div class="callout warn">Conséquence pratique : après le 12 novembre 2026, les modèles GPT ne seront plus utilisables dans Cursor. Si tu en dépends, prévois les autres modèles proposés dans Cursor, ou un autre outil (VS Code + Copilot, Codex, Claude Code).</div>`},
 {t:"Installation et premiers réglages", h:`
 <ol class="steps">
 <li>Télécharge Cursor sur le site officiel et installe-le.</li>
@@ -1181,7 +1270,9 @@ ch:[
 <tr><td>Claude Code</td><td>Agent d'Anthropic en terminal, IDE, application et web</td></tr>
 <tr><td>OpenAI Codex</td><td>Agent de code d'OpenAI en ligne de commande, IDE et cloud</td></tr>
 <tr><td>Gemini CLI</td><td>Agent open source de Google en ligne de commande</td></tr>
-<tr><td>Windsurf, Zed, JetBrains AI</td><td>Autres éditeurs avec IA intégrée</td></tr>
+<tr><td>Google Antigravity</td><td>Environnement de développement à agents de Google</td></tr>
+<tr><td>Vibe Code (Mistral)</td><td>Agent de code européen en ligne de commande, VS Code et web</td></tr>
+<tr><td>Windsurf (Cognition), Zed, JetBrains AI</td><td>Autres éditeurs avec IA intégrée</td></tr>
 </tbody></table></div>
 <div class="ex"><b class="t">Exercice</b><p>Ouvre un petit projet HTML et demande à l'agent : « Trouve trois problèmes d'accessibilité dans cette page et corrige-les. » Relis les différences avant d'accepter.</p></div>`}
 ]},
@@ -1203,6 +1294,7 @@ ch:[
 <li>Les modèles lisent des <b>tokens</b> : des morceaux de mots. En français, comptez environ 1 token pour 3 à 4 caractères.</li>
 <li>La facturation se fait au million de tokens, avec un prix pour l'<b>entrée</b> (ta question et le contexte) et un prix plus élevé pour la <b>sortie</b> (la réponse).</li>
 <li>Les petits modèles coûtent beaucoup moins cher que les grands : choisis le plus petit qui fait bien le travail.</li>
+<li><b>Exemples de prix publics (octobre 2026)</b> : Claude Opus 5.5 coûte 4 $ par million de tokens en entrée et 20 $ en sortie ; Gemini 4 Argon 2 $ et 10 $ en tarif de lancement jusqu'au 30 novembre 2026, puis 4 $ et 20 $.</li>
 <li>Fixe une <b>limite de dépenses</b> dans la console pour éviter les surprises.</li>
 </ul>`},
 {t:"Un premier appel", h:`
@@ -1249,6 +1341,7 @@ ch:[
 {t:"Midjourney en détail", h:`
 <ul class="clean">
 <li>S'utilise sur le site midjourney.com (et historiquement sur Discord). Abonnement payant.</li>
+<li><b>Version actuelle : V8.2</b>, par défaut depuis le 24 juillet 2026, avec un nouveau modèle d'édition qui remplace les anciennes références de personnage, de style et la retexture. La V8 était sortie en alpha en mars 2026.</li>
 <li>Le prompt décrit l'image, puis des <b>paramètres</b> s'ajoutent à la fin :</li>
 </ul>
 <div class="tbl-wrap"><table><thead><tr><th>Paramètre</th><th>Effet</th></tr></thead><tbody>
@@ -1261,7 +1354,8 @@ ch:[
 <p>Après génération : <b>Vary</b> (variations), <b>Upscale</b> (agrandir), <b>Edit</b> (modifier une zone).</p>`},
 {t:"La vidéo générative", h:`
 <ul class="clean">
-<li><b>Veo</b> (Google, via Gemini et Flow) et <b>Sora</b> (OpenAI) : vidéos réalistes avec son à partir d'un texte ou d'une image, disponibilité selon pays et offre.</li>
+<li><b>Gemini Omni</b> (Google, mai 2026) et <b>Veo 3.1</b> : vidéos réalistes avec son, dans l'app Gemini et Flow.</li>
+<li><b>Sora 2</b> (OpenAI, septembre 2025) : vidéos avec son et application dédiée.</li>
 <li><b>Runway</b> : suite créative complète (génération, retouche, effets).</li>
 <li><b>Kling</b>, <b>Luma Dream Machine</b> : génération de clips courts.</li>
 <li><b>HeyGen</b>, <b>Synthesia</b> : avatars qui parlent, très utilisés pour les vidéos de formation, et traduction de vidéos avec synchronisation des lèvres.</li>
@@ -1310,16 +1404,199 @@ ollama run hf.co/compte/modele-GGUF   # lancer un modèle GGUF de Hugging Face</
 {t:"LM Studio et les familles de modèles", h:`
 <p><b>LM Studio</b> (lmstudio.ai) : application graphique pour chercher, télécharger et discuter avec des modèles, sans terminal. Il indique si un modèle tient dans ta mémoire. <b>Jan</b> est une alternative open source.</p>
 <div class="tbl-wrap"><table><thead><tr><th>Famille</th><th>Éditeur</th><th>Remarque</th></tr></thead><tbody>
-<tr><td>Llama</td><td>Meta</td><td>Très répandu, licence communautaire</td></tr>
-<tr><td>Mistral, Ministral</td><td>Mistral AI</td><td>Bon en français, plusieurs versions sous Apache 2.0</td></tr>
+<tr><td>Muse Spark Open</td><td>Meta</td><td>Sorti le 15 octobre 2026, 816 milliards de paramètres : réservé aux machines très puissantes</td></tr>
+<tr><td>Llama</td><td>Meta</td><td>La famille précédente, très répandue, licence communautaire</td></tr>
+<tr><td>Mistral, Ministral</td><td>Mistral AI</td><td>Bon en français ; Ministral et Small tournent sur un PC, Medium 3.5 et Large 4 demandent des serveurs</td></tr>
 <tr><td>Qwen</td><td>Alibaba</td><td>Très performant, nombreuses tailles</td></tr>
 <tr><td>Gemma</td><td>Google</td><td>Petits modèles efficaces</td></tr>
 <tr><td>gpt-oss</td><td>OpenAI</td><td>Modèles à poids ouverts sous Apache 2.0</td></tr>
-<tr><td>DeepSeek</td><td>DeepSeek</td><td>Fort en raisonnement ; en local, aucune donnée n'est envoyée</td></tr>
+<tr><td>DeepSeek V4</td><td>DeepSeek</td><td>V4-Pro (août 2026) et V4-Flash : très gros, surtout pour serveurs ; en local, aucune donnée n'est envoyée</td></tr>
 </tbody></table></div>
 <div class="ex"><b class="t">Exercice</b><p>Sur un ordinateur personnel, installe LM Studio, télécharge un petit modèle (3 à 8 milliards de paramètres), coupe le wifi et demande-lui de reformuler un paragraphe. Compare avec un assistant en ligne.</p></div>`}
 ]}
 );
+
+/* ====== HISTOIRE DE L'IA : chronologie vérifiée jusqu'au 17 octobre 2026 ====== */
+const MAJ = '17 octobre 2026';
+const HIST_CATS = {modele:'Modèle', produit:'Produit', entreprise:'Entreprise & argent', loi:'Loi & politique', societe:'Société & recherche'};
+// d : date ISO (tri) · s : affichage si la date exacte n'est pas un jour précis · a : acteur · c : catégorie · t : titre · w : pourquoi c'est important
+const HIST = [
+{d:'2017-06-12',a:'Google',c:'societe',t:"Publication de « Attention Is All You Need »",w:"Des chercheurs de Google inventent l'architecture Transformer. Tous les grands modèles actuels (GPT, Claude, Gemini, Mistral…) en descendent."},
+{d:'2018-06-11',a:'OpenAI',c:'modele',t:'GPT-1',w:"Premier « Generative Pre-trained Transformer » : un modèle pré-entraîné sur beaucoup de texte puis spécialisé. Le principe de base des LLM est posé."},
+{d:'2018-10-11',a:'Google',c:'modele',t:'BERT',w:"Modèle de compréhension du langage qui améliore fortement la recherche Google."},
+{d:'2019-02-14',a:'OpenAI',c:'modele',t:'GPT-2, publié par étapes',w:"OpenAI retarde la publication complète par crainte des abus (fausses informations). Premier grand débat sur la diffusion des modèles."},
+{d:'2020-05-28',a:'OpenAI',c:'modele',t:'GPT-3 (175 milliards de paramètres)',w:"Il sait écrire, traduire, résumer à partir de quelques exemples. Proposé via une API en juin 2020."},
+{d:'2021-01-05',a:'OpenAI',c:'modele',t:'DALL·E et CLIP',w:"Premières images générées à partir d'un texte à grande échelle."},
+{d:'2021-06-29',a:'GitHub',c:'produit',t:'GitHub Copilot en aperçu',w:"Premier assistant de code grand public, basé sur un modèle d'OpenAI. Le code devient un usage phare de l'IA."},
+{d:'2021-07-22',a:'Google',c:'societe',t:'AlphaFold publie des centaines de milliers de structures de protéines',w:"DeepMind montre que l'IA peut faire avancer la science fondamentale. Vaudra un prix Nobel en 2024."},
+{d:'2021-12-31',s:'2021',a:'Anthropic',c:'entreprise',t:"Création d'Anthropic",w:"Fondée par d'anciens d'OpenAI dont Dario et Daniela Amodei, avec la sécurité de l'IA comme priorité."},
+{d:'2022-04-06',a:'OpenAI',c:'modele',t:'DALL·E 2',w:"Images réalistes et cohérentes : la génération d'images devient spectaculaire."},
+{d:'2022-07-12',a:'Midjourney',c:'produit',t:'Midjourney ouvert au public (bêta)',w:"Génération d'images artistiques accessible à tous via Discord."},
+{d:'2022-08-22',a:'Stability AI',c:'modele',t:'Stable Diffusion en open source',w:"Un générateur d'images que chacun peut installer sur son ordinateur."},
+{d:'2022-09-21',a:'OpenAI',c:'modele',t:'Whisper',w:"Transcription audio open source très précise, encore utilisée partout."},
+{d:'2022-11-30',a:'OpenAI',c:'produit',t:'Lancement de ChatGPT',w:"Le moment qui change tout : 100 millions d'utilisateurs en environ deux mois. L'IA générative devient grand public."},
+{d:'2023-01-23',a:'Microsoft',c:'entreprise',t:'Microsoft investit plusieurs milliards dans OpenAI',w:"Le partenariat qui amène GPT dans Bing, Windows et Office."},
+{d:'2023-02-07',a:'Microsoft',c:'produit',t:'Bing Chat (futur Copilot)',w:"Le moteur de recherche Bing répond avec GPT-4 : début de la recherche conversationnelle."},
+{d:'2023-02-24',a:'Meta',c:'modele',t:'LLaMA',w:"Meta diffuse son modèle aux chercheurs ; il fuit rapidement et lance la vague des modèles ouverts."},
+{d:'2023-03-14',a:'OpenAI',c:'modele',t:'GPT-4',w:"Nettement plus fiable, comprend les images. Réussit de nombreux examens professionnels."},
+{d:'2023-03-14',a:'Anthropic',c:'modele',t:'Claude (première version)',w:"Anthropic lance son assistant le même jour que GPT-4."},
+{d:'2023-03-21',a:'Google',c:'produit',t:'Google Bard ouvert au public',w:"Réponse de Google à ChatGPT, d'abord aux États-Unis et au Royaume-Uni."},
+{d:'2023-04-30',s:'avril 2023',a:'Mistral AI',c:'entreprise',t:'Création de Mistral AI à Paris',w:"Arthur Mensch, Guillaume Lample et Timothée Lacroix fondent le champion européen de l'IA."},
+{d:'2023-07-11',a:'Anthropic',c:'modele',t:'Claude 2',w:"Longue fenêtre de contexte : on peut lui donner des documents entiers."},
+{d:'2023-07-18',a:'Meta',c:'modele',t:'Llama 2, utilisable commercialement',w:"Les entreprises peuvent enfin utiliser un grand modèle ouvert dans leurs produits."},
+{d:'2023-09-27',a:'Mistral AI',c:'modele',t:'Mistral 7B',w:"Petit modèle ouvert sous licence Apache 2.0, plus performant que des modèles bien plus gros."},
+{d:'2023-11-06',a:'OpenAI',c:'produit',t:'DevDay : les GPTs et GPT-4 Turbo',w:"Chacun peut créer son assistant personnalisé dans ChatGPT."},
+{d:'2023-11-17',a:'OpenAI',c:'entreprise',t:'Sam Altman renvoyé puis réintégré cinq jours plus tard',w:"Crise de gouvernance spectaculaire : quasiment tous les salariés menacent de partir."},
+{d:'2023-12-06',a:'Google',c:'modele',t:'Gemini 1.0',w:"Premier modèle Gemini, conçu dès le départ pour le texte, l'image, le son et la vidéo."},
+{d:'2023-12-08',a:'Union européenne',c:'loi',t:"Accord politique sur l'AI Act",w:"L'Europe s'accorde sur la première grande loi au monde encadrant l'IA."},
+{d:'2023-12-11',a:'Mistral AI',c:'modele',t:'Mixtral 8x7B',w:"Modèle ouvert à « mélange d'experts » : rapide et performant."},
+{d:'2024-02-08',a:'Google',c:'produit',t:'Bard devient Gemini',w:"Google unifie son assistant sous le nom Gemini et lance une offre payante."},
+{d:'2024-02-15',a:'OpenAI',c:'modele',t:'Sora dévoilé',w:"Des vidéos d'une minute d'un réalisme jamais vu, générées à partir d'un texte."},
+{d:'2024-02-15',a:'Google',c:'modele',t:'Gemini 1.5 et son million de tokens',w:"Une fenêtre de contexte capable de lire des livres entiers ou des heures de vidéo."},
+{d:'2024-02-26',a:'Mistral AI',c:'produit',t:'Mistral Large et Le Chat',w:"Mistral lance son assistant et s'allie à Microsoft."},
+{d:'2024-03-04',a:'Anthropic',c:'modele',t:'Claude 3 (Opus, Sonnet, Haiku)',w:"Apparition des trois gammes de taille. Opus rivalise avec GPT-4."},
+{d:'2024-03-13',a:'Union européenne',c:'loi',t:"Le Parlement européen adopte l'AI Act",w:"Vote final de la loi européenne sur l'IA."},
+{d:'2024-04-18',a:'Meta',c:'modele',t:'Llama 3',w:"Modèles ouverts qui se rapprochent des meilleurs modèles fermés."},
+{d:'2024-05-13',a:'OpenAI',c:'modele',t:'GPT-4o',w:"Un seul modèle pour le texte, l'image et la voix, avec une conversation orale quasi instantanée."},
+{d:'2024-05-14',a:'Google',c:'produit',t:'Google I/O : AI Overviews, Veo, Project Astra',w:"Les réponses IA arrivent dans la recherche Google."},
+{d:'2024-06-10',a:'Apple',c:'produit',t:'Apple Intelligence annoncé',w:"Apple entre dans l'IA générative, avec une intégration de ChatGPT."},
+{d:'2024-06-20',a:'Anthropic',c:'modele',t:'Claude 3.5 Sonnet et les Artefacts',w:"Un modèle intermédiaire qui dépasse le haut de gamme précédent, et le panneau de création à côté de la conversation."},
+{d:'2024-07-23',a:'Meta',c:'modele',t:'Llama 3.1 405B',w:"Le premier modèle ouvert au niveau des meilleurs modèles fermés."},
+{d:'2024-08-01',a:'Union européenne',c:'loi',t:"Entrée en vigueur de l'AI Act",w:"Début de l'application progressive de la loi européenne."},
+{d:'2024-08-01',a:'Black Forest Labs',c:'modele',t:'FLUX.1',w:"Génération d'images ouverte de très haute qualité, par d'anciens de Stable Diffusion."},
+{d:'2024-09-12',a:'OpenAI',c:'modele',t:'o1 : le premier modèle « qui réfléchit »',w:"Le modèle raisonne avant de répondre. Début de l'ère des modèles de raisonnement."},
+{d:'2024-10-08',a:'Recherche',c:'societe',t:'Prix Nobel de physique pour Hopfield et Hinton',w:"Récompense les fondations des réseaux de neurones."},
+{d:'2024-10-09',a:'Google',c:'societe',t:'Prix Nobel de chimie pour Hassabis, Jumper et Baker',w:"Récompense AlphaFold et la conception de protéines."},
+{d:'2024-10-22',a:'Anthropic',c:'produit',t:"Claude peut utiliser un ordinateur (computer use)",w:"L'IA voit l'écran, bouge la souris et tape : premier pas vers les agents."},
+{d:'2024-10-31',a:'OpenAI',c:'produit',t:'ChatGPT Search',w:"Recherche web avec sources directement dans ChatGPT."},
+{d:'2024-11-25',a:'Anthropic',c:'produit',t:'Model Context Protocol (MCP)',w:"Standard ouvert pour brancher une IA sur des outils et des données. Adopté ensuite par toute l'industrie."},
+{d:'2024-12-05',a:'OpenAI',c:'produit',t:'o1 et ChatGPT Pro',w:"Première offre premium pour les usages intensifs."},
+{d:'2024-12-09',a:'OpenAI',c:'produit',t:'Sora ouvert au public',w:"La génération vidéo devient accessible aux abonnés."},
+{d:'2024-12-11',a:'Google',c:'modele',t:'Gemini 2.0',w:"Google annonce l'« ère des agents »."},
+{d:'2024-12-26',a:'DeepSeek',c:'modele',t:'DeepSeek-V3',w:"Un laboratoire chinois atteint le haut niveau pour un coût d'entraînement annoncé très bas."},
+{d:'2025-01-20',a:'DeepSeek',c:'modele',t:'DeepSeek-R1',w:"Modèle de raisonnement ouvert, presque au niveau d'o1. Choc mondial."},
+{d:'2025-01-21',a:'OpenAI',c:'entreprise',t:'Projet Stargate',w:"Annonce de 500 milliards de dollars de centres de données aux États-Unis."},
+{d:'2025-01-23',a:'OpenAI',c:'produit',t:'Operator',w:"Premier agent d'OpenAI qui navigue sur le web pour l'utilisateur."},
+{d:'2025-01-27',a:'Nvidia',c:'entreprise',t:"L'action Nvidia chute d'environ 17 % en un jour",w:"Les marchés craignent que DeepSeek prouve qu'on peut faire de l'IA avec moins de puces."},
+{d:'2025-02-02',a:'Union européenne',c:'loi',t:"AI Act : les usages interdits s'appliquent",w:"Notation sociale, manipulation, certaines reconnaissances biométriques sont interdites."},
+{d:'2025-02-02',a:'OpenAI',c:'produit',t:'Deep Research',w:"Rapports de recherche complets produits par un agent en quelques minutes."},
+{d:'2025-02-10',a:'France',c:'loi',t:"Sommet pour l'action sur l'IA à Paris",w:"La France annonce 109 milliards d'euros d'investissements dans l'IA."},
+{d:'2025-02-24',a:'Anthropic',c:'produit',t:'Claude 3.7 Sonnet et Claude Code (aperçu)',w:"Premier modèle hybride (rapide ou réflexion) et naissance de l'agent de code d'Anthropic."},
+{d:'2025-02-27',a:'OpenAI',c:'modele',t:'GPT-4.5',w:"Le plus gros modèle « classique » d'OpenAI, vite remplacé."},
+{d:'2025-03-25',a:'Google',c:'modele',t:'Gemini 2.5 Pro',w:"Google prend la tête de nombreux classements."},
+{d:'2025-03-25',a:'OpenAI',c:'produit',t:'Génération d\'images dans ChatGPT (GPT-4o)',w:"Vague mondiale d'images « à la Ghibli » : des centaines de millions d'images en quelques jours."},
+{d:'2025-04-05',a:'Meta',c:'modele',t:'Llama 4',w:"Accueil mitigé, qui poussera Meta à réorganiser toute son IA."},
+{d:'2025-04-16',a:'OpenAI',c:'modele',t:'o3, o4-mini et Codex CLI',w:"Les modèles de raisonnement utilisent eux-mêmes les outils (web, code, images)."},
+{d:'2025-05-16',a:'OpenAI',c:'produit',t:'Codex, agent de code dans le cloud',w:"On confie une tâche de programmation et l'agent la réalise en parallèle."},
+{d:'2025-05-19',a:'GitHub',c:'produit',t:'Agent de code GitHub Copilot',w:"On assigne une issue à Copilot, il code et ouvre une pull request."},
+{d:'2025-05-20',a:'Google',c:'produit',t:'Google I/O : Veo 3, AI Mode, Flow',w:"Vidéo générée avec son et dialogues ; mode IA dans la recherche."},
+{d:'2025-05-22',a:'Anthropic',c:'modele',t:'Claude 4 (Opus 4, Sonnet 4) et Claude Code pour tous',w:"Les meilleurs modèles pour le code ; Claude Code devient un produit à part entière."},
+{d:'2025-06-10',a:'Mistral AI',c:'modele',t:'Magistral',w:"Premier modèle de raisonnement de Mistral, bon en français."},
+{d:'2025-06-25',a:'Google',c:'produit',t:'Gemini CLI',w:"Agent de code open source dans le terminal."},
+{d:'2025-07-09',a:'xAI',c:'modele',t:'Grok 4',w:"xAI rejoint le peloton de tête."},
+{d:'2025-07-14',a:'Cognition',c:'entreprise',t:'Cognition rachète Windsurf',w:"Après l'échec du rachat par OpenAI et le départ des dirigeants chez Google : la guerre des outils de code."},
+{d:'2025-07-17',a:'OpenAI',c:'produit',t:'ChatGPT agent',w:"ChatGPT utilise son propre ordinateur virtuel pour accomplir des tâches."},
+{d:'2025-08-02',a:'Union européenne',c:'loi',t:"AI Act : règles pour les modèles à usage général",w:"Obligations de transparence et de documentation pour les fournisseurs de grands modèles."},
+{d:'2025-08-05',a:'OpenAI',c:'modele',t:'gpt-oss',w:"Premiers modèles à poids ouverts d'OpenAI depuis GPT-2, sous Apache 2.0."},
+{d:'2025-08-05',a:'Anthropic',c:'modele',t:'Claude Opus 4.1',w:"Amélioration du code et du raisonnement."},
+{d:'2025-08-07',a:'OpenAI',c:'modele',t:'GPT-5',w:"Un modèle unique qui choisit seul entre réponse rapide et réflexion."},
+{d:'2025-08-26',a:'Google',c:'modele',t:'Nano Banana (Gemini 2.5 Flash Image)',w:"Retouche d'images d'une cohérence inédite : énorme succès."},
+{d:'2025-09-09',a:'Mistral AI',c:'entreprise',t:'Mistral lève 1,7 milliard d\'euros, mené par ASML',w:"Mistral devient la startup d'IA la plus valorisée d'Europe."},
+{d:'2025-09-29',a:'Anthropic',c:'modele',t:'Claude Sonnet 4.5',w:"Capable de travailler en autonomie sur du code pendant des heures."},
+{d:'2025-09-30',a:'OpenAI',c:'produit',t:'Sora 2 et son application',w:"Vidéos avec son et réseau social de vidéos générées."},
+{d:'2025-10-06',a:'OpenAI',c:'produit',t:'Applications dans ChatGPT et AgentKit',w:"ChatGPT devient une plateforme d'applications tierces."},
+{d:'2025-10-16',a:'Anthropic',c:'produit',t:'Agent Skills (compétences)',w:"Des dossiers d'instructions que Claude charge à la demande."},
+{d:'2025-10-21',a:'OpenAI',c:'produit',t:'ChatGPT Atlas',w:"Le navigateur web d'OpenAI, avec ChatGPT intégré."},
+{d:'2025-10-28',a:'OpenAI',c:'entreprise',t:'Restructuration d\'OpenAI',w:"La branche commerciale devient une société d'intérêt public contrôlée par la fondation."},
+{d:'2025-10-29',a:'Cursor',c:'produit',t:'Cursor 2.0 et le modèle Composer',w:"Cursor lance son propre modèle de code et une interface centrée sur les agents."},
+{d:'2025-11-18',a:'Google',c:'modele',t:'Gemini 3 Pro et Antigravity',w:"Nouveau modèle phare et environnement de développement à agents."},
+{d:'2025-11-24',a:'Anthropic',c:'modele',t:'Claude Opus 4.5',w:"Opus devient plus rapide et moins cher."},
+{d:'2025-12-02',a:'Mistral AI',c:'modele',t:'Mistral 3 (Large 3 et Ministral 3)',w:"Toute une famille de modèles ouverts sous Apache 2.0."},
+{d:'2025-12-09',a:'Anthropic',c:'societe',t:'MCP confié à la Linux Foundation',w:"Le protocole devient un standard neutre, géré par l'Agentic AI Foundation."},
+{d:'2025-12-11',a:'OpenAI',c:'modele',t:'GPT-5.2',w:"Versions Instant, Thinking et Pro."},
+{d:'2025-12-17',a:'Google',c:'modele',t:'Gemini 3 Flash',w:"Devient le modèle par défaut de l'application Gemini."},
+{d:'2026-01-10',a:'xAI',c:'societe',t:'Scandale des deepfakes de Grok : l\'Indonésie bloque Grok',w:"Après la création d'images sexuelles truquées, plusieurs pays bloquent Grok et xAI restreint la génération d'images."},
+{d:'2026-01-31',s:'janvier 2026',a:'Anthropic',c:'produit',t:'Claude Cowork (aperçu)',w:"Claude travaille dans tes dossiers et applications de bureau pour des tâches longues."},
+{d:'2026-02-02',a:'SpaceX',c:'entreprise',t:'SpaceX rachète xAI',w:"Plus grosse fusion de l'histoire : l'ensemble est valorisé 1 250 milliards de dollars."},
+{d:'2026-02-05',a:'Anthropic',c:'modele',t:'Claude Opus 4.6',w:"Nouveau modèle haut de gamme d'Anthropic."},
+{d:'2026-02-05',a:'OpenAI',c:'modele',t:'GPT-5.3-Codex',w:"Le modèle de code le plus capable d'OpenAI à cette date."},
+{d:'2026-02-09',a:'OpenAI',c:'produit',t:'Publicités dans ChatGPT (test aux États-Unis)',w:"Uniquement pour les offres gratuite et Go ; les offres payantes restent sans publicité."},
+{d:'2026-02-17',a:'Anthropic',c:'modele',t:'Claude Sonnet 4.6',w:"Mise à jour du modèle du quotidien."},
+{d:'2026-02-19',a:'Google',c:'modele',t:'Gemini 3.1 Pro',w:"Google annonce un raisonnement plus de deux fois meilleur que Gemini 3 Pro."},
+{d:'2026-02-27',a:'OpenAI',c:'societe',t:'ChatGPT atteint 900 millions d\'utilisateurs par semaine',w:"L'outil numérique à la croissance la plus rapide de l'histoire."},
+{d:'2026-02-28',s:'février 2026',a:'GitHub',c:'produit',t:'Claude et Codex deviennent agents de code dans Copilot',w:"Copilot accueille les agents des concurrents ; Copilot CLI devient disponible pour tous."},
+{d:'2026-03-05',a:'OpenAI',c:'modele',t:'GPT-5.4',w:"Réunit raisonnement et capacités de code de pointe."},
+{d:'2026-03-31',s:'mars 2026',a:'Anthropic',c:'loi',t:'Le Pentagone classe Anthropic « risque pour la chaîne d\'approvisionnement »',w:"Anthropic refusait l'usage de ses modèles pour les armes totalement autonomes et la surveillance de masse. Bataille judiciaire en cours."},
+{d:'2026-03-31',s:'mars 2026',a:'Midjourney',c:'modele',t:'Midjourney V8 (alpha)',w:"Nouvelle génération de Midjourney, suivie de V8.1 le 14 avril."},
+{d:'2026-04-07',a:'Anthropic',c:'modele',t:'Claude Mythos Preview et Project Glasswing',w:"Modèle aux capacités de cybersécurité inédites, réservé à douze partenaires (Amazon, Apple, Microsoft, Cisco…) pour la défense."},
+{d:'2026-04-08',a:'Meta',c:'modele',t:'Muse Spark',w:"Premier modèle de la refonte totale de l'IA de Meta, sous la direction d'Alexandr Wang."},
+{d:'2026-04-23',a:'OpenAI',c:'modele',t:'GPT-5.5',w:"Devient le modèle par défaut de ChatGPT le 5 mai."},
+{d:'2026-04-24',a:'DeepSeek',c:'modele',t:'DeepSeek V4 (aperçu)',w:"Modèles ouverts avec un million de tokens de contexte."},
+{d:'2026-04-30',s:'avril 2026',a:'Anthropic',c:'produit',t:'Claude Cowork disponible pour tous sur Mac et Windows',w:"L'agent de bureau sort de l'aperçu."},
+{d:'2026-05-19',a:'Google',c:'produit',t:'Google I/O 2026 : Gemini Omni et Gemini Spark',w:"Modèle qui crée à partir de n'importe quelle entrée (d'abord la vidéo) et agent personnel permanent. L'app Gemini dépasse 900 millions d'utilisateurs mensuels."},
+{d:'2026-06-08',a:'Apple',c:'produit',t:'Siri AI annoncé à la WWDC',w:"Nouveaux modèles Apple construits en collaboration avec Gemini de Google."},
+{d:'2026-06-09',a:'Anthropic',c:'modele',t:'Claude Fable 5 et Claude Mythos 5',w:"Fable 5 est la version publique, avec garde-fous, d'un modèle de classe Mythos ; Mythos 5 reste réservé aux partenaires."},
+{d:'2026-06-12',a:'Anthropic',c:'loi',t:'Accès à Fable 5 et Mythos 5 suspendu sur directive américaine',w:"Anthropic coupe l'accès pour se conformer à une directive de contrôle des exportations. Rétabli le 1er juillet."},
+{d:'2026-06-12',a:'SpaceX',c:'entreprise',t:'Introduction en bourse record de SpaceX',w:"La société, qui inclut désormais xAI et Grok, entre en bourse."},
+{d:'2026-06-16',a:'SpaceX',c:'entreprise',t:'SpaceX annonce le rachat de Cursor pour 60 milliards de dollars',w:"L'éditeur de code le plus populaire passe sous le contrôle d'Elon Musk (finalisé le 14 août)."},
+{d:'2026-06-01',s:'mi-2026',a:'Mistral AI',c:'produit',t:'Le Chat devient Vibe',w:"Un seul produit avec trois modes : Vibe Chat, Vibe Work et Vibe Code. Même adresse : chat.mistral.ai."},
+{d:'2026-06-30',s:'juin 2026',a:'Microsoft',c:'produit',t:'Copilot Cowork disponible',w:"Microsoft 365 Copilot intègre un agent pour le travail long, propulsé par Claude d'Anthropic."},
+{d:'2026-07-01',a:'Anthropic',c:'produit',t:'Fable 5 de retour, dans Claude Code et Cowork',w:"Rétablissement mondial après la suspension de juin."},
+{d:'2026-07-09',a:'OpenAI',c:'modele',t:'GPT-5.6 (Sol, Terra, Luna) et ChatGPT Work',w:"Trois tailles de modèles, et un agent qui produit documents, tableurs et présentations à partir de tes applications."},
+{d:'2026-07-09',a:'Meta',c:'modele',t:'Muse Spark 1.1',w:"Meta se lance sur le marché du code par IA."},
+{d:'2026-07-24',a:'Anthropic',c:'modele',t:'Claude Opus 5',w:"Proche de Fable 5 pour moitié prix."},
+{d:'2026-07-24',a:'Union européenne',c:'loi',t:'« Omnibus numérique » : l\'AI Act modifié',w:"Publié le 24 juillet, en vigueur le 27 : les obligations sur les systèmes à haut risque sont repoussées au 2 décembre 2027 (et 2028 pour ceux intégrés à des produits)."},
+{d:'2026-07-24',a:'Midjourney',c:'modele',t:'Midjourney V8.2 par défaut',w:"Avec un nouveau modèle d'édition qui remplace les références de personnage et de style."},
+{d:'2026-07-31',s:'juillet 2026',a:'Hugging Face',c:'societe',t:'Intrusion chez Hugging Face',w:"Données et identifiants internes touchés : les utilisateurs sont invités à renouveler leurs jetons d'accès."},
+{d:'2026-08-02',a:'Union européenne',c:'loi',t:'AI Act : obligations de transparence (article 50)',w:"Les contenus générés par IA doivent être signalés comme tels ; ces obligations n'ont pas été repoussées."},
+{d:'2026-08-13',a:'DeepSeek',c:'modele',t:'DeepSeek V4-Pro disponible',w:"1 600 milliards de paramètres, un million de tokens de contexte."},
+{d:'2026-08-28',a:'Anthropic',c:'loi',t:'Un juge fédéral bloque la liste noire du Pentagone',w:"Première victoire judiciaire d'Anthropic, contredite par une cour d'appel le 25 septembre."},
+{d:'2026-08-29',a:'OpenAI',c:'entreprise',t:'OpenAI annonce la fin de l\'accès de Cursor à ses modèles',w:"Conséquence du rachat de Cursor par SpaceX ; coupure prévue le 12 novembre 2026."},
+{d:'2026-09-01',a:'Anthropic',c:'modele',t:'Claude Fable 5.1 et Mythos 5.1',w:"Fable 5.1 devient le modèle Anthropic le plus capable accessible au public."},
+{d:'2026-09-03',a:'OpenAI',c:'modele',t:'GPT-6 Astra',w:"Le modèle le plus capable d'OpenAI, premier à atteindre son seuil interne « critique » en cybersécurité."},
+{d:'2026-09-03',a:'Nvidia',c:'entreprise',t:'Nvidia annonce le rachat de Hugging Face (environ 12,9 milliards de dollars)',w:"Nvidia promet que la plateforme restera ouverte à tout l'écosystème."},
+{d:'2026-09-08',a:'Mistral AI',c:'entreprise',t:'Mistral lève 3 milliards d\'euros, mené par Samsung',w:"Plus grosse levée de fonds de l'histoire de la tech européenne ; valorisation de plus de 21 milliards d'euros."},
+{d:'2026-09-14',a:'Apple',c:'produit',t:'iOS 27 et Siri AI (bêta)',w:"D'abord en anglais et pas dans l'Union européenne au lancement."},
+{d:'2026-09-21',a:'SpaceX',c:'modele',t:'Grok 4.7',w:"Nouvelle version de Grok, désormais développée par la branche IA de SpaceX."},
+{d:'2026-09-22',a:'Anthropic',c:'modele',t:'Claude Opus 5.5',w:"Au niveau de Fable 5.1 sur la plupart des tâches, 40 % moins cher qu'Opus 5."},
+{d:'2026-09-22',a:'OpenAI',c:'modele',t:'GPT-6 Sol et GPT-6 Luna',w:"Modèles plus petits et moins chers ; Sol fait environ deux fois moins d'erreurs factuelles que son prédécesseur selon OpenAI."},
+{d:'2026-09-25',a:'Anthropic',c:'loi',t:'Une cour d\'appel confirme la désignation du Pentagone',w:"Décision à 2 voix contre 1 ; Anthropic étudie les recours."},
+{d:'2026-09-28',a:'Anthropic',c:'modele',t:'Claude Sonnet 5.5',w:"30 % plus rapide et jusqu'à 30 % moins cher que Sonnet 5."},
+{d:'2026-09-29',a:'OpenAI',c:'modele',t:'GPT-6.1 Sol',w:"Presque au niveau d'Astra pour le code et le travail professionnel, à moindre coût."},
+{d:'2026-09-30',a:'Google',c:'modele',t:'Gemini 4 Argon (accès limité)',w:"D'abord réservé à des partenaires de cybersécurité via le programme Fairwind."},
+{d:'2026-10-06',a:'Mistral AI',c:'modele',t:'Mistral Large 4 (aperçu)',w:"Modèle de 1 000 milliards de paramètres, poids ouverts annoncés après tests de sécurité."},
+{d:'2026-10-07',a:'Anthropic',c:'modele',t:'Claude Haiku 5.5',w:"Petit modèle rapide et économique, avec un million de tokens de contexte."},
+{d:'2026-10-07',a:'OpenAI',c:'produit',t:'GPT-6 et l\'« Intelligent UI » dans ChatGPT',w:"Réponses qui mêlent texte, visuels et outils interactifs ; offres gratuite et Go dès le 8 octobre."},
+{d:'2026-10-13',a:'Google',c:'produit',t:'Gemini 4 Argon disponible',w:"Dans l'app Gemini (offres Pro et Ultra), l'API, AI Mode et GitHub Copilot."},
+{d:'2026-10-15',a:'Meta',c:'modele',t:'Muse Spark Open',w:"Modèle à poids ouverts de Meta : 816 milliards de paramètres, un million de tokens de contexte."}
+];
+
+/* ====== OÙ EN EST-ON (au 17 octobre 2026) ====== */
+const ETAT = [
+{a:'OpenAI', m:'GPT-6 Astra (le plus puissant), GPT-6.1 Sol, GPT-6 Sol et Luna, GPT-6 Pro', p:'ChatGPT (plus de 1,2 milliard d\'utilisateurs par semaine), ChatGPT Work, Codex, Atlas, Sora', k:'chatgpt'},
+{a:'Anthropic', m:'Claude Fable 5.1 (le plus puissant accessible), Opus 5.5, Sonnet 5.5, Haiku 5.5 ; Mythos 5.1 réservé aux partenaires', p:'Claude.ai, Claude Code, Claude Cowork, API', k:'claude'},
+{a:'Google', m:'Gemini 4 Argon, Gemini 3.1 Pro, Gemini 3 Flash, Gemini Omni (vidéo), Nano Banana (images)', p:'App Gemini (plus de 900 millions d\'utilisateurs mensuels en mai), NotebookLM, Antigravity, AI Mode', k:'gemini'},
+{a:'Mistral AI', m:'Mistral Large 4 (aperçu), Medium 3.5 (par défaut), Small 4, OCR 4', p:'Vibe (ex-Le Chat) : modes Chat, Work et Code', k:'mistral'},
+{a:'Meta', m:'Muse Spark, Muse Spark 1.1, Muse Spark Open (poids ouverts)', p:'Meta AI dans WhatsApp, Instagram, Messenger'},
+{a:'SpaceX (ex-xAI)', m:'Grok 4.7', p:'Grok ; propriétaire de Cursor depuis le 14 août 2026', k:'cursor'},
+{a:'DeepSeek', m:'DeepSeek V4-Pro, V4.1-Flash (poids ouverts)', p:'Application et API DeepSeek'},
+{a:'Microsoft', m:'Modèles d\'OpenAI et d\'Anthropic au choix', p:'Microsoft 365 Copilot, Copilot Cowork, Copilot Studio', k:'copilot'},
+{a:'Apple', m:'Apple Foundation Models (construits avec Gemini)', p:'Siri AI dans iOS 27 (bêta, pas encore dans l\'UE au lancement)'},
+{a:'GitHub', m:'Choix entre modèles OpenAI, Anthropic, Google (dont Gemini 4 Argon)', p:'Copilot, agents Copilot, Claude et Codex, Copilot CLI', k:'github'},
+{a:'Hugging Face', m:'Plateforme de plus d\'un million de modèles ouverts', p:'Rachat par Nvidia annoncé le 3 septembre 2026', k:'huggingface'}
+];
+
+/* ====== LES GRANDES TENDANCES ====== */
+const TENDANCES = [
+{t:'Du chatbot à l\'agent', d:"2022 : on discute. 2024 : l'IA raisonne et cherche sur le web. 2025 : elle navigue et code seule. 2026 : des agents comme ChatGPT Work, Claude Cowork, Vibe Work ou Gemini Spark travaillent des heures sur tes fichiers et tes applications."},
+{t:'Le raisonnement est devenu la norme', d:"Depuis o1 (septembre 2024), tous les modèles de pointe réfléchissent avant de répondre. En 2026, un même modèle choisit seul entre réponse rapide et réflexion longue."},
+{t:'Le code, premier métier transformé', d:"Copilot (2021), Cursor, Claude Code, Codex, Gemini CLI, Vibe Code : les agents écrivent, testent et livrent du code. C'est le marché le plus disputé, au point que SpaceX a payé 60 milliards de dollars pour Cursor."},
+{t:'Les modèles ouverts au niveau des meilleurs', d:"Llama, Mistral, Qwen, DeepSeek, gpt-oss puis Muse Spark Open et Mistral Large 4 : on peut télécharger des modèles proches du sommet. La Chine (DeepSeek, Qwen) y joue un rôle majeur."},
+{t:'Cybersécurité et IA « trop puissantes »', d:"En 2026, les laboratoires retiennent leurs modèles les plus forts : Mythos chez Anthropic, accès échelonné de GPT-6 Astra et de Gemini 4 Argon, programmes réservés aux experts en sécurité."},
+{t:'Concentration et rachats géants', d:"SpaceX absorbe xAI puis Cursor, Nvidia rachète Hugging Face, les levées se comptent en milliards (Mistral 3 milliards d'euros). Quelques acteurs contrôlent puces, modèles et plateformes."},
+{t:'L\'IA devient politique', d:"AI Act européen (2024, assoupli par l'omnibus de 2026), conflit entre Anthropic et le Pentagone, contrôle des exportations, sommets internationaux (Paris 2025, New Delhi 2026)."},
+{t:'Usage massif', d:"ChatGPT dépasse 1,2 milliard d'utilisateurs par semaine et Gemini 900 millions par mois. La publicité arrive dans les offres gratuites de ChatGPT (2026)."}
+];
 
 /* ====== PANORAMA DES OUTILS ====== */
 const TOOL_CATS = {
@@ -1329,20 +1606,20 @@ const TOOL_CATS = {
 };
 // n nom · e éditeur · c catégorie · u usage · p points forts · m limites · $ prix · url · t astuce · k cours lié
 const TOOLS = [
-{n:'ChatGPT',e:'OpenAI · États-Unis',c:'chat',u:"L'assistant généraliste le plus complet : rédaction, analyse de fichiers, recherche, images, voix, agent.",p:'Écosystème très riche (Projets, GPTs, mémoire), mode vocal excellent',m:'Quotas gratuits vite atteints, peut affirmer des erreurs avec aplomb','$':'Freemium',url:'https://chatgpt.com',t:"Pour un calcul, demande-lui d'exécuter du code plutôt que de répondre de tête.",k:'chatgpt'},
-{n:'Claude',e:'Anthropic · États-Unis',c:'chat',u:'Rédaction soignée, analyse de longs documents, code, artefacts interactifs, création de fichiers.',p:'Très bonne qualité d\'écriture, longs contextes, honnête sur ses limites',m:'Pas de génération d\'images photo, limites d\'usage en gratuit','$':'Freemium',url:'https://claude.ai',t:'Structure tes prompts avec des balises <document> et <consignes>.',k:'claude'},
-{n:'Gemini',e:'Google · États-Unis',c:'chat',u:'Assistant intégré à Gmail, Docs, Drive, Android, Chrome. Deep Research, Gems, images et vidéos.',p:'Intégration Google, multimodal (voix, caméra, vidéo)',m:'Au meilleur de sa forme dans l\'écosystème Google','$':'Freemium',url:'https://gemini.google.com',t:'Gemini Live avec la caméra permet de montrer un objet et de poser une question.',k:'gemini'},
-{n:'Le Chat',e:'Mistral AI · France',c:'chat',u:'Assistant rapide avec recherche web, analyse de documents, agents et bibliothèques.',p:'Acteur européen, très rapide, bon OCR',m:'Écosystème moins large que les leaders américains','$':'Freemium',url:'https://chat.mistral.ai',t:'C\'est la même famille de modèles que le Bot Maths de l\'OS Enrobé.',k:'mistral'},
+{n:'ChatGPT',e:'OpenAI · États-Unis',c:'chat',u:"L'assistant le plus utilisé (1,2 milliard d'utilisateurs par semaine), sous GPT-6 depuis octobre 2026 : rédaction, fichiers, recherche, images, voix, agent.",p:'Écosystème très riche (Projets, GPTs, ChatGPT Work, Codex), mode vocal excellent',m:'Quotas gratuits vite atteints, peut affirmer des erreurs avec aplomb','$':'Freemium',url:'https://chatgpt.com',t:"Pour un calcul, demande-lui d'exécuter du code plutôt que de répondre de tête.",k:'chatgpt'},
+{n:'Claude',e:'Anthropic · États-Unis',c:'chat',u:'Fable 5.1, Opus 5.5, Sonnet 5.5, Haiku 5.5 : rédaction soignée, longs documents, code, artefacts, Cowork, création de fichiers.',p:'Très bonne qualité d\'écriture, longs contextes, honnête sur ses limites',m:'Pas de génération d\'images photo, limites d\'usage en gratuit','$':'Freemium',url:'https://claude.ai',t:'Structure tes prompts avec des balises <document> et <consignes>.',k:'claude'},
+{n:'Gemini',e:'Google · États-Unis',c:'chat',u:'Gemini 4 Argon depuis le 13 octobre 2026. Intégré à Gmail, Docs, Drive, Android, Chrome. Deep Research, Gems, Gemini Omni, Gemini Spark.',p:'Intégration Google, multimodal (voix, caméra, vidéo)',m:'Au meilleur de sa forme dans l\'écosystème Google','$':'Freemium',url:'https://gemini.google.com',t:'Gemini Live avec la caméra permet de montrer un objet et de poser une question.',k:'gemini'},
+{n:'Vibe (ex-Le Chat)',e:'Mistral AI · France',c:'chat',u:'Le Chat renommé Vibe en 2026 : modes Chat, Work (agent) et Code. Modèle Mistral Medium 3.5 par défaut.',p:'Acteur européen, très rapide, bon OCR',m:'Écosystème moins large que les leaders américains','$':'Freemium',url:'https://chat.mistral.ai',t:'C\'est la même famille de modèles que le Bot Maths de l\'OS Enrobé.',k:'mistral'},
 {n:'Microsoft Copilot',e:'Microsoft · États-Unis',c:'chat',u:'Assistant grand public dans Windows et Edge ; version entreprise dans Microsoft 365.',p:'Présent partout dans l\'environnement Microsoft',m:'Les fonctions Word/Excel/Teams demandent une licence entreprise','$':'Freemium',url:'https://copilot.microsoft.com',t:'Avec un compte pro, Copilot Chat protège les données de l\'entreprise.',k:'copilot'},
-{n:'Meta AI',e:'Meta · États-Unis',c:'chat',u:'Assistant intégré à WhatsApp, Instagram et Messenger.',p:'Gratuit, déjà dans les applications du quotidien',m:'Application grand public : à éviter pour tout sujet professionnel','$':'Gratuit',url:'https://www.meta.ai',t:'Pratique pour une question rapide, jamais pour des informations de l\'entreprise.'},
-{n:'Grok',e:'xAI · États-Unis',c:'chat',u:'Assistant relié au réseau X, avec génération d\'images.',p:'Accès aux publications récentes de X',m:'Fiabilité inégale sur les sujets sensibles, ton parfois provocateur','$':'Freemium',url:'https://grok.com',t:'Recoupe toujours avec une source fiable.'},
-{n:'DeepSeek',e:'DeepSeek · Chine',c:'chat',u:'Assistant performant en raisonnement, modèles à poids ouverts.',p:'Gratuit, très bon en maths et en code',m:'Données hébergées en Chine ; plusieurs autorités européennes ont émis des réserves','$':'Gratuit',url:'https://chat.deepseek.com',t:'Si tu veux ses modèles, utilise-les en local plutôt que l\'application en ligne.'},
+{n:'Meta AI',e:'Meta · États-Unis',c:'chat',u:'Assistant intégré à WhatsApp, Instagram et Messenger, propulsé depuis avril 2026 par les modèles Muse Spark.',p:'Gratuit, déjà dans les applications du quotidien',m:'Application grand public : à éviter pour tout sujet professionnel','$':'Gratuit',url:'https://www.meta.ai',t:'Pratique pour une question rapide, jamais pour des informations de l\'entreprise.'},
+{n:'Grok',e:'SpaceX (ex-xAI) · États-Unis',c:'chat',u:'Assistant relié au réseau X ; version Grok 4.7 depuis le 21 septembre 2026.',p:'Accès aux publications récentes de X',m:'Scandale des images truquées en janvier 2026, bloqué dans plusieurs pays ; fiabilité inégale','$':'Freemium',url:'https://grok.com',t:'Recoupe toujours avec une source fiable.'},
+{n:'DeepSeek',e:'DeepSeek · Chine',c:'chat',u:'Assistant performant en raisonnement ; modèles V4 à poids ouverts et un million de tokens de contexte (2026).',p:'Gratuit, très bon en maths et en code',m:'Données hébergées en Chine ; plusieurs autorités européennes ont émis des réserves','$':'Gratuit',url:'https://chat.deepseek.com',t:'Si tu veux ses modèles, utilise-les en local plutôt que l\'application en ligne.'},
 {n:'Perplexity',e:'Perplexity AI · États-Unis',c:'recherche',u:'Moteur de réponse avec sources citées, recherche approfondie, espaces de travail.',p:'Sources visibles et cliquables, choix des modèles en Pro',m:'Peut mal résumer une bonne source','$':'Freemium',url:'https://www.perplexity.ai',t:'Clique toujours sur les sources des affirmations importantes.',k:'perplexity'},
 {n:'NotebookLM',e:'Google',c:'recherche',u:'Répond uniquement à partir de tes documents, avec citations. Résumés audio, quiz, cartes mentales.',p:'Invente très peu, idéal pour la documentation technique',m:'Ne cherche pas en dehors des sources fournies (c\'est voulu)','$':'Freemium',url:'https://notebooklm.google.com',t:'Le résumé audio est parfait pour réviser en voiture, en passager.',k:'notebooklm'},
-{n:'Modes « Recherche approfondie »',e:'ChatGPT, Gemini, Claude, Perplexity, Le Chat',c:'recherche',u:'L\'IA mène une enquête sur des dizaines de sources et rédige un rapport structuré.',p:'Gain de temps énorme pour un état des lieux',m:'Prend plusieurs minutes, quotas limités, sources à vérifier','$':'Freemium',url:'https://chatgpt.com',t:'Précise la période, le pays et le type de sources acceptées.'},
+{n:'Modes « Recherche approfondie »',e:'ChatGPT, Gemini, Claude, Perplexity, Vibe',c:'recherche',u:'L\'IA mène une enquête sur des dizaines de sources et rédige un rapport structuré.',p:'Gain de temps énorme pour un état des lieux',m:'Prend plusieurs minutes, quotas limités, sources à vérifier','$':'Freemium',url:'https://chatgpt.com',t:'Précise la période, le pays et le type de sources acceptées.'},
 {n:'Consensus',e:'Consensus · États-Unis',c:'recherche',u:'Recherche dans les publications scientifiques avec synthèse des résultats.',p:'Uniquement des études publiées',m:'Surtout en anglais, sujets de recherche','$':'Freemium',url:'https://consensus.app',t:'Utile pour savoir ce que dit la science sur un sujet précis.'},
 {n:'Elicit',e:'Elicit · États-Unis',c:'recherche',u:'Assistant de revue de littérature scientifique : trouve, résume et compare des articles.',p:'Extraction de données des études en tableau',m:'Public plutôt chercheurs et ingénieurs','$':'Freemium',url:'https://elicit.com',t:'Demande un tableau comparatif des études trouvées.'},
-{n:'Microsoft 365 Copilot',e:'Microsoft',c:'bureau',u:'IA dans Word, Excel, PowerPoint, Outlook et Teams, avec accès à tes fichiers et réunions.',p:'Travaille dans les outils de l\'entreprise, respecte les droits d\'accès',m:'Licence payante par utilisateur','$':'Payant',url:'https://www.microsoft.com/microsoft-365/copilot',t:'Dans Teams : « Quelles décisions ont été prises et qui fait quoi ? »',k:'copilot'},
+{n:'Microsoft 365 Copilot',e:'Microsoft',c:'bureau',u:'IA dans Word, Excel, PowerPoint, Outlook et Teams, avec choix entre modèles OpenAI et Anthropic, et l\'agent Copilot Cowork (juin 2026).',p:'Travaille dans les outils de l\'entreprise, respecte les droits d\'accès',m:'Licence payante par utilisateur','$':'Payant',url:'https://www.microsoft.com/microsoft-365/copilot',t:'Dans Teams : « Quelles décisions ont été prises et qui fait quoi ? »',k:'copilot'},
 {n:'Gemini pour Workspace',e:'Google',c:'bureau',u:'IA dans Gmail, Docs, Sheets, Slides et Meet.',p:'Résumés de fils de mails, prise de notes en réunion',m:'Selon l\'offre Workspace de l\'entreprise','$':'Payant',url:'https://workspace.google.com',t:'Demande un résumé des mails non lus avant ta journée.'},
 {n:'DeepL',e:'DeepL · Allemagne',c:'bureau',u:'Traduction de très haute qualité, documents entiers, correction avec DeepL Write.',p:'Traductions naturelles, conserve la mise en page',m:'Version gratuite limitée en taille de documents','$':'Freemium',url:'https://www.deepl.com',t:'Pour une consigne de sécurité traduite, fais-la relire par un locuteur natif.'},
 {n:'Notion AI',e:'Notion',c:'bureau',u:'Rédaction, résumés et recherche dans tes pages Notion.',p:'Interroge toute ta base de connaissances',m:'Utile seulement si l\'équipe utilise Notion','$':'Payant',url:'https://www.notion.com',t:'Pose une question sur l\'ensemble de tes notes.'},
@@ -1354,15 +1631,15 @@ const TOOLS = [
 {n:'Microsoft Designer',e:'Microsoft',c:'pres',u:'Création de visuels et retouches d\'images assistées.',p:'Inclus avec les comptes Microsoft',m:'Moins complet que Canva','$':'Freemium',url:'https://designer.microsoft.com',t:'Bon pour des visuels rapides de réseaux sociaux.'},
 {n:'GPT Image',e:'OpenAI (dans ChatGPT)',c:'image',u:'Création et retouche d\'images par la conversation.',p:'Suit précisément les consignes, texte lisible dans l\'image',m:'Génération parfois lente, quotas','$':'Freemium',url:'https://chatgpt.com',t:'Corrige par la conversation : « même image, mais avec un ciel nuageux ».',k:'creation'},
 {n:'Nano Banana (Gemini)',e:'Google',c:'image',u:'Génération et surtout retouche d\'images avec cohérence du sujet.',p:'Garde le même personnage ou objet d\'une image à l\'autre',m:'Filigrane d\'identification sur les images','$':'Freemium',url:'https://gemini.google.com',t:'Idéal pour modifier une photo existante sans tout changer.',k:'creation'},
-{n:'Midjourney',e:'Midjourney · États-Unis',c:'image',u:'Images artistiques et esthétiques à partir de texte.',p:'Qualité visuelle de référence',m:'Payant uniquement, moins précis sur le texte dans l\'image','$':'Payant',url:'https://www.midjourney.com',t:'--ar 16:9 pour le format paysage.',k:'creation'},
+{n:'Midjourney',e:'Midjourney · États-Unis',c:'image',u:'Images artistiques et esthétiques à partir de texte. Version V8.2 par défaut depuis le 24 juillet 2026.',p:'Qualité visuelle de référence',m:'Payant uniquement, moins précis sur le texte dans l\'image','$':'Payant',url:'https://www.midjourney.com',t:'--ar 16:9 pour le format paysage.',k:'creation'},
 {n:'Adobe Firefly',e:'Adobe',c:'image',u:'Génération d\'images et remplissage génératif dans Photoshop.',p:'Entraîné sur des contenus sous licence, sûr pour un usage commercial',m:'Crédits limités selon l\'offre','$':'Freemium',url:'https://firefly.adobe.com',t:'Le remplissage génératif efface un objet gênant sur une photo.',k:'creation'},
 {n:'Ideogram',e:'Ideogram',c:'image',u:'Images avec texte et typographie lisibles.',p:'Le meilleur pour les affiches et logos avec texte',m:'Moins photoréaliste que d\'autres','$':'Freemium',url:'https://ideogram.ai',t:'Mets le texte exact entre guillemets dans le prompt.'},
 {n:'FLUX',e:'Black Forest Labs · Allemagne',c:'image',u:'Modèles de génération d\'images, ouverts et professionnels.',p:'Très bonne qualité, versions ouvertes',m:'Accès via d\'autres plateformes ou en local','$':'Open source',url:'https://bfl.ai',t:'Disponible sur Hugging Face et dans de nombreux outils.'},
 {n:'Stable Diffusion',e:'Stability AI · Royaume-Uni',c:'image',u:'Modèles ouverts à faire tourner en local avec ComfyUI ou d\'autres interfaces.',p:'Contrôle total, gratuit en local',m:'Technique, demande une bonne carte graphique','$':'Open source',url:'https://stability.ai',t:'ComfyUI permet de créer des chaînes de traitement avancées.'},
 {n:'Leonardo',e:'Leonardo.Ai',c:'image',u:'Plateforme de génération d\'images avec de nombreux styles.',p:'Interface complète, crédits gratuits quotidiens',m:'Beaucoup d\'options pour débuter','$':'Freemium',url:'https://leonardo.ai',t:'Utilise les styles prédéfinis pour démarrer.'},
 {n:'Krea',e:'Krea',c:'image',u:'Génération en temps réel, agrandissement et amélioration d\'images.',p:'Voir l\'image évoluer en direct',m:'Quotas gratuits limités','$':'Freemium',url:'https://www.krea.ai',t:'L\'agrandissement améliore une image de faible résolution.'},
-{n:'Veo',e:'Google',c:'video',u:'Vidéos réalistes avec son à partir de texte ou d\'image, via Gemini et Flow.',p:'Réalisme et son intégré',m:'Accès selon l\'abonnement, clips courts','$':'Payant',url:'https://gemini.google.com',t:'Décris le mouvement de caméra.',k:'creation'},
-{n:'Sora',e:'OpenAI',c:'video',u:'Génération de vidéos à partir de texte ou d\'image.',p:'Scènes cohérentes et réalistes',m:'Disponibilité selon les pays','$':'Freemium',url:'https://openai.com/sora',t:'Un plan, une action.',k:'creation'},
+{n:'Gemini Omni et Veo',e:'Google',c:'video',u:'Vidéos réalistes avec son à partir de texte ou d\'image (Gemini Omni depuis mai 2026, Veo 3.1), via Gemini et Flow.',p:'Réalisme et son intégré',m:'Accès selon l\'abonnement, clips courts','$':'Payant',url:'https://gemini.google.com',t:'Décris le mouvement de caméra.',k:'creation'},
+{n:'Sora 2',e:'OpenAI',c:'video',u:'Génération de vidéos avec son à partir de texte ou d\'image, et application dédiée (depuis septembre 2025).',p:'Scènes cohérentes et réalistes',m:'Disponibilité selon les pays','$':'Freemium',url:'https://openai.com/sora',t:'Un plan, une action.',k:'creation'},
 {n:'Runway',e:'Runway · États-Unis',c:'video',u:'Suite vidéo IA : génération, retouche, effets, suppression d\'objets.',p:'Outils professionnels complets',m:'Crédits vite consommés','$':'Freemium',url:'https://runwayml.com',t:'Anime une photo avec l\'option image vers vidéo.'},
 {n:'Kling',e:'Kuaishou · Chine',c:'video',u:'Génération de clips vidéo réalistes.',p:'Bonne qualité de mouvement',m:'Éditeur chinois : aucune donnée sensible','$':'Freemium',url:'https://klingai.com',t:'Parfait pour tester la génération vidéo.'},
 {n:'Luma Dream Machine',e:'Luma AI',c:'video',u:'Vidéos à partir de texte et d\'images.',p:'Interface simple',m:'Clips courts','$':'Freemium',url:'https://lumalabs.ai',t:'Utilise une image de départ pour mieux contrôler le résultat.'},
@@ -1375,10 +1652,11 @@ const TOOLS = [
 {n:'Whisper',e:'OpenAI',c:'audio',u:'Modèle de transcription audio très précis, utilisable en local.',p:'Gratuit, ouvert, multilingue',m:'Technique à installer seul','$':'Open source',url:'https://github.com/openai/whisper',t:'Beaucoup d\'applications de transcription l\'utilisent.'},
 {n:'Adobe Podcast',e:'Adobe',c:'audio',u:'Nettoie un enregistrement : bruit de fond, écho.',p:'Rend audible une voix enregistrée sur chantier',m:'Version gratuite limitée','$':'Freemium',url:'https://podcast.adobe.com',t:'Idéal pour un message vocal enregistré dans le bruit.'},
 {n:'Modes vocaux',e:'ChatGPT, Gemini Live, Claude, Copilot',c:'audio',u:'Conversation orale en temps réel avec l\'IA.',p:'Mains libres, naturel',m:'Jamais au détriment de la vigilance au volant ou sur le chantier','$':'Freemium',url:'https://chatgpt.com',t:'Entraîne-toi à une présentation orale.'},
-{n:'GitHub Copilot',e:'GitHub · Microsoft',c:'code',u:'Suggestions de code, chat, revue de PR et agent de code dans GitHub et les éditeurs.',p:'Intégré à GitHub et VS Code',m:'Offre gratuite limitée','$':'Freemium',url:'https://github.com/features/copilot',t:'Assigne une issue à Copilot pour qu\'il ouvre une PR.',k:'github'},
+{n:'GitHub Copilot',e:'GitHub · Microsoft',c:'code',u:'Suggestions de code, chat, revue de PR, agent Copilot ; depuis février 2026, agents Claude et Codex intégrés et Copilot CLI.',p:'Intégré à GitHub et VS Code',m:'Offre gratuite limitée','$':'Freemium',url:'https://github.com/features/copilot',t:'Assigne une issue à Copilot pour qu\'il ouvre une PR.',k:'github'},
 {n:'Claude Code',e:'Anthropic',c:'code',u:'Agent de développement : lit, modifie, teste, commite et ouvre des PR.',p:'Très fort sur les gros projets, terminal, IDE et web',m:'Abonnement Claude ou API requis','$':'Payant',url:'https://claude.com/product/claude-code',t:'Un fichier CLAUDE.md donne ses règles permanentes.',k:'claude'},
-{n:'Cursor',e:'Anysphere',c:'code',u:'Éditeur de code basé sur VS Code avec IA intégrée et agent.',p:'Autocomplétion très efficace, agent multi-fichiers',m:'Quotas selon l\'offre','$':'Freemium',url:'https://cursor.com',t:'Demande un plan avant de laisser l\'agent coder.',k:'cursor'},
+{n:'Cursor',e:'Anysphere · propriété de SpaceX depuis le 14 août 2026',c:'code',u:'Éditeur de code basé sur VS Code avec IA intégrée, agents et modèle maison Composer.',p:'Autocomplétion très efficace, agent multi-fichiers',m:'OpenAI coupe l\'accès de Cursor à ses modèles le 12 novembre 2026','$':'Freemium',url:'https://cursor.com',t:'Demande un plan avant de laisser l\'agent coder.',k:'cursor'},
 {n:'OpenAI Codex',e:'OpenAI',c:'code',u:'Agent de code en ligne de commande, IDE et cloud.',p:'Inclus dans les offres ChatGPT payantes',m:'Usage selon les quotas ChatGPT','$':'Payant',url:'https://openai.com/codex',t:'Peut travailler en parallèle sur plusieurs tâches.'},
+{n:'Google Antigravity',e:'Google',c:'code',u:'Environnement de développement où des agents planifient, codent et testent (depuis novembre 2025).',p:'Intégré aux derniers modèles Gemini, dont Gemini 4 Argon',m:'Gemini 4 Argon réservé à l\'offre Ultra dans Antigravity','$':'Freemium',url:'https://antigravity.google',t:'Laisse l\'agent proposer un plan, puis valide.'},
 {n:'Gemini CLI',e:'Google',c:'code',u:'Agent open source en ligne de commande.',p:'Quota gratuit généreux',m:'Interface en terminal','$':'Freemium',url:'https://github.com/google-gemini/gemini-cli',t:'Pratique pour découvrir les agents de code gratuitement.'},
 {n:'Lovable',e:'Lovable · Suède',c:'code',u:'Créer une application web complète en la décrivant.',p:'Aucun code à écrire',m:'Projets complexes difficiles à maintenir','$':'Freemium',url:'https://lovable.dev',t:'Décris les écrans un par un.'},
 {n:'Bolt',e:'StackBlitz',c:'code',u:'Générer et faire tourner une application web dans le navigateur.',p:'Résultat immédiat',m:'Crédits vite consommés','$':'Freemium',url:'https://bolt.new',t:'Bon pour prototyper un outil interne.'},
@@ -1388,12 +1666,14 @@ const TOOLS = [
 {n:'Make',e:'Make · République tchèque',c:'auto',u:'Automatisations visuelles avancées entre applications.',p:'Scénarios complexes, prix raisonnable',m:'Prise en main plus longue','$':'Freemium',url:'https://www.make.com',t:'Visualise chaque étape du scénario.'},
 {n:'n8n',e:'n8n · Allemagne',c:'auto',u:'Automatisations et agents IA, auto-hébergeables.',p:'Open source, données gardées chez soi',m:'Technique à installer soi-même','$':'Open source',url:'https://n8n.io',t:'La version cloud évite l\'installation.'},
 {n:'Power Automate',e:'Microsoft',c:'auto',u:'Automatisations dans Microsoft 365, décrites en langage naturel.',p:'Déjà dans l\'environnement de l\'entreprise',m:'Certaines fonctions sont payantes','$':'Payant',url:'https://www.microsoft.com/power-platform/products/power-automate',t:'« Quand un fichier arrive dans ce dossier, préviens l\'équipe dans Teams. »'},
+{n:'ChatGPT Work',e:'OpenAI',c:'auto',u:'Agent (juillet 2026) qui travaille des heures sur tes fichiers et applications connectées : documents, tableurs, présentations.',p:'Disponible sur toutes les offres, y compris gratuite sur ordinateur',m:'Vérifie chaque livrable avant usage','$':'Freemium',url:'https://chatgpt.com',t:'Donne-lui un dossier précis plutôt que tout ton Drive.',k:'chatgpt'},
+{n:'Claude Cowork',e:'Anthropic',c:'auto',u:'Agent de bureau qui travaille dans tes dossiers et applications pour des tâches longues.',p:'Mac et Windows depuis avril 2026, web et mobile depuis juillet 2026',m:'Abonnement Claude payant','$':'Payant',url:'https://claude.com',t:'Commence par un dossier de test, jamais par tes documents importants.',k:'claude'},
 {n:'Agents de navigation',e:'ChatGPT agent, Comet, Claude pour Chrome…',c:'auto',u:'L\'IA agit sur des sites web à ta place : chercher, remplir, comparer.',p:'Automatise des tâches longues',m:'Peut se tromper ou être piégée par une page : surveille chaque action','$':'Freemium',url:'https://chatgpt.com',t:'Ne lui confie jamais un paiement ou un accès sensible sans contrôle.'},
 {n:'Ollama',e:'Ollama',c:'local',u:'Faire tourner des modèles d\'IA sur son ordinateur.',p:'Gratuit, simple, confidentiel',m:'Moins puissant que les modèles en ligne','$':'Open source',url:'https://ollama.com',t:'ollama run mistral pour démarrer.',k:'local'},
 {n:'LM Studio',e:'LM Studio',c:'local',u:'Application graphique pour télécharger et utiliser des modèles locaux.',p:'Aucune ligne de commande',m:'Demande beaucoup de mémoire','$':'Gratuit',url:'https://lmstudio.ai',t:'Il indique si un modèle tient dans ta mémoire.',k:'local'},
-{n:'Hugging Face',e:'Hugging Face · France / États-Unis',c:'local',u:'La plateforme de l\'IA ouverte : modèles, données, démos, bibliothèques.',p:'Plus d\'un million de modèles, cours gratuits',m:'Qualité et licences variables','$':'Freemium',url:'https://huggingface.co',t:'Vérifie la licence avant tout usage pro.',k:'huggingface'},
-{n:'Llama',e:'Meta',c:'local',u:'Famille de modèles à poids ouverts.',p:'Très répandue, nombreuses variantes',m:'Licence communautaire à lire','$':'Open source',url:'https://www.llama.com',t:'Disponible dans Ollama et LM Studio.'},
-{n:'Modèles Mistral ouverts',e:'Mistral AI',c:'local',u:'Modèles ouverts performants en français.',p:'Plusieurs sous licence Apache 2.0',m:'Les plus grands modèles demandent un gros matériel','$':'Open source',url:'https://mistral.ai',t:'Un bon choix pour une IA locale en français.'},
+{n:'Hugging Face',e:'Hugging Face · rachat par Nvidia annoncé le 3 septembre 2026',c:'local',u:'La plateforme de l\'IA ouverte : modèles, données, démos, bibliothèques.',p:'Plus d\'un million de modèles, cours gratuits',m:'Qualité et licences variables','$':'Freemium',url:'https://huggingface.co',t:'Vérifie la licence avant tout usage pro.',k:'huggingface'},
+{n:'Muse Spark Open et Llama',e:'Meta',c:'local',u:'Muse Spark Open (15 octobre 2026, 816 milliards de paramètres) et la famille Llama, à poids ouverts.',p:'Llama très répandu, nombreuses variantes',m:'Muse Spark Open demande des serveurs ; licences à lire','$':'Open source',url:'https://www.llama.com',t:'Disponible dans Ollama et LM Studio.'},
+{n:'Modèles Mistral ouverts',e:'Mistral AI',c:'local',u:'Modèles ouverts performants en français : Ministral, Small 4, Medium 3.5, Large 4 (aperçu, 1 000 milliards de paramètres).',p:'Plusieurs sous licence Apache 2.0',m:'Les plus grands modèles demandent un gros matériel','$':'Open source',url:'https://mistral.ai',t:'Un bon choix pour une IA locale en français.'},
 {n:'Qwen',e:'Alibaba · Chine',c:'local',u:'Famille de modèles ouverts de toutes tailles.',p:'Excellent rapport taille / performance',m:'Utiliser en local plutôt qu\'en ligne','$':'Open source',url:'https://huggingface.co/Qwen',t:'Les petites versions tournent sur un portable.'},
 {n:'Gemma',e:'Google',c:'local',u:'Petits modèles ouverts efficaces.',p:'Légers, multilingues',m:'Moins puissants que les grands modèles','$':'Open source',url:'https://ai.google.dev/gemma',t:'Bon pour les ordinateurs modestes.'},
 {n:'gpt-oss',e:'OpenAI',c:'local',u:'Modèles à poids ouverts d\'OpenAI.',p:'Licence Apache 2.0, bon raisonnement',m:'La grande version demande un matériel puissant','$':'Open source',url:'https://huggingface.co/openai',t:'La petite version tourne sur un PC bien équipé.'}
@@ -1798,8 +2078,9 @@ ex:"Pose le même problème de logique à une IA en mode rapide puis en mode ré
 {t:"Agents, outils et automatisation", s:"Quand l'IA agit au lieu de seulement répondre", h:`
 <p>Un <b>agent</b> est une IA qui enchaîne plusieurs actions seule pour atteindre un objectif : chercher sur le web, ouvrir des pages, remplir un tableau, écrire et tester du code, envoyer un brouillon.</p>
 <ul class="clean">
+<li><b>Agents de travail</b> (2026) : ChatGPT Work, Claude Cowork, Vibe Work, Copilot Cowork, Gemini Spark travaillent des heures sur tes fichiers et applications.</li>
 <li><b>Agents de navigation</b> : ChatGPT agent, Comet, Claude pour Chrome.</li>
-<li><b>Agents de code</b> : Claude Code, Codex, Copilot, Cursor.</li>
+<li><b>Agents de code</b> : Claude Code, Codex, Copilot, Cursor, Antigravity, Vibe Code.</li>
 <li><b>Connecteurs et MCP</b> : brancher l'IA sur tes mails, ton agenda, tes fichiers, tes outils métier.</li>
 <li><b>Automatisations</b> : Power Automate, Zapier, Make, n8n déclenchent des actions selon des règles.</li>
 </ul>
@@ -1859,7 +2140,7 @@ const TECHS = [
 /* ====== PROMPTS MAÎTRES ====== */
 const MASTERS = [
 {t:"Le prompt maître : ingénieur de prompts", tag:"Le plus important", use:"Colle-le dans n'importe quelle IA, remplace la demande brute, réponds à ses questions. Tu obtiens un prompt professionnel à réutiliser.", p:`# RÔLE
-Tu es un ingénieur de prompts senior. Ta mission : transformer ma demande brute en un prompt professionnel, complet et directement exploitable par une IA générative (ChatGPT, Claude, Gemini, Le Chat, Copilot), puis l'améliorer jusqu'à ce qu'il soit optimal.
+Tu es un ingénieur de prompts senior. Ta mission : transformer ma demande brute en un prompt professionnel, complet et directement exploitable par une IA générative (ChatGPT, Claude, Gemini, Vibe, Copilot), puis l'améliorer jusqu'à ce qu'il soit optimal.
 
 # MA DEMANDE BRUTE
 """
@@ -1985,6 +2266,12 @@ const QUIZ = [
 {q:"Quelle technique est la plus efficace pour obtenir le format exact voulu ?",o:["Être poli","Donner un exemple du résultat attendu","Écrire en anglais","Répéter la demande"],a:1,e:"Un exemple vaut mille consignes : l'IA reproduit structure et ton."},
 {q:"Quelle est la différence entre ChatGPT Plus et l'API d'OpenAI ?",o:["Aucune","Plus est un abonnement à l'interface, l'API est facturée à l'usage pour les programmes","L'API est gratuite","Plus sert seulement aux images"],a:1,e:"Les deux sont facturés séparément : forfait pour l'interface, au token pour l'API."},
 {q:"Pourquoi utiliser une IA locale avec Ollama ?",o:["Elle est plus puissante que tout","Les données ne quittent pas l'ordinateur","Elle cherche mieux sur le web","Elle génère des vidéos"],a:1,e:"Le principal intérêt est la confidentialité, au prix d'une puissance moindre."},
+{q:"Quel événement a rendu l'IA générative grand public, le 30 novembre 2022 ?",o:["La sortie de GPT-4","Le lancement de ChatGPT","La création de Mistral AI","L'AI Act"],a:1,e:"ChatGPT atteint 100 millions d'utilisateurs en environ deux mois."},
+{q:"Quelle invention de 2017 est à la base de tous les grands modèles actuels ?",o:["Le Transformer","Le smartphone","Le cloud","Le GPU"],a:0,e:"L'article « Attention Is All You Need » de Google a introduit le Transformer."},
+{q:"Qui possède Cursor depuis le 14 août 2026 ?",o:["Microsoft","OpenAI","SpaceX","Google"],a:2,e:"SpaceX, qui avait déjà absorbé xAI en février 2026, a racheté Cursor pour 60 milliards de dollars."},
+{q:"Comment s'appelle Le Chat de Mistral depuis 2026 ?",o:["Vibe","Muse","Spark","Argon"],a:0,e:"Le Chat est devenu Vibe, avec trois modes : Chat, Work et Code."},
+{q:"Que prévoit l'omnibus numérique européen de juillet 2026 ?",o:["La suppression de l'AI Act","Le report des règles sur les systèmes à haut risque au 2 décembre 2027","L'interdiction de ChatGPT","Une taxe sur l'IA"],a:1,e:"Les obligations de transparence restent en vigueur depuis le 2 août 2026 ; seules les règles sur le haut risque sont repoussées."},
+{q:"Quel est le modèle Anthropic le plus capable accessible au public au 17 octobre 2026 ?",o:["Claude 3 Opus","Claude Fable 5.1","Claude Mythos 5.1","Claude Haiku 5.5"],a:1,e:"Mythos 5.1 est réservé aux partenaires de cybersécurité ; Fable 5.1 est la version publique avec garde-fous."},
 {q:"Qui reste responsable d'un document produit avec l'aide de l'IA ?",o:["L'éditeur de l'IA","Personne","Toi, qui le valides et le signes","L'ordinateur"],a:2,e:"L'IA prépare, l'humain vérifie et assume."}
 ];
 
@@ -2027,15 +2314,19 @@ const GLOSS = [
 ["Température","Réglage de la créativité d'un modèle : basse = stable et prévisible, haute = variée."],
 ["Token","Morceau de mot traité par le modèle. Sert d'unité de mesure du contexte et de facturation."],
 ["Transformer","Architecture de réseau de neurones inventée en 2017, à la base de tous les grands modèles actuels."],
-["Vibe coding","Créer une application en décrivant ce qu'on veut à une IA, sans écrire le code soi-même."]
+["Vibe coding","Créer une application en décrivant ce qu'on veut à une IA, sans écrire le code soi-même. À ne pas confondre avec Vibe, le nouveau nom de Le Chat de Mistral."],
+["Agent de travail","Agent qui réalise des tâches longues dans tes fichiers et applications : ChatGPT Work, Claude Cowork, Vibe Work, Copilot Cowork."],
+["Omnibus numérique","Règlement européen de juillet 2026 qui modifie l'AI Act, notamment en repoussant les règles sur les systèmes à haut risque."],
+["Classe Mythos","Modèles d'Anthropic aux capacités de cybersécurité jugées trop dangereuses pour une diffusion libre ; Fable en est la version publique avec garde-fous."],
+["Poids (d'un modèle)","Les paramètres appris pendant l'entraînement. Un modèle « à poids ouverts » les publie pour que chacun puisse le télécharger."]
 ];
 
 /* ====== PROGRAMME 4 SEMAINES ====== */
 const PLAN = [
-{w:"Semaine 1 · Les bases", d:["Créer un compte sur deux assistants (ex. Claude et ChatGPT)","Lire les modules 1 à 4 des fondamentaux","Régler la confidentialité de tes comptes","Poser la même question aux deux IA et comparer","Installer le prompt système de la section Prompt maître"]},
+{w:"Semaine 1 · Les bases", d:["Lire la chronologie de l'histoire de l'IA et le tableau « Où en est-on »","Lire les modules 1 à 4 des fondamentaux","Régler la confidentialité de tes comptes","Poser la même question aux deux IA et comparer","Installer le prompt système de la section Prompt maître"]},
 {w:"Semaine 2 · Le prompt", d:["Lire la méthode des 7 blocs","Réécrire 3 de tes demandes habituelles avec la méthode","Utiliser le prompt maître sur un vrai besoin","Obtenir au moins 70 dans l'analyseur de l'atelier","Copier 5 prompts de la bibliothèque dans tes favoris"]},
 {w:"Semaine 3 · Les outils", d:["Suivre les cours ChatGPT ou Claude jusqu'au bout","Créer un Projet ou un Gem pour ton travail","Tester NotebookLM sur une documentation","Créer une image avec deux générateurs différents","Faire une recherche sourcée et vérifier 3 sources"]},
-{w:"Semaine 4 · Niveau avancé", d:["Suivre le cours GitHub et créer un dépôt de test","Explorer 3 Spaces sur Hugging Face","Découvrir Cursor ou Claude Code sur un petit projet","Créer une petite application HTML avec une IA","Réussir le quiz final avec au moins 14/20"]}
+{w:"Semaine 4 · Niveau avancé", d:["Suivre le cours GitHub et créer un dépôt de test","Explorer 3 Spaces sur Hugging Face","Découvrir Cursor ou Claude Code sur un petit projet","Créer une petite application HTML avec une IA","Réussir le quiz final avec au moins 70 % de bonnes réponses"]}
 ];
 
 /* ====== CHECK-LIST AVANT ENVOI ====== */
@@ -2073,8 +2364,22 @@ function copyText(txt){
   try { navigator.clipboard.writeText(txt).then(ok, fallback); } catch (e) { fallback(); }
 }
 
+/* ---------- Dates ---------- */
+const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const fmtDate = ev => { if (ev.s) return ev.s; const [y, m, d] = ev.d.split('-').map(Number); return (d === 1 ? '1er' : d) + ' ' + MOIS[m - 1] + ' ' + y; };
+const HIST_SORTED = HIST.slice().sort((a, b) => a.d.localeCompare(b.d));
+
+// Chapitre « Les dates clés » ajouté à chaque cours à partir de la chronologie
+COURS.forEach(c => {
+  if (!c.hk) return;
+  const evs = HIST_SORTED.filter(e => c.hk.includes(e.a) || c.hk.some(k => e.t.includes(k)));
+  if (!evs.length) return;
+  c.ch.push({t:'Les dates clés, jusqu\'au ' + MAJ, h:'<p>Tout ce qui s\'est passé pour ' + esc(c.n) + ', dans l\'ordre. La chronologie complète de l\'IA est dans la section Histoire de l\'IA.</p><div class="tl">' +
+    evs.map(e => '<div class="ev c-' + e.c + '"><span class="dt">' + esc(fmtDate(e)) + '</span><div><b>' + esc(e.t) + '</b><p>' + esc(e.w) + '</p></div></div>').join('') + '</div>'});
+});
+
 /* ---------- Navigation ---------- */
-const TITLES = {accueil:'Accueil & parcours', bases:'Les fondamentaux', cours:'Cours par outil', outils:'Panorama des IA', methode:'Méthode de prompt',
+const TITLES = {accueil:'Accueil & parcours', bases:'Les fondamentaux', histoire:'Histoire de l\'IA', cours:'Cours par outil', outils:'Panorama des IA', methode:'Méthode de prompt',
   maitre:'Prompt maître', atelier:'Atelier interactif', biblio:'Bibliothèque de prompts', quiz:'Quiz final', glossaire:'Glossaire', securite:'Sécurité & règles'};
 function show(v, keepScroll){
   if (!TITLES[v]) v = 'accueil';
@@ -2088,34 +2393,46 @@ function show(v, keepScroll){
   if (btn && btn.scrollIntoView && window.innerWidth <= 900) btn.scrollIntoView({inline:'center', block:'nearest'});
 }
 document.querySelectorAll('#nav button').forEach(b => b.addEventListener('click', () => show(b.dataset.v)));
-document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) { show(g.dataset.go); if (g.dataset.course) openCourse(g.dataset.course); } });
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) { show(g.dataset.go); if (g.dataset.course) openCourse(g.dataset.course); if (g.dataset.anchor) $('#' + g.dataset.anchor).scrollIntoView({block:'start'}); } });
 
 /* ---------- Progression ---------- */
 const totalChap = COURS.reduce((n, c) => n + c.ch.length, 0);
 const planItems = PLAN.reduce((n, w) => n + w.d.length, 0);
 function progress(){
   const done = Object.values(S.mods).filter(Boolean).length + Object.values(S.chap).filter(Boolean).length
-    + Object.values(S.plan).filter(Boolean).length + (S.quizBest !== null && S.quizBest >= 14 ? 1 : 0);
+    + Object.values(S.plan).filter(Boolean).length + (quizPassed() ? 1 : 0);
   const total = MODULES.length + totalChap + planItems + 1;
   const pct = Math.round(done / total * 100);
   ['#pgTxt', '#pgTxt2'].forEach(s => $(s).textContent = pct + ' %');
   ['#pgBar', '#pgBar2'].forEach(s => $(s).style.width = pct + '%');
-  renderPath();
+  renderPath(); renderDash();
 }
+function quizPassed(){ return S.quizBest !== null && S.quizBest >= PASS; }
 
 /* ---------- Accueil ---------- */
 const PATH = [
   {v:'bases', t:'Les fondamentaux', d:'Comprendre comment fonctionne une IA, ses forces et ses pièges.', done:() => MODULES.every((m, i) => S.mods[i])},
+  {v:'histoire', t:'Histoire de l\'IA', d:HIST.length + ' événements datés, de 2017 au ' + MAJ + '.', done:() => false},
   {v:'cours', t:'Cours par outil', d:'Claude, ChatGPT, Gemini, Mistral, Copilot, GitHub, Hugging Face, Cursor…', done:() => COURS.every(c => c.ch.every((x, j) => S.chap[c.id + ':' + j]))},
   {v:'outils', t:'Panorama des IA', d:'Les ' + TOOLS.length + ' outils majeurs, classés par usage.', done:() => false},
   {v:'methode', t:'Méthode de prompt', d:'Les 7 blocs et 12 techniques pour des résultats fiables.', done:() => false},
   {v:'maitre', t:'Prompt maître', d:'Les prompts professionnels qui fabriquent tous les autres.', done:() => false},
   {v:'atelier', t:'Atelier interactif', d:'Générer et noter tes propres prompts.', done:() => false},
   {v:'biblio', t:'Bibliothèque', d:PROMPTS.length + ' prompts prêts à copier pour le travail.', done:() => false},
-  {v:'quiz', t:'Quiz final', d:QUIZ.length + ' questions pour valider la formation.', done:() => S.quizBest !== null && S.quizBest >= 14}
+  {v:'quiz', t:'Quiz final', d:QUIZ.length + ' questions pour valider la formation.', done:() => quizPassed()}
 ];
 function renderPath(){
   $('#path').innerHTML = PATH.map((p, i) => '<button class="step' + (p.done() ? ' done' : '') + '" data-go="' + p.v + '"><span class="n">ÉTAPE ' + (i + 1) + '</span><b>' + esc(p.t) + '</b><span class="small muted">' + esc(p.d) + '</span></button>').join('');
+}
+function renderDash(){
+  const cards = [];
+  const md = MODULES.filter((m, i) => S.mods[i]).length;
+  cards.push({go:'bases', t:'Les fondamentaux', n:md, of:MODULES.length});
+  COURS.forEach(c => cards.push({go:'cours', course:c.id, t:'Cours ' + c.n, n:coursDone(c), of:c.ch.length}));
+  cards.push({go:'accueil', t:'Programme 4 semaines', n:Object.values(S.plan).filter(Boolean).length, of:planItems, anchor:'plan'});
+  cards.push({go:'quiz', t:'Quiz final (meilleur score)', n:S.quizBest === null ? 0 : S.quizBest, of:QUIZ.length, quiz:true});
+  $('#dash').innerHTML = cards.map(c => { const pct = Math.round(c.n / c.of * 100), full = c.quiz ? quizPassed() : c.n === c.of;
+    return '<button class="card' + (full ? ' full' : '') + '" data-go="' + c.go + '"' + (c.course ? ' data-course="' + c.course + '"' : '') + (c.anchor ? ' data-anchor="' + c.anchor + '"' : '') + '><b>' + esc(c.t) + '</b><span class="pc">' + pct + ' %</span><div class="bar"><i style="width:' + pct + '%"></i></div><span class="small muted">' + c.n + ' / ' + c.of + (c.quiz ? ' (' + PASS + ' pour valider)' : '') + '</span></button>'; }).join('');
 }
 function renderPlan(){
   $('#plan').innerHTML = PLAN.map((w, i) => '<div class="card stack" style="gap:8px"><h3>' + esc(w.w) + '</h3>' +
@@ -2184,6 +2501,30 @@ $('#coursDetail').addEventListener('click', e => {
   if (el) { document.querySelectorAll('#coursDetail details').forEach(x => x.open = false); el.open = true; el.scrollIntoView({block:'start'}); }
   if (nowDone) toast(coursDone(curCourse) === curCourse.ch.length ? 'Cours terminé, bravo !' : 'Chapitre validé');
 });
+
+/* ---------- Histoire ---------- */
+$('#etat').innerHTML = ETAT.map(r => '<tr><td><b>' + esc(r.a) + '</b>' + (r.k ? '<br><button class="btn ghost sm" style="margin-top:6px" data-go="cours" data-course="' + r.k + '">Cours</button>' : '') + '</td><td>' + esc(r.m) + '</td><td>' + esc(r.p) + '</td></tr>').join('');
+$('#tendances').innerHTML = TENDANCES.map((t, i) => '<div class="card"><h3>' + esc(t.t) + '</h3><p class="small" style="margin-top:6px">' + esc(t.d) + '</p></div>').join('');
+const H_YEARS = [['', 'Toutes les années'], ['avant', '2017–2021']].concat(['2022','2023','2024','2025','2026'].map(y => [y, y]));
+let hYear = '', hCat = '';
+[...new Set(HIST.map(e => e.a))].sort((a, b) => a.localeCompare(b, 'fr')).forEach(a => { const o = document.createElement('option'); o.value = a; o.textContent = a; $('#hActor').appendChild(o); });
+function renderHist(){
+  $('#hYears').innerHTML = H_YEARS.map(([k, v]) => '<button data-hy="' + k + '" class="' + (hYear === k ? 'on' : '') + '">' + v + '</button>').join('');
+  $('#hCats').innerHTML = [['', 'Tous les types']].concat(Object.entries(HIST_CATS)).map(([k, v]) => '<button data-hc="' + k + '" class="' + (hCat === k ? 'on' : '') + '">' + esc(v) + '</button>').join('');
+  const q = $('#hQ').value.trim().toLowerCase(), act = $('#hActor').value;
+  const list = HIST_SORTED.filter(e => { const y = e.d.slice(0, 4);
+    return (!hYear || (hYear === 'avant' ? y < '2022' : y === hYear)) && (!hCat || e.c === hCat) && (!act || e.a === act) && (!q || (e.t + ' ' + e.w + ' ' + e.a).toLowerCase().includes(q)); });
+  $('#hCount').textContent = list.length + ' événement' + (list.length > 1 ? 's' : '');
+  let html = '', cur = '';
+  list.slice().reverse().forEach(e => { const y = e.d.slice(0, 4);
+    if (y !== cur) { cur = y; html += '<div class="tl-year">' + y + '<small>' + list.filter(x => x.d.slice(0, 4) === y).length + ' événements</small></div>'; }
+    html += '<div class="ev c-' + e.c + '"><span class="dt">' + esc(fmtDate(e)) + '</span><div><b>' + esc(e.t) + '</b><p>' + esc(e.w) + '</p><div class="meta"><span class="chip o">' + esc(e.a) + '</span><span class="chip">' + esc(HIST_CATS[e.c]) + '</span></div></div></div>'; });
+  $('#tl').innerHTML = html || '<p class="muted">Aucun événement ne correspond.</p>';
+}
+$('#hYears').addEventListener('click', e => { const b = e.target.closest('[data-hy]'); if (b) { hYear = b.dataset.hy; renderHist(); } });
+$('#hCats').addEventListener('click', e => { const b = e.target.closest('[data-hc]'); if (b) { hCat = b.dataset.hc; renderHist(); } });
+$('#hQ').addEventListener('input', renderHist);
+$('#hActor').addEventListener('change', renderHist);
 
 /* ---------- Panorama des outils ---------- */
 let toolCat = '';
@@ -2316,6 +2657,8 @@ $('#prompts').addEventListener('click', e => {
 });
 
 /* ---------- Quiz ---------- */
+const PASS = Math.ceil(QUIZ.length * 0.7);
+$('#qzLead').textContent = 'Vérifie ce que tu as retenu. ' + PASS + ' bonnes réponses sur ' + QUIZ.length + ' valident la formation.';
 let qAns = {};
 function renderQuiz(){
   $('#qz').innerHTML = QUIZ.map((q, i) => { const a = qAns[i];
@@ -2328,8 +2671,8 @@ function renderQuiz(){
   const end = $('#qzEnd');
   if (n === QUIZ.length) {
     end.hidden = false;
-    end.className = 'callout ' + (good >= 14 ? 'ok' : 'warn');
-    end.innerHTML = '<b>' + good + ' / ' + QUIZ.length + ' : ' + (good >= 14 ? 'formation validée.' : 'presque !') + '</b> ' + (good >= 14 ? "Tu maîtrises les bases. Continue avec les cours avancés (GitHub, Hugging Face, Cursor) et la bibliothèque." : "Relis les explications des questions ratées, puis recommence le quiz.");
+    end.className = 'callout ' + (good >= PASS ? 'ok' : 'warn');
+    end.innerHTML = '<b>' + good + ' / ' + QUIZ.length + ' : ' + (good >= PASS ? 'formation validée.' : 'presque !') + '</b> ' + (good >= PASS ? "Tu maîtrises les bases. Continue avec les cours avancés (GitHub, Hugging Face, Cursor) et la bibliothèque." : "Relis les explications des questions ratées, puis recommence le quiz.");
   } else end.hidden = true;
 }
 $('#qz').addEventListener('click', e => {
@@ -2363,12 +2706,14 @@ $('#stCours').textContent = COURS.length;
 $('#stChap').textContent = totalChap + MODULES.length;
 $('#stTools').textContent = TOOLS.length;
 $('#stPrompts').textContent = PROMPTS.length + MASTERS.length;
-renderPlan(); renderMods(); renderCoursList(); renderTools(); renderPrompts(); renderQuiz(); renderGloss(); renderSec(); progress();
-(function route(){
+renderPlan(); renderMods(); renderHist(); renderCoursList(); renderTools(); renderPrompts(); renderQuiz(); renderGloss(); renderSec(); progress();
+function route(){
   const h = (location.hash || '').slice(1);
   if (h.indexOf('cours-') === 0) { show('cours', true); openCourse(h.slice(6)); }
   else if (h) show(h, true);
-})();
+}
+route();
+window.addEventListener('hashchange', route);
 
 </script>
 </body>
