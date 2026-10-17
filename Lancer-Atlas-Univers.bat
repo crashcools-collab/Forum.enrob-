@@ -25,20 +25,21 @@ echo.
 echo   EXPLORER
 echo    1. Ciel en direct (planetarium, ta ville, l'heure exacte)
 echo    2. Ce soir : que voir cette nuit ?
-echo    3. Systeme solaire en 3D
-echo    4. Univers en 3D (etoiles voisines, Voie lactee, galaxies)
-echo    5. Photos et videos de la NASA (internet necessaire)
+echo    3. FORMATION : l'Odyssee cosmique (14 chapitres + diplome)
+echo    4. Systeme solaire en 3D
+echo    5. Univers en 3D (etoiles voisines, Voie lactee, galaxies)
+echo    6. Photos et videos de la NASA (internet necessaire)
 echo.
 echo   COMPRENDRE ET JOUER
-echo    6. Decouvertes a couper le souffle
-echo    7. Demonstrations interactives
-echo    8. Encyclopedie et schemas
-echo    9. Quiz
-echo   10. Defis d'observation et badges
-echo   11. Outils et calendrier (eclipses, etoiles filantes...)
+echo    7. Decouvertes a couper le souffle
+echo    8. Demonstrations interactives
+echo    9. Encyclopedie et schemas
+echo   10. Quiz
+echo   11. Defis d'observation et badges
+echo   12. Outils et calendrier (eclipses, etoiles filantes...)
 echo.
-echo   12. Visite guidee avec Stella
-echo   13. Ouvrir l'atlas la ou je m'etais arrete
+echo   13. Visite guidee avec Stella
+echo   14. Ouvrir l'atlas la ou je m'etais arrete
 echo.
 echo    0. Quitter
 echo.
@@ -49,17 +50,18 @@ set /p "choix=Ton choix : "
 
 if "%choix%"=="1"  call :ouvrir ciel & goto menu
 if "%choix%"=="2"  call :ouvrir cesoir & goto menu
-if "%choix%"=="3"  call :ouvrir systeme & goto menu
-if "%choix%"=="4"  call :ouvrir cosmos & goto menu
-if "%choix%"=="5"  call :ouvrir medias & goto menu
-if "%choix%"=="6"  call :ouvrir decouvertes & goto menu
-if "%choix%"=="7"  call :ouvrir demos & goto menu
-if "%choix%"=="8"  call :ouvrir encyclo & goto menu
-if "%choix%"=="9"  call :ouvrir quiz & goto menu
-if "%choix%"=="10" call :ouvrir defis & goto menu
-if "%choix%"=="11" call :ouvrir outils & goto menu
-if "%choix%"=="12" call :ouvrir visite & goto menu
-if "%choix%"=="13" start "" "%ATLAS%\index.html" & goto menu
+if "%choix%"=="3"  call :ouvrir formation & goto menu
+if "%choix%"=="4"  call :ouvrir systeme & goto menu
+if "%choix%"=="5"  call :ouvrir cosmos & goto menu
+if "%choix%"=="6"  call :ouvrir medias & goto menu
+if "%choix%"=="7"  call :ouvrir decouvertes & goto menu
+if "%choix%"=="8"  call :ouvrir demos & goto menu
+if "%choix%"=="9"  call :ouvrir encyclo & goto menu
+if "%choix%"=="10" call :ouvrir quiz & goto menu
+if "%choix%"=="11" call :ouvrir defis & goto menu
+if "%choix%"=="12" call :ouvrir outils & goto menu
+if "%choix%"=="13" call :ouvrir visite & goto menu
+if "%choix%"=="14" start "" "%ATLAS%\index.html" & goto menu
 if "%choix%"=="0"  exit /b 0
 goto menu
 

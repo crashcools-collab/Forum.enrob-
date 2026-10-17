@@ -10,12 +10,17 @@ const Fee = (() => {
     const v = speechSynthesis.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith('fr') && v.localService);
     voix = v.find(x => /female|femme|hortense|julie|amelie|marie|denise|audrey/i.test(x.name)) || v[0] || null;
   }
-  function parler(texte) {
+  function parler(texte, max = 600) {
     if (!voixActive || !voix || !('speechSynthesis' in window)) return;
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(texte.replace(/<[^>]+>/g, ' ').replace(/[*_#]/g, '').slice(0, 600));
-    u.voice = voix; u.lang = voix.lang; u.rate = 1.03; u.pitch = 1.25;
-    speechSynthesis.speak(u);
+    // phrase par phrase : certains navigateurs coupent les lectures trop longues
+    const phrases = texte.replace(/<[^>]+>/g, ' ').replace(/[*_#]/g, '').slice(0, max).match(/[^.!?…]+[.!?…]*/g) || [];
+    for (const p of phrases) {
+      if (!p.trim()) continue;
+      const u = new SpeechSynthesisUtterance(p.trim());
+      u.voice = voix; u.lang = voix.lang; u.rate = 1.03; u.pitch = 1.25;
+      speechSynthesis.speak(u);
+    }
   }
 
   // --- Messages ---
@@ -51,6 +56,7 @@ const Fee = (() => {
     if (contient(q, 'merci')) return message('Avec plaisir ! Les étoiles sont toujours là pour toi. 🌟');
     if (contient(q, 'qui es tu', 'tu es qui', 'ton nom', 'es tu une ia', 'es tu un robot')) return message('Je suis <b>Stella</b>, la petite fée de cet atlas. Je ne suis pas une IA connectée : je réponds avec la base de connaissances et les calculs astronomiques intégrés à l’appli, même sans internet.');
     if (contient(q, 'visite', 'guide moi', 'montre moi l appli', 'comment ca marche', 'aide')) return message('Je te fais visiter ? Suis-moi !', { actions: [['🧚 Commencer la visite', demarrerVisite]] });
+    if (contient(q, 'formation', 'cours', 'odyssee', 'apprendre', 'lecon', 'raconte moi une histoire', 'histoire du signal')) return message('Viens vivre l’<b>Odyssée cosmique</b> : 14 chapitres, un signal mystérieux à élucider et des rebondissements à chaque étape !', { actions: [['🎓 Ouvrir la formation', () => Appli.afficherVue('formation')], ['▶ Reprendre où j’en étais', () => { Appli.afficherVue('formation'); Formation.reprendre(); }]] });
     if (contient(q, 'quiz', 'question pour moi', 'teste moi', 'interroge')) return message('Prêt pour un petit quiz ? Choisis ton thème.', { actions: [['🧠 Ouvrir les quiz', () => Appli.afficherVue('quiz')], ['⭐ Reconnais la constellation', () => { Appli.afficherVue('quiz'); Appli.lancerQuiz('constellations'); }]] });
     if (contient(q, 'demonstration', 'demo', 'experience', 'experimenter', 'manipuler')) return message('Voici mes expériences préférées :', { actions: Demos.liste.map(d => [d.titre, () => { Appli.afficherVue('demos'); Demos.afficher(d.id); }]) });
     if (contient(q, 'decouverte', 'incroyable', 'epoustouflant', 'couper le souffle', 'wow', 'etonne moi', 'surprends moi')) {
@@ -132,6 +138,7 @@ const Fee = (() => {
     { vue: 'ciel', cible: '#t-avant', texte: 'Ces boutons accélèrent le temps : regarde le ciel tourner, les planètes avancer, la Lune changer de phase. « Maintenant » te ramène au présent.' },
     { vue: 'ciel', cible: '#ciel-btn-options', texte: 'Ici tu choisis ta ville (ou ta position), et ce que tu veux afficher : constellations, grilles, sol transparent pour voir le ciel de l’autre côté de la Terre…' },
     { vue: 'cesoir', cible: '.onglet[data-vue="cesoir"]', texte: '« Ce soir » te prépare le programme de la nuit : planètes visibles, phase de la Lune, plus beaux objets, prochains événements.' },
+    { vue: 'formation', cible: '.onglet[data-vue="formation"]', texte: 'La <b>formation « L’Odyssée cosmique »</b> : une grande aventure en 14 chapitres, avec un signal mystérieux à élucider, des rebondissements, des questions et un diplôme à ton nom à la fin.' },
     { vue: 'systeme', cible: '#systeme-zone', texte: 'Le <b>système solaire en 3D</b>, avec les vraies positions des planètes. Accélère le temps et clique sur une planète pour la suivre.' },
     { vue: 'cosmos', cible: '#cosmos-barre', texte: 'L’<b>univers en 3D</b> : nos étoiles voisines, la Voie lactée, nos galaxies voisines, la toile cosmique, et un voyage de la Terre jusqu’aux confins.' },
     { vue: 'medias', cible: '.onglet[data-vue="medias"]', texte: 'Les vraies <b>photos et vidéos de la NASA</b>, avec l’image astronomique du jour (il faut internet pour cet onglet seulement).' },
@@ -172,6 +179,7 @@ const Fee = (() => {
   // Petites astuces la première fois que l'on ouvre un onglet
   const ASTUCES = {
     cesoir: 'Le programme de la nuit est calculé pour ta ville. Change-la dans « Ciel en direct » › ⚙️.',
+    formation: 'Chaque rebondissement se révèle au clic. Ne triche pas : essaie de deviner avant ! 😉',
     systeme: 'Astuce : clique sur Saturne, puis accélère le temps pour voir ses anneaux s’incliner au fil des années.',
     cosmos: 'Essaie « Échelle de l’univers » puis le bouton 🚀 Voyage : ça donne le vertige !',
     medias: 'Tape un sujet en français ou en anglais : les photos viennent directement de la médiathèque de la NASA.',
@@ -212,10 +220,12 @@ const Fee = (() => {
     $('#fee-suggestions').innerHTML = sug.map(s => `<button class="btn petit">${s}</button>`).join('');
     $$('#fee-suggestions button').forEach(b => b.onclick = () => question(b.textContent));
     Bus.sur('vue', astuce);
+    Bus.sur('chapitre-fini', ({ titre, dernier }) => { if (ouverte) message(dernier ? 'Tu as terminé toute l’Odyssée ! Je suis tellement fière de toi. 🏆✨' : `Chapitre « ${titre} » terminé ! La suite est encore plus surprenante… 🌟`); });
     Bus.sur('quiz-fin', ({ score, total }) => {
       if (ouverte) message(score === total ? `Parfait, ${score}/${total} ! Tu es un vrai astronome. 🏆` : `${score}/${total}, bravo ! Chaque question ratée est une chose apprise. ✨`);
     });
     if (!Memoire.lire('visite-faite', false)) setTimeout(() => { if (etapeVisite < 0 && !ouverte) { const a = document.createElement('div'); a.id = 'astuce-fee'; a.className = 'astuce-fee'; a.innerHTML = '🧚 Bonjour ! Je suis Stella. Clique sur moi pour une visite guidée ou pour me poser une question.'; a.onclick = () => { a.hidden = true; ouvrir(); }; document.body.appendChild(a); setTimeout(() => { a.hidden = true; }, 12000); } }, 1500);
   }
-  return { init, ouvrir, question, demarrerVisite };
+  const lireAVoixHaute = texte => { const avant = voixActive; voixActive = true; if (!voix) choisirVoix(); if (!voix) alert('Aucune voix française n’est installée sur cet appareil.'); parler(texte, 6000); voixActive = avant; };
+  return { init, ouvrir, question, demarrerVisite, lireAVoixHaute };
 })();

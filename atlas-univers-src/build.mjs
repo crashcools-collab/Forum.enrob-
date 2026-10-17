@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const ici = dirname(fileURLToPath(import.meta.url));
 const lire = f => readFileSync(join(ici, f), 'utf8');
-const scripts = ['util', 'astro', 'savoir', 'schemas', 'moteur3d', 'ciel', 'systeme', 'cosmos', 'demos', 'fee', 'app']
+const scripts = ['util', 'astro', 'savoir', 'schemas', 'moteur3d', 'ciel', 'systeme', 'cosmos', 'demos', 'formation-contenu', 'formation', 'fee', 'app']
   .map(n => `// ===== ${n}.js =====\n${lire(`js/${n}.js`)}`).join('\n');
 const proteger = s => s.replace(/<\/script/gi, '<\\/script');
 const page = lire('index.html')

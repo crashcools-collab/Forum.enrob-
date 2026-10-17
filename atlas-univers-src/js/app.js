@@ -15,6 +15,7 @@ const Appli = (() => {
     $$('.vue').forEach(v => v.classList.toggle('active', v.id === 'vue-' + id));
     Systeme.activer(id === 'systeme'); Cosmos.activer(id === 'cosmos'); Demos.activer(id === 'demos');
     if (id === 'cesoir') construireCeSoir();
+    if (id === 'formation') Formation.afficher();
     if (id === 'medias') initMedias();
     if (id === 'ciel') Ciel.redessiner();
     const o = $(`.onglet[data-vue="${id}"]`); if (o) o.scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -423,7 +424,7 @@ const Appli = (() => {
   // ---------- Démarrage ----------
   function init() {
     const etapes = [['Ciel', () => Ciel.init()], ['Système solaire', () => Systeme.init()], ['Univers', () => Cosmos.init()], ['Démos', () => Demos.init()], ['Découvertes', construireDecouvertes],
-      ['Encyclopédie', () => construireEncyclo()], ['Quiz', accueilQuiz], ['Défis', construireDefis], ['Outils', construireOutils], ['Stella', () => Fee.init()]];
+      ['Encyclopédie', () => construireEncyclo()], ['Quiz', accueilQuiz], ['Défis', construireDefis], ['Outils', construireOutils], ['Formation', () => Formation.init()], ['Stella', () => Fee.init()]];
     for (const [nom, f] of etapes) { try { f(); } catch (e) { console.error(`Erreur au démarrage (${nom})`, e); } }
     $$('.onglet').forEach(b => b.onclick = () => afficherVue(b.dataset.vue));
     $('#btn-rouge').onclick = e => { const on = document.body.classList.toggle('nuit-rouge'); e.currentTarget.setAttribute('aria-pressed', on); Memoire.ecrire('rouge', on); };
@@ -431,7 +432,7 @@ const Appli = (() => {
     Lieu.surChangement(() => { cacheNuit = null; if (vueActive === 'cesoir') construireCeSoir(); });
     window.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#visionneuse').hidden) { $('#visionneuse').hidden = true; $('#visionneuse').innerHTML = ''; } });
     // L'adresse peut viser un onglet (index.html#systeme) ou lancer la visite (#visite) : c'est ce qu'utilise le lanceur .bat
-    const VUES = ['ciel', 'cesoir', 'systeme', 'cosmos', 'medias', 'decouvertes', 'demos', 'encyclo', 'quiz', 'defis', 'outils'];
+    const VUES = ['ciel', 'cesoir', 'formation', 'systeme', 'cosmos', 'medias', 'decouvertes', 'demos', 'encyclo', 'quiz', 'defis', 'outils'];
     const suivreAdresse = () => {
       const h = decodeURIComponent(location.hash.slice(1));
       if (VUES.includes(h)) { afficherVue(h); return true; }

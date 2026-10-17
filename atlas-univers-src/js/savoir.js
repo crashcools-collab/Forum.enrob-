@@ -88,7 +88,7 @@ const Savoir = (() => {
       <p>En plaçant les étoiles selon leur température et leur luminosité, on obtient le <b>diagramme de Hertzsprung-Russell</b> : la plupart (90 %) se rangent sur une diagonale, la « séquence principale ». Les géantes et les naines blanches occupent d’autres zones.</p>
       <p>Regarde Orion en hiver : Bételgeuse est nettement orangée, Rigel bleutée. Dans le planétarium, les étoiles ont leur vraie couleur.</p>`, { schema: 'hr' }),
     F('trous-noirs', 'Étoiles', 'Les trous noirs', ['trou noir', 'horizon', 'sagittarius', 'm87', 'event horizon', 'singularite', 'gravite'],
-      `<p>Un trou noir est une région où la matière est si concentrée que rien, pas même la lumière, ne peut s’en échapper une fois franchi l’<b>horizon des événements</b>. Si la Terre devenait un trou noir, elle tiendrait dans une bille de 9 mm.</p>
+      `<p>Un trou noir est une région où la matière est si concentrée que rien, pas même la lumière, ne peut s’en échapper une fois franchi l’<b>horizon des événements</b>. Si la Terre devenait un trou noir, elle tiendrait dans une bille de moins de 2 cm.</p>
       <ul><li><b>Trous noirs stellaires</b> : quelques dizaines de masses solaires, nés de l’effondrement d’étoiles massives.</li>
       <li><b>Trous noirs supermassifs</b> : des millions à des milliards de masses solaires, au centre des galaxies. Le nôtre, <b>Sagittarius A*</b>, pèse 4 millions de Soleils.</li></ul>
       <p>En 2019, l’Event Horizon Telescope a publié la première image de l’ombre d’un trou noir (M87*, 6,5 milliards de masses solaires) ; en 2022, celle de Sagittarius A*. Près d’un trou noir, le temps s’écoule plus lentement : c’est la relativité d’Einstein.</p>`, { schema: 'trounoir', nasa: 'black hole', ciel: 'M87' }),

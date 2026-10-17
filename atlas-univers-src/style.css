@@ -243,6 +243,42 @@ input:focus-visible, select:focus-visible, button:focus-visible, textarea:focus-
 }
 .visite[hidden] { display: none; }
 
+/* Formation « L'Odyssée cosmique » */
+.odyssee-hero {
+  background: radial-gradient(ellipse at 80% 0%, #3a2470 0%, transparent 60%), linear-gradient(180deg, #121a3a, #0a1022);
+  border: 1px solid #4a3a80; border-radius: 18px; padding: 22px; margin-bottom: 18px;
+}
+.odyssee-hero h2 { font-size: 2rem; }
+.odyssee-chemin { display: grid; gap: 10px; position: relative; }
+.etape-odyssee {
+  display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; text-align: left;
+  background: var(--carte); border: 1px solid var(--bord); border-radius: 14px; padding: 12px 14px;
+}
+.etape-odyssee:hover:not(:disabled) { border-color: var(--accent); }
+.etape-odyssee:disabled { opacity: .45; cursor: not-allowed; }
+.etape-odyssee.faite { border-color: #2f6b4c; }
+.etape-odyssee.courante { border-color: var(--or); box-shadow: 0 0 0 1px rgba(255, 210, 122, .25); }
+.icone-etape { font-size: 1.8rem; text-align: center; }
+.statut-etape { font-size: 1.2rem; }
+.scene-odyssee { max-width: 780px; margin: 14px auto 0; }
+.scene-odyssee h2 { font-size: 1.7rem; margin-top: 10px; }
+.recit { font-size: 1.08rem; line-height: 1.7; }
+.recit p { margin-bottom: 1em; }
+.rebondissement { margin: 18px 0; padding: 14px 16px; border-radius: 14px; border: 1px dashed #7b5fc0; background: #160f33; }
+.rebondissement.revele { border-style: solid; box-shadow: 0 0 30px rgba(155, 107, 255, .25); animation: apparaitre .4s ease-out; }
+.rebondissement h3 { color: #d9c2ff; }
+.question-odyssee { margin: 18px 0; }
+.nav-odyssee { justify-content: space-between; margin: 22px 0 10px; }
+.diplome { width: 100%; height: auto; border-radius: 10px; margin: 12px 0; border: 1px solid var(--bord); display: block; }
+#retour-formation { position: fixed; left: 16px; bottom: 76px; z-index: 39; box-shadow: var(--ombre); }
+#zone-impression { display: none; }
+@media print {
+  body > *:not(#zone-impression) { display: none !important; }
+  #zone-impression { display: block !important; }
+  #zone-impression img { width: 100%; }
+  body { background: #fff; overflow: visible; }
+}
+
 /* Petite astuce de Stella près de la fée */
 .astuce-fee {
   position: fixed; right: 100px; bottom: 40px; max-width: min(300px, calc(100vw - 130px)); z-index: 40; background: #1d1840; border: 1px solid #5a3f8a;

@@ -251,6 +251,42 @@ input:focus-visible, select:focus-visible, button:focus-visible, textarea:focus-
 }
 .visite[hidden] { display: none; }
 
+/* Formation « L'Odyssée cosmique » */
+.odyssee-hero {
+  background: radial-gradient(ellipse at 80% 0%, #3a2470 0%, transparent 60%), linear-gradient(180deg, #121a3a, #0a1022);
+  border: 1px solid #4a3a80; border-radius: 18px; padding: 22px; margin-bottom: 18px;
+}
+.odyssee-hero h2 { font-size: 2rem; }
+.odyssee-chemin { display: grid; gap: 10px; position: relative; }
+.etape-odyssee {
+  display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; text-align: left;
+  background: var(--carte); border: 1px solid var(--bord); border-radius: 14px; padding: 12px 14px;
+}
+.etape-odyssee:hover:not(:disabled) { border-color: var(--accent); }
+.etape-odyssee:disabled { opacity: .45; cursor: not-allowed; }
+.etape-odyssee.faite { border-color: #2f6b4c; }
+.etape-odyssee.courante { border-color: var(--or); box-shadow: 0 0 0 1px rgba(255, 210, 122, .25); }
+.icone-etape { font-size: 1.8rem; text-align: center; }
+.statut-etape { font-size: 1.2rem; }
+.scene-odyssee { max-width: 780px; margin: 14px auto 0; }
+.scene-odyssee h2 { font-size: 1.7rem; margin-top: 10px; }
+.recit { font-size: 1.08rem; line-height: 1.7; }
+.recit p { margin-bottom: 1em; }
+.rebondissement { margin: 18px 0; padding: 14px 16px; border-radius: 14px; border: 1px dashed #7b5fc0; background: #160f33; }
+.rebondissement.revele { border-style: solid; box-shadow: 0 0 30px rgba(155, 107, 255, .25); animation: apparaitre .4s ease-out; }
+.rebondissement h3 { color: #d9c2ff; }
+.question-odyssee { margin: 18px 0; }
+.nav-odyssee { justify-content: space-between; margin: 22px 0 10px; }
+.diplome { width: 100%; height: auto; border-radius: 10px; margin: 12px 0; border: 1px solid var(--bord); display: block; }
+#retour-formation { position: fixed; left: 16px; bottom: 76px; z-index: 39; box-shadow: var(--ombre); }
+#zone-impression { display: none; }
+@media print {
+  body > *:not(#zone-impression) { display: none !important; }
+  #zone-impression { display: block !important; }
+  #zone-impression img { width: 100%; }
+  body { background: #fff; overflow: visible; }
+}
+
 /* Petite astuce de Stella près de la fée */
 .astuce-fee {
   position: fixed; right: 100px; bottom: 40px; max-width: min(300px, calc(100vw - 130px)); z-index: 40; background: #1d1840; border: 1px solid #5a3f8a;
@@ -291,6 +327,7 @@ body.nuit-rouge .filtre-rouge { display: block; }
     <nav class="onglets" role="tablist" aria-label="Sections">
       <button class="onglet actif" data-vue="ciel" role="tab">🌌 Ciel en direct</button>
       <button class="onglet" data-vue="cesoir" role="tab">🔭 Ce soir</button>
+      <button class="onglet" data-vue="formation" role="tab">🎓 Formation</button>
       <button class="onglet" data-vue="systeme" role="tab">🪐 Système solaire 3D</button>
       <button class="onglet" data-vue="cosmos" role="tab">🌀 Univers 3D</button>
       <button class="onglet" data-vue="medias" role="tab">📷 Photos et vidéos NASA</button>
@@ -337,6 +374,9 @@ body.nuit-rouge .filtre-rouge { display: block; }
 
     <!-- Ce soir -->
     <section class="vue" id="vue-cesoir"><div class="defile"><div class="contenu" id="cesoir"></div></div></section>
+
+    <!-- Formation -->
+    <section class="vue" id="vue-formation"><div class="defile"><div class="contenu" id="formation"></div></div></section>
 
     <!-- Système solaire -->
     <section class="vue" id="vue-systeme">
@@ -868,7 +908,7 @@ const Savoir = (() => {
       <p>En plaçant les étoiles selon leur température et leur luminosité, on obtient le <b>diagramme de Hertzsprung-Russell</b> : la plupart (90 %) se rangent sur une diagonale, la « séquence principale ». Les géantes et les naines blanches occupent d’autres zones.</p>
       <p>Regarde Orion en hiver : Bételgeuse est nettement orangée, Rigel bleutée. Dans le planétarium, les étoiles ont leur vraie couleur.</p>`, { schema: 'hr' }),
     F('trous-noirs', 'Étoiles', 'Les trous noirs', ['trou noir', 'horizon', 'sagittarius', 'm87', 'event horizon', 'singularite', 'gravite'],
-      `<p>Un trou noir est une région où la matière est si concentrée que rien, pas même la lumière, ne peut s’en échapper une fois franchi l’<b>horizon des événements</b>. Si la Terre devenait un trou noir, elle tiendrait dans une bille de 9 mm.</p>
+      `<p>Un trou noir est une région où la matière est si concentrée que rien, pas même la lumière, ne peut s’en échapper une fois franchi l’<b>horizon des événements</b>. Si la Terre devenait un trou noir, elle tiendrait dans une bille de moins de 2 cm.</p>
       <ul><li><b>Trous noirs stellaires</b> : quelques dizaines de masses solaires, nés de l’effondrement d’étoiles massives.</li>
       <li><b>Trous noirs supermassifs</b> : des millions à des milliards de masses solaires, au centre des galaxies. Le nôtre, <b>Sagittarius A*</b>, pèse 4 millions de Soleils.</li></ul>
       <p>En 2019, l’Event Horizon Telescope a publié la première image de l’ombre d’un trou noir (M87*, 6,5 milliards de masses solaires) ; en 2022, celle de Sagittarius A*. Près d’un trou noir, le temps s’écoule plus lentement : c’est la relativité d’Einstein.</p>`, { schema: 'trounoir', nasa: 'black hole', ciel: 'M87' }),
@@ -2930,6 +2970,455 @@ const Demos = (() => {
   return { init, afficher, activer: on => { actif = on; }, liste: demos.map(d => ({ id: d.id, titre: d.titre })) };
 })();
 
+// ===== formation-contenu.js =====
+// « L'Odyssée cosmique » : formation racontée en 14 chapitres, du jardin aux confins de l'univers.
+// Fil rouge : un mystérieux signal capté par Stella dès le prologue. Chaque scène peut avoir un rebondissement
+// (révélé au clic), une question et une mission qui ouvre une autre partie de l'atlas.
+// Missions : [libellé, type, cible] avec type = ciel | demo | systeme | cosmos | fiche | quiz | defis
+const FORMATION = [
+  {
+    id: 'prologue', icone: '📻', titre: 'Prologue : le signal', sousTitre: 'Une nuit pas comme les autres',
+    scenes: [
+      { titre: 'Une nuit dans le jardin', html: `<p>Il est 22 heures. Tu sors dans le jardin, le cou levé. Au-dessus de toi, quelques étoiles percent la lueur de la ville. Tu ne le sais pas encore, mais tu vas faire ce soir le plus long voyage de ta vie.</p>
+        <p>Un petit froissement d’ailes. Une lueur dorée se pose sur la barrière : c’est <b>Stella</b>, une fée minuscule qui serre contre elle une vieille radio à antenne.</p>
+        <p>« Enfin quelqu’un qui regarde le ciel ! Il se passe quelque chose de bizarre, et j’ai besoin d’aide. »</p>` },
+      { titre: 'Bip… bip… bip…', html: `<p>Stella tourne le bouton de sa radio. Dans le grésillement, un son apparaît : <b>bip</b>… <b>bip</b>… <b>bip</b>… Parfaitement régulier. Un bip toutes les <b>1,337 seconde</b>, nuit après nuit, toujours au même endroit du ciel, dans la constellation du Petit Renard.</p>
+        <p>« Aucune étoile ne fait ça, murmure Stella. Ça ressemble à une horloge. Ou à… un message. »</p>`,
+        question: { q: 'À ton avis, d’où vient ce signal si régulier ?', choix: ['Un satellite humain en panne', 'Des extraterrestres qui nous appellent', 'Un phénomène naturel encore inconnu', 'Impossible de le savoir pour l’instant'], bonne: 3, explication: 'La seule réponse honnête aujourd’hui : on ne sait pas encore. Un bon scientifique ne choisit pas l’explication la plus excitante, il enquête. Garde tes hypothèses en tête : la réponse viendra au fil du voyage.' } },
+      { titre: 'La mission', html: `<p>« Pour comprendre ce signal, explique Stella, il faut comprendre le ciel tout entier : la Terre, la Lune, le Soleil, les planètes, les étoiles, leur vie, leur mort… jusqu’au début de l’univers. »</p>
+        <p>Elle te tend la main. « Treize étapes. Des surprises à chaque fois. Prêt ? »</p>
+        <p>Ta mission : <b>identifier la source du signal</b>. À chaque chapitre, tu gagneras des <b>points d’étoile</b> en répondant aux questions. À la fin, un diplôme t’attend.</p>`,
+        action: ['🌌 Regarder le ciel de ce soir', 'ciel', 'Petit Renard'] }
+    ],
+    retenir: ['La science commence par une observation étrange et une question.', 'On ne choisit pas l’explication la plus spectaculaire : on enquête.', 'Le signal : un bip toutes les 1,337 seconde, venu du Petit Renard.'],
+    suspense: 'Avant de partir loin, Stella veut te montrer quelque chose que tu crois connaître : le ciel au-dessus de ta tête. Et il te cache bien des choses…'
+  },
+  {
+    id: 'ciel', icone: '🌌', titre: 'Chapitre 1 : le ciel au-dessus de nous', sousTitre: 'Une coupole qui tourne… ou pas',
+    scenes: [
+      { titre: 'Le grand manège', html: `<p>Observe le ciel pendant une heure : les étoiles se lèvent à l’est, glissent vers le sud et se couchent à l’ouest, comme le Soleil. Les Anciens pensaient que le ciel était une immense sphère tournant autour de la Terre.</p>
+        <p>En réalité, c’est <b>la Terre qui tourne sur elle-même</b>, en 23 heures et 56 minutes. Le ciel ne bouge pas : c’est nous qui sommes sur le manège.</p>`,
+        action: ['⏩ Accélérer le temps dans le planétarium', 'ciel', 'Polaris'] },
+      { titre: 'L’étoile qui ne bouge pas', html: `<p>Une étoile semble presque immobile au milieu de ce manège : l’<b>étoile Polaire</b>. Elle est pile dans l’axe de rotation de la Terre, au-dessus du pôle Nord. Pour la trouver, prolonge cinq fois le bord de la « casserole » de la Grande Ourse.</p>
+        <p>Depuis des millénaires, les voyageurs s’en servent pour trouver le nord. Et sa hauteur au-dessus de l’horizon est égale à ta latitude : environ 49° à Paris, 90° au pôle Nord.</p>`, schema: 'polaire',
+        twist: { titre: 'Elle ne sera pas toujours la Polaire', html: `<p>L’axe de la Terre tourne lentement, comme une toupie qui ralentit : un tour complet en <b>26 000 ans</b>. Il y a 4 500 ans, quand les Égyptiens bâtissaient les pyramides, l’étoile polaire était Thuban, dans le Dragon. Vers l’an 14 000, ce sera <b>Véga</b>, bien plus brillante.</p>` },
+        question: { q: 'Quelle est l’étoile la plus brillante du ciel nocturne ?', choix: ['L’étoile Polaire', 'Sirius', 'Véga', 'Bételgeuse'], bonne: 1, explication: 'Sirius, dans le Grand Chien. La Polaire n’est qu’environ la 48e étoile la plus brillante : elle est célèbre pour sa position, pas pour son éclat.' } },
+      { titre: 'Les dessins du ciel', html: `<p>Pour s’y retrouver, les humains ont relié les étoiles en dessins : les <b>constellations</b>. Il y en a 88 officielles. Mais attention : les étoiles d’une constellation n’ont en général <b>rien à voir entre elles</b>. Elles sont à des distances très différentes et semblent voisines par un simple effet de perspective, comme un arbre au loin qui semble « posé » sur le toit d’une maison proche.</p>`,
+        twist: { titre: 'Sauf… la Grande Ourse !', html: `<p>Retournement : dans la Grande Ourse, <b>cinq des sept étoiles</b> de la casserole (Merak, Phecda, Megrez, Alioth et Mizar) sont vraiment sœurs. Elles sont nées ensemble il y a environ 400 millions d’années et voyagent ensemble dans l’espace, à environ 80 années-lumière de nous. Seules Dubhe et Alkaid sont des intruses qui passaient par là.</p>` },
+        action: ['🌌 Trouver la Grande Ourse', 'ciel', 'Grande Ourse'] },
+      { titre: 'Étoile ou planète ?', html: `<p>Parmi les points brillants, certains sont des <b>planètes</b>. Comment les reconnaître ? Les étoiles <b>scintillent</b> : leur lumière, venue d’un point minuscule, est secouée par les turbulences de l’air. Les planètes, plus proches, forment de tout petits disques : elles brillent d’un éclat plus calme.</p>
+        <p>Autre indice : les planètes se promènent toujours le long d’une même bande du ciel, l’<b>écliptique</b>, celle que suit aussi le Soleil.</p>`,
+        question: { q: 'Un point très brillant, bas sur l’horizon après le coucher du Soleil, qui ne scintille presque pas. C’est probablement…', choix: ['Sirius', 'Vénus', 'Un avion', 'L’étoile Polaire'], bonne: 1, explication: 'Vénus, « l’étoile du Berger », visible le soir ou le matin près du Soleil. Un avion clignoterait et bougerait vite ; la Polaire est au nord, à hauteur fixe.' } }
+    ],
+    retenir: ['Le ciel semble tourner parce que la Terre tourne sur elle-même.', 'La Polaire indique le nord ; sa hauteur égale ta latitude.', 'Les constellations sont des effets de perspective… à quelques exceptions près.'],
+    suspense: 'Stella fronce les sourcils : « Une question bête : pourquoi fait-il noir la nuit ? » Tu crois que c’est évident ? Les plus grands savants s’y sont cassé les dents.'
+  },
+  {
+    id: 'terre', icone: '🌍', titre: 'Chapitre 2 : la Terre, notre vaisseau spatial', sousTitre: 'Tu voyages bien plus vite que tu ne le crois',
+    scenes: [
+      { titre: 'Immobile ? Vraiment ?', html: `<p>Assis dans ton fauteuil, tu as l’impression de ne pas bouger. Pourtant, à Paris, la rotation de la Terre t’emporte à environ <b>1 100 km/h</b>. Autour du Soleil, la Terre file à <b>30 km par seconde</b>, soit plus de 100 000 km/h. Et le Soleil lui-même tourne autour de la galaxie à environ 230 km/s.</p>
+        <p>Pourquoi ne sens-tu rien ? Parce que le mouvement est régulier : comme dans un avion qui vole droit, seules les accélérations se sentent.</p>`,
+        question: { q: 'Combien de kilomètres as-tu parcouru autour du Soleil pendant la dernière minute ?', choix: ['Environ 30 km', 'Environ 1 800 km', 'Environ 100 000 km', 'Zéro'], bonne: 1, explication: '30 km par seconde × 60 secondes = 1 800 km. Pendant la lecture de cette phrase, tu as fait environ 300 km.' } },
+      { titre: 'Les saisons', html: `<p>Si on demande pourquoi il fait chaud en été, la plupart des gens répondent : « parce que la Terre est plus près du Soleil ». C’est faux ! La cause, c’est l’<b>inclinaison de 23,4°</b> de l’axe de la Terre. En juin, l’hémisphère nord penche vers le Soleil : rayons plus droits, jours plus longs. En décembre, c’est l’inverse.</p>`, schema: 'saisons',
+        twist: { titre: 'La Terre est au plus près du Soleil… en janvier !', html: `<p>Chaque année, vers le 3 ou 4 janvier, la Terre passe au plus près du Soleil (147 millions de km), en plein hiver pour nous. Début juillet, elle est au plus loin (152 millions de km). La preuve que la distance ne fait pas les saisons : sinon, l’Australie et la France auraient l’été en même temps.</p>` },
+        action: ['🧪 Démonstration : les saisons', 'demo', 'saisons'] },
+      { titre: 'Pourquoi fait-il noir la nuit ?', html: `<p>Question d’enfant ? Pas du tout. Si l’univers était infini, éternel et rempli d’étoiles, alors dans <b>chaque direction</b> où tu regardes, ton regard finirait par tomber sur une étoile. Le ciel entier devrait briller comme la surface du Soleil, jour et nuit !</p>
+        <p>C’est le <b>paradoxe d’Olbers</b>, du nom d’un astronome allemand du XIX<sup>e</sup> siècle. Pendant longtemps, personne n’a trouvé la bonne réponse.</p>`,
+        question: { q: 'Selon toi, pourquoi le ciel nocturne est-il noir ?', choix: ['Les poussières cachent les étoiles lointaines', 'L’univers a un âge : la lumière des plus lointaines n’est pas encore arrivée', 'Les étoiles s’éteignent la nuit', 'Le Soleil nous éblouit même la nuit'], bonne: 1, explication: 'Les poussières ne suffisent pas : chauffées, elles finiraient par briller aussi. La vraie raison : l’univers n’est pas éternel. Il a 13,8 milliards d’années, donc la lumière n’a eu le temps de venir que d’une zone limitée. Et l’expansion affaiblit encore cette lumière.' },
+        twist: { titre: 'Le noir de la nuit est une preuve du Big Bang', html: `<p>Le simple fait que la nuit soit noire indique que l’univers a eu un commencement. Et le premier à avoir eu cette intuition n’était pas un astronome, mais un poète : <b>Edgar Allan Poe</b>, dans son essai <i>Eureka</i>, en 1848 !</p>` } }
+    ],
+    retenir: ['Tu voyages à 30 km/s autour du Soleil sans le sentir.', 'Les saisons viennent de l’inclinaison de l’axe terrestre, pas de la distance.', 'La nuit est noire parce que l’univers a un âge.'],
+    suspense: 'Au-dessus du jardin, la Lune se lève. Stella sourit : « Elle aussi, elle tombe. En ce moment même. Et elle ne s’arrête jamais. »'
+  },
+  {
+    id: 'lune', icone: '🌙', titre: 'Chapitre 3 : la Lune, notre compagne', sousTitre: 'Née d’une catastrophe',
+    scenes: [
+      { titre: 'Une naissance violente', html: `<p>Il y a environ 4,5 milliards d’années, la jeune Terre a été percutée par un astre de la taille de Mars, que les scientifiques appellent <b>Théia</b>. Le choc a été si violent qu’un nuage de roches en fusion a été projeté en orbite. En un temps très court à l’échelle cosmique (de quelques heures à quelques siècles selon les simulations), ces débris se sont rassemblés : la Lune était née.</p>
+        <p>Les roches rapportées par les astronautes d’Apollo ont une composition étonnamment proche de celle de la Terre : un indice fort en faveur de ce scénario.</p>` },
+      { titre: 'La face cachée', html: `<p>La Lune nous montre toujours la même face : elle tourne sur elle-même exactement pendant qu’elle tourne autour de la Terre (27,3 jours). L’autre côté, on l’a découvert seulement en 1959, grâce à la sonde soviétique Luna 3.</p>`,
+        twist: { titre: 'Il n’y a pas de « face sombre »', html: `<p>On parle souvent de « face sombre de la Lune ». C’est faux : la face cachée reçoit autant de Soleil que l’autre ! À la nouvelle Lune, quand nous voyons notre côté tout noir, la face cachée est en plein jour. Elle est cachée, pas sombre.</p>` },
+        question: { q: 'Quand la face cachée de la Lune est-elle entièrement éclairée ?', choix: ['Jamais', 'À la pleine Lune', 'À la nouvelle Lune', 'Pendant les éclipses'], bonne: 2, explication: 'À la nouvelle Lune, le Soleil est derrière la Lune par rapport à nous : il éclaire entièrement la face qu’on ne voit pas.' } },
+      { titre: 'La Lune tombe', html: `<p>Vers 1666, Isaac Newton se pose une question folle : la force qui fait tomber une pomme est-elle la même que celle qui retient la Lune ? Sa réponse : oui. La Lune <b>tombe</b> en permanence vers la Terre… mais elle va si vite de côté qu’elle « rate » la Terre à chaque instant. C’est ça, une orbite : une chute sans fin.</p>`,
+        action: ['🧪 Démonstration : le canon de Newton', 'demo', 'canon'] },
+      { titre: 'Les phases', html: `<p>La Lune n’a pas de lumière propre : elle est toujours éclairée à moitié par le Soleil. Selon sa position autour de la Terre, nous voyons une portion plus ou moins grande de cette moitié éclairée : ce sont les phases, sur un cycle de 29,5 jours.</p>`, schema: 'phases',
+        action: ['🧪 Démonstration : les phases', 'demo', 'phases'] },
+      { titre: 'Le hasard des éclipses', html: `<p>Le Soleil est 400 fois plus grand que la Lune… et 400 fois plus loin. Résultat : dans le ciel, ils ont presque exactement la même taille. Quand la Lune passe pile devant le Soleil, elle le masque parfaitement : c’est l’éclipse totale, l’un des plus beaux spectacles de la nature.</p>`, schema: 'eclipses',
+        twist: { titre: 'Profitons-en, ça ne durera pas', html: `<p>La Lune s’éloigne de la Terre de <b>3,8 cm par an</b> (mesuré grâce à des miroirs déposés par Apollo et visés au laser). Elle paraît donc lentement plus petite. Dans environ 600 millions d’années, elle ne pourra plus couvrir tout le Soleil : les éclipses totales auront disparu. Nous vivons à une époque privilégiée.</p>` },
+        question: { q: 'Pourquoi n’y a-t-il pas d’éclipse à chaque nouvelle Lune ?', choix: ['La Lune est trop petite', 'L’orbite de la Lune est inclinée de 5°', 'Le Soleil bouge trop vite', 'Il y en a une à chaque fois, mais invisible'], bonne: 1, explication: 'L’orbite lunaire est inclinée d’environ 5° : la plupart du temps, la Lune passe au-dessus ou au-dessous du Soleil. Il faut un alignement parfait, environ deux fois par an.' } }
+    ],
+    retenir: ['La Lune est née d’une collision géante avec Théia.', 'Une orbite est une chute permanente (Newton).', 'Les éclipses totales sont un heureux hasard… provisoire.'],
+    suspense: 'L’aube approche. « Notre prochaine étape est une étoile, dit Stella. La seule que l’on voit de jour. Et je parie que tu te trompes sur sa couleur. »'
+  },
+  {
+    id: 'soleil', icone: '☀️', titre: 'Chapitre 4 : le Soleil, notre étoile', sousTitre: 'Un réacteur à fusion de 1,4 million de km',
+    scenes: [
+      { titre: 'Le cœur nucléaire', html: `<p>Au centre du Soleil, à 15 millions de degrés, les noyaux d’hydrogène se heurtent si fort qu’ils fusionnent en hélium. À chaque seconde, environ <b>4 millions de tonnes</b> de matière disparaissent, transformées en énergie, selon la célèbre formule d’Einstein E = mc².</p>
+        <p>Rassure-toi : le Soleil est si énorme qu’il peut continuer ainsi encore environ 5 milliards d’années.</p>`, schema: 'soleil' },
+      { titre: 'Un très long voyage', html: `<p>La lumière met 8 minutes et 20 secondes pour aller du Soleil à la Terre. Facile ? Ce n’est que la fin du voyage !</p>`,
+        twist: { titre: 'Ta lumière du jour a des milliers d’années', html: `<p>À l’intérieur du Soleil, la matière est si dense que chaque grain de lumière est absorbé et réémis des milliards de fois, dans des directions au hasard. Pour sortir du cœur jusqu’à la surface, l’énergie met <b>des dizaines de milliers d’années</b>, peut-être plus de 100 000 ans selon les estimations. La lumière qui te réchauffe aujourd’hui a commencé son voyage avant la naissance de l’agriculture.</p>` } },
+      { titre: 'De quelle couleur est le Soleil ?', html: `<p>Dessine un Soleil : tu prendras sûrement un crayon jaune. Pourtant…</p>`,
+        question: { q: 'Vu depuis l’espace, de quelle couleur est le Soleil ?', choix: ['Jaune', 'Orange', 'Blanc', 'Rouge'], bonne: 2, explication: 'Blanc ! Le Soleil émet toutes les couleurs à peu près à égalité. Il nous paraît jaune (et rouge au coucher) parce que notre atmosphère diffuse une partie du bleu… ce qui, au passage, rend le ciel bleu. Les astronautes le voient blanc éclatant.' } },
+      { titre: 'Les colères du Soleil', html: `<p>Le Soleil n’est pas calme : des taches, des éruptions, et parfois d’énormes bulles de gaz magnétisé projetées vers l’espace. Quand l’une d’elles frappe la Terre, elle déclenche des <b>aurores polaires</b>… et des ennuis.</p>
+        <p>Le 1<sup>er</sup> septembre 1859, l’astronome anglais Richard Carrington observe un éclair blanc sur le Soleil. Le lendemain, des aurores sont visibles jusqu’aux Caraïbes, et les fils du télégraphe crachent des étincelles. Une telle tempête aujourd’hui pourrait endommager satellites et réseaux électriques.</p>`,
+        twist: { titre: 'Des aurores au-dessus de la France', html: `<p>En mai 2024, puis en octobre 2024, de fortes tempêtes solaires ont offert des aurores visibles dans toute la France et jusqu’au sud de l’Europe. Beaucoup les ont mieux vues sur l’écran de leur téléphone qu’à l’œil nu : les capteurs perçoivent mieux les couleurs dans la nuit que nos yeux.</p>` },
+        action: ['🪐 Voir le Soleil dans le système solaire 3D', 'systeme', 'soleil'] }
+    ],
+    retenir: ['Le Soleil brille par fusion nucléaire : 4 millions de tonnes converties par seconde.', 'Sa lumière met des milliers d’années à sortir, puis 8 minutes à nous rejoindre.', 'Il est blanc, et ses tempêtes allument les aurores.'],
+    suspense: 'Stella pointe le doigt vers une petite étoile près de l’horizon : « Celle-là n’est pas une étoile. Et ce n’est pas la planète la plus proche du Soleil qui est la plus chaude. » Direction les mondes rocheux.'
+  },
+  {
+    id: 'rocheuses', icone: '🔴', titre: 'Chapitre 5 : les mondes rocheux', sousTitre: 'Mercure, Vénus, Mars : trois destins',
+    scenes: [
+      { titre: 'Mercure, la rapide', html: `<p>La plus petite planète file autour du Soleil en 88 jours. Sans atmosphère pour garder la chaleur, elle passe de +430 °C le jour à −180 °C la nuit. Un « jour » complet, d’un lever de Soleil au suivant, y dure 176 jours terrestres.</p>`,
+        twist: { titre: 'Mercure est notre plus proche voisine', html: `<p>On répète que Vénus est la planète la plus proche de la Terre. C’est vrai… seulement quand elle passe de notre côté. En moyenne sur des années, c’est <b>Mercure</b> qui est la plus proche de nous, parce qu’elle ne s’éloigne jamais beaucoup du Soleil. Un calcul publié en 2019 a même montré que Mercure est, en moyenne, la plus proche voisine de <b>toutes</b> les planètes, Neptune comprise !</p>` } },
+      { titre: 'Vénus, l’enfer voilé', html: `<p>Presque la jumelle de la Terre par la taille, Vénus est recouverte de nuages d’acide sulfurique. Son atmosphère de gaz carbonique est 92 fois plus lourde que la nôtre : comme être à 900 m sous la mer.</p>`,
+        question: { q: 'Quelle est la planète la plus chaude du système solaire ?', choix: ['Mercure, la plus proche du Soleil', 'Vénus', 'Mars', 'Jupiter'], bonne: 1, explication: 'Vénus : 465 °C en surface, jour et nuit, à cause d’un effet de serre emballé. C’est plus chaud que Mercure, pourtant deux fois plus près du Soleil. Une leçon pour notre propre planète.' },
+        twist: { titre: 'Un jour plus long qu’une année', html: `<p>Vénus tourne sur elle-même en 243 jours, mais fait le tour du Soleil en 225 jours : son jour est plus long que son année ! Et elle tourne à l’envers : là-bas, le Soleil se lève à l’ouest.</p>` } },
+      { titre: 'Mars, la planète qui a perdu ses océans', html: `<p>Mars est aujourd’hui un désert glacé, à −63 °C en moyenne. Pourtant, les sondes y ont trouvé des lits de rivières asséchées, des deltas et des minéraux qui ne se forment que dans l’eau. Il y a plus de 3 milliards d’années, Mars avait des lacs et peut-être un océan.</p>
+        <p>Que s’est-il passé ? Sa petite taille lui a fait perdre son champ magnétique ; le vent solaire a alors arraché peu à peu son atmosphère, et l’eau a disparu ou s’est réfugiée dans le sous-sol et les calottes polaires.</p>`,
+        action: ['🧪 Démonstration : la boucle de Mars', 'demo', 'retrograde'] },
+      { titre: 'Sur les traces de la vie', html: `<p>Depuis 2021, le rover <b>Perseverance</b> explore le cratère Jezero, un ancien lac. Il prélève des échantillons de roche qu’une future mission devra rapporter sur Terre. En 2024, il a découvert une roche aux taches étranges, surnommées « taches de léopard », qui pourraient avoir été produites par des microbes… ou par de simples réactions chimiques.</p>
+        <p>Pour trancher, il faudra analyser ces roches dans nos laboratoires. La question « Y a-t-il eu de la vie sur Mars ? » reste l’une des plus grandes énigmes de notre époque.</p>`,
+        question: { q: 'Pourquoi Mars a-t-elle perdu l’essentiel de son atmosphère ?', choix: ['Un astéroïde l’a soufflée', 'Elle a perdu son champ magnétique protecteur', 'Le Soleil l’a brûlée d’un coup', 'Elle s’est figée en glace'], bonne: 1, explication: 'Sans champ magnétique global, le vent solaire a érodé son atmosphère pendant des centaines de millions d’années.' } }
+    ],
+    retenir: ['Mercure est, en moyenne, la planète la plus proche de toutes les autres.', 'Vénus est la plus chaude, à cause de l’effet de serre.', 'Mars a eu de l’eau liquide ; la question de la vie y reste ouverte.'],
+    suspense: '« Accroche-toi, prévient Stella. On passe la ceinture d’astéroïdes. Derrière, il y a des géants… et des océans cachés sous la glace. »'
+  },
+  {
+    id: 'geantes', icone: '🪐', titre: 'Chapitre 6 : les géantes et leurs lunes', sousTitre: 'Des océans là où on ne les attendait pas',
+    scenes: [
+      { titre: 'Jupiter, le roi', html: `<p>Jupiter est si énorme que toutes les autres planètes réunies tiendraient dedans, avec de la place. Sa Grande Tache rouge est une tempête plus large que la Terre, observée depuis au moins 1830. En 1610, Galilée y découvre quatre lunes : la preuve que tout ne tourne pas autour de la Terre.</p>`,
+        twist: { titre: 'Jupiter, gardienne ou menace ?', html: `<p>On dit souvent que Jupiter nous protège en avalant ou en déviant les comètes. C’est en partie vrai : en 1994, on l’a vue absorber la comète Shoemaker-Levy 9. Mais des simulations ont montré que sa gravité peut aussi <b>renvoyer</b> des astéroïdes vers l’intérieur du système solaire. Gardienne, oui… mais pas toujours de notre côté.</p>` },
+        action: ['🪐 Suivre Jupiter en 3D', 'systeme', 'jupiter'] },
+      { titre: 'Saturne et ses anneaux', html: `<p>Saturne est la seule planète moins dense que l’eau : dans une baignoire géante, elle flotterait. Ses anneaux font 280 000 km de large, mais souvent moins de 100 mètres d’épaisseur : à l’échelle, une feuille de papier de 300 mètres de large.</p>`,
+        twist: { titre: 'Des anneaux jeunes… ou pas ?', html: `<p>Les mesures de la sonde Cassini ont laissé penser que les anneaux étaient tout jeunes : 100 à 400 millions d’années, apparus à l’époque des dinosaures. Puis, en 2024, une étude a montré que les poussières qui tombent sur la glace pourraient ne pas la salir autant qu’on le pensait : les anneaux pourraient être aussi vieux que Saturne. Le débat est ouvert, et c’est ça, la science vivante.</p>` },
+        question: { q: 'Saturne a plus de lunes connues que toute autre planète. Combien environ ?', choix: ['12', '82', '146', '274'], bonne: 3, explication: '274 lunes connues en 2025, la plupart toutes petites. Le compte change régulièrement avec les nouvelles découvertes.' } },
+      { titre: 'Des océans sous la glace', html: `<p>La plus grande surprise des géantes, ce sont leurs lunes. Sous la croûte glacée d’<b>Europe</b> (Jupiter) se cache un océan d’eau salée qui contiendrait plus d’eau que tous les océans terrestres. <b>Encelade</b> (Saturne) projette des geysers d’eau dans l’espace. <b>Titan</b> a des lacs… de méthane liquide.</p>
+        <p>Les sondes JUICE et Europa Clipper sont en route vers Jupiter pour y regarder de plus près.</p>`,
+        question: { q: 'Où chercherais-tu en priorité une vie microbienne dans le système solaire ?', choix: ['Sur le Soleil', 'Dans les océans cachés d’Europe ou d’Encelade', 'Sur Mercure', 'Dans les anneaux de Saturne'], bonne: 1, explication: 'De l’eau liquide, des sels, de l’énergie et des molécules organiques : ces océans cochent beaucoup de cases. Avec le sous-sol de Mars, ce sont les meilleures pistes.' } },
+      { titre: 'Une planète trouvée par le calcul', html: `<p>En 1781, William Herschel découvre Uranus. Mais quelque chose cloche : elle ne suit pas exactement la trajectoire prévue, comme si une main invisible la tirait.</p>
+        <p>Le Français <b>Urbain Le Verrier</b> fait l’hypothèse d’une planète inconnue et calcule où elle doit se trouver. Le 23 septembre 1846, l’astronome Johann Galle pointe son télescope à l’endroit indiqué… et trouve <b>Neptune</b>, à moins d’un degré de la prédiction.</p>`,
+        twist: { titre: 'La même méthode a échoué pour Vulcain', html: `<p>Fort de son succès, Le Verrier explique une anomalie de l’orbite de Mercure par une autre planète invisible, proche du Soleil : « Vulcain ». On l’a cherchée pendant des décennies. Elle n’existait pas. La vraie explication est venue en 1915 : la relativité générale d’Einstein. Une anomalie peut révéler une planète… ou une nouvelle physique.</p>` } }
+    ],
+    retenir: ['Jupiter et Saturne sont des géantes de gaz ; leurs lunes cachent des océans.', 'L’âge des anneaux de Saturne fait encore débat.', 'Neptune a été découverte par le calcul de Le Verrier.'],
+    suspense: 'Le Soleil n’est plus qu’une étoile très brillante. « Bienvenue aux confins, dit Stella. Et devine quoi : l’objet humain le plus lointain n’est pas encore sorti du système solaire. »'
+  },
+  {
+    id: 'confins', icone: '☄️', titre: 'Chapitre 7 : aux confins du système solaire', sousTitre: 'Pluton, les comètes et les Voyager',
+    scenes: [
+      { titre: 'L’affaire Pluton', html: `<p>Découverte en 1930 par le jeune Américain Clyde Tombaugh, Pluton a été la neuvième planète pendant 76 ans. Puis, en 2005, on découvre Éris, presque aussi grande, et bien d’autres mondes glacés au-delà de Neptune.</p>
+        <p>Le 24 août 2006, l’Union astronomique internationale tranche : une planète doit avoir « fait le ménage » autour de son orbite. Pluton partage la sienne avec des milliers d’objets : elle devient une <b>planète naine</b>.</p>`,
+        twist: { titre: 'Clyde Tombaugh est allé voir Pluton', html: `<p>Une petite partie des cendres de Clyde Tombaugh voyage à bord de la sonde New Horizons, qui a survolé Pluton le 14 juillet 2015. Elle y a découvert un immense cœur de glace, des montagnes et un ciel bleuté. La sonde file maintenant vers l’espace interstellaire, avec son découvreur à bord.</p>` },
+        question: { q: 'Pourquoi Pluton n’est-elle plus une planète ?', choix: ['Elle est trop loin', 'Elle est trop petite pour être ronde', 'Elle n’a pas fait le ménage autour de son orbite', 'Elle n’a pas de lune'], bonne: 2, explication: 'Pluton est ronde et a cinq lunes, mais elle partage sa zone avec de nombreux objets de la ceinture de Kuiper. C’est le critère qui lui manque.' } },
+      { titre: 'Les comètes, messagères glacées', html: `<p>Les comètes sont des boules de glace et de poussière venues de très loin. En s’approchant du Soleil, elles se réchauffent et déploient une chevelure et des queues de millions de kilomètres, toujours tournées à l’opposé du Soleil, poussées par le vent solaire.</p>
+        <p>La plus célèbre, la comète de Halley, revient tous les 76 ans environ. Sa dernière visite date de 1986 ; la prochaine, de 2061. Ses poussières nous donnent chaque année deux pluies d’étoiles filantes.</p>`,
+        action: ['☄️ Voir la comète de Halley en 3D', 'systeme', 'halley'] },
+      { titre: 'Voyager, la bouteille à la mer', html: `<p>En 1977, deux sondes partent profiter d’un alignement rare des planètes géantes : <b>Voyager 1 et 2</b>. Elles survolent Jupiter, Saturne, puis Voyager 2 visite Uranus et Neptune. Elles emportent un disque en or gravé de sons et d’images de la Terre, au cas où quelqu’un les trouverait.</p>
+        <p>Vers la mi-novembre 2026, Voyager 1 se trouve à <b>un jour-lumière</b> de la Terre : un message radio met 24 heures pour lui parvenir.</p>`,
+        twist: { titre: 'Voyager n’a pas quitté le système solaire', html: `<p>En 2012, les journaux titrent : « Voyager 1 quitte le système solaire ! » En réalité, elle a quitté l’<b>héliosphère</b>, la bulle de vent solaire. Mais le Soleil règne encore par sa gravité bien plus loin : il faudra environ <b>300 ans</b> à Voyager pour atteindre le nuage de Oort, ce réservoir de comètes, et peut-être <b>30 000 ans</b> pour le traverser.</p>` },
+        question: { q: 'En 1990, Voyager 1 s’est retournée pour photographier la Terre depuis 6 milliards de km. À quoi ressemblait-elle ?', choix: ['Une bille bleue bien nette', 'Un croissant bleu', 'Un seul pixel bleuté', 'Elle était invisible'], bonne: 2, explication: 'Un point bleu pâle, moins d’un pixel, perdu dans un rayon de Soleil. Carl Sagan en a tiré un texte célèbre sur la fragilité de notre monde.' } }
+    ],
+    retenir: ['Pluton est une planète naine depuis 2006.', 'Les comètes viennent des confins glacés ; Halley reviendra en 2061.', 'Voyager 1 a quitté l’héliosphère, pas encore l’empire du Soleil.'],
+    suspense: 'Stella rallume sa radio : bip… bip… bip… « Le signal vient d’au-delà du système solaire. Il est temps de partir vers les étoiles. »'
+  },
+  {
+    id: 'etoiles', icone: '⭐', titre: 'Chapitre 8 : les étoiles, des soleils lointains', sousTitre: 'Mesurer l’immensité',
+    scenes: [
+      { titre: 'Mesurer l’inaccessible', html: `<p>Comment mesurer la distance d’une étoile qu’on ne peut pas atteindre ? Tends le bras, lève le pouce et ferme un œil, puis l’autre : ton pouce « saute » par rapport au décor. C’est la <b>parallaxe</b>.</p>
+        <p>Les astronomes font pareil avec l’orbite de la Terre : ils observent une étoile en janvier puis en juillet, à 300 millions de km d’écart. L’étoile se décale très légèrement sur le fond du ciel. En 1838, l’Allemand Friedrich Bessel réussit le premier à mesurer ce minuscule décalage pour l’étoile 61 du Cygne : environ 11 années-lumière.</p>`,
+        action: ['⭐ Voir nos étoiles voisines en 3D', 'cosmos', 'voisinage'] },
+      { titre: 'L’année-lumière', html: `<p>La lumière parcourt 300 000 km par seconde. Une <b>année-lumière</b> est la distance qu’elle parcourt en un an : environ 9 500 milliards de km. L’étoile la plus proche, Proxima du Centaure, est à 4,24 années-lumière. Avec la vitesse de Voyager, il faudrait plus de 70 000 ans pour y arriver.</p>`,
+        question: { q: 'Une année-lumière, c’est…', choix: ['une durée', 'une distance', 'une vitesse', 'une luminosité'], bonne: 1, explication: 'Une distance, malgré le mot « année ». Comme quand on dit qu’une ville est « à deux heures de route ».' } },
+      { titre: 'Regarder, c’est remonter le temps', html: `<p>Puisque la lumière met du temps à voyager, regarder loin, c’est regarder dans le passé. Tu vois Sirius telle qu’elle était il y a 8,6 ans, et la galaxie d’Andromède telle qu’elle était il y a 2,5 millions d’années.</p>`,
+        twist: { titre: '« Les étoiles que tu vois sont peut-être mortes » ? Presque jamais !', html: `<p>On entend souvent cette phrase poétique. Mais les étoiles visibles à l’œil nu sont presque toutes à moins de quelques milliers d’années-lumière, et une étoile vit des millions ou des milliards d’années. La probabilité qu’une de celles que tu vois soit déjà morte est infime. Bételgeuse elle-même, à 550 années-lumière, est très probablement encore là.</p>` },
+        question: { q: 'Si une étoile est à 500 années-lumière, sa lumière que tu vois ce soir est partie…', choix: ['Ce matin', 'Il y a 500 jours', 'Vers l’an 1500', 'Au Big Bang'], bonne: 2, explication: 'Il y a environ 500 ans, à l’époque de la Renaissance. Tu reçois une lumière partie à l’époque de la Renaissance.' } },
+      { titre: 'Des couleurs qui disent tout', html: `<p>Les étoiles n’ont pas toutes la même couleur. Regarde Orion en hiver : Bételgeuse est orangée, Rigel bleutée. La couleur révèle la température : les bleues dépassent 20 000 °C, le Soleil fait 5 500 °C, les rouges moins de 3 500 °C. C’est l’inverse de nos robinets !</p>
+        <p>En décomposant leur lumière en arc-en-ciel (le spectre), on découvre aussi de quoi elles sont faites, à des années-lumière de distance. Au XIX<sup>e</sup> siècle, le philosophe Auguste Comte affirmait qu’on ne saurait jamais la composition des étoiles. Moins de trente ans plus tard, grâce à l’analyse de la lumière, c’était fait.</p>`, schema: 'hr',
+        action: ['🌌 Comparer Bételgeuse et Rigel', 'ciel', 'Orion'] }
+    ],
+    retenir: ['La parallaxe permet de mesurer la distance des étoiles proches.', 'Regarder loin, c’est regarder dans le passé.', 'La couleur d’une étoile indique sa température.'],
+    suspense: 'Le bip devient plus fort. « On approche de la source, souffle Stella. Mais pour comprendre ce qu’elle est, il faut d’abord savoir comment meurent les étoiles. »'
+  },
+  {
+    id: 'mort-etoiles', icone: '💥', titre: 'Chapitre 9 : vie et mort des étoiles', sousTitre: 'Le mystère du signal est résolu',
+    scenes: [
+      { titre: 'Des pouponnières d’étoiles', html: `<p>Les étoiles naissent dans d’immenses nuages de gaz et de poussières, les nébuleuses. Sous l’effet de leur propre gravité, des grumeaux s’effondrent, se réchauffent, et quand leur cœur atteint quelques millions de degrés, la fusion s’allume : une étoile est née.</p>
+        <p>Tu peux en voir une à l’œil nu : la grande nébuleuse d’Orion, sous la ceinture du chasseur.</p>`, schema: 'vie',
+        action: ['🌌 Montrer la nébuleuse d’Orion', 'ciel', 'M42'] },
+      { titre: 'Mourir selon sa taille', html: `<p>Une étoile comme le Soleil finira en douceur : elle gonflera en géante rouge, soufflera ses couches externes en une jolie nébuleuse, et laissera un cœur de la taille de la Terre, une <b>naine blanche</b>.</p>
+        <p>Les étoiles de plus de 8 fois la masse du Soleil meurent dans une <b>supernova</b>, une explosion qui peut briller autant qu’une galaxie entière. Leur cœur s’effondre alors en un objet incroyable : une <b>étoile à neutrons</b>, une boule d’une vingtaine de kilomètres qui pèse plus que le Soleil.</p>`,
+        question: { q: 'Combien pèserait une cuillère à café de matière d’étoile à neutrons ?', choix: ['Un kilo', 'Le poids d’une voiture', 'Environ un milliard de tonnes', 'Autant que la Terre'], bonne: 2, explication: 'De l’ordre d’un milliard de tonnes : la matière y est tassée comme dans un noyau d’atome.' } },
+      { titre: 'Le phare cosmique', html: `<p>Une étoile à neutrons tourne sur elle-même très vite, parfois des centaines de fois par seconde, et possède un champ magnétique gigantesque. Il en sort deux faisceaux d’ondes radio, comme un phare. Si l’un des faisceaux balaie la Terre à chaque tour, nous captons… un bip régulier.</p>
+        <p>Tu vois où je veux en venir ?</p>`,
+        twist: { titre: 'LE SIGNAL, C’ÉTAIT UN PULSAR !', html: `<p>Notre bip toutes les 1,337 seconde, venu du Petit Renard, existe vraiment : c’est le pulsar <b>PSR B1919+21</b>, le tout premier jamais découvert. En 1967, une étudiante de 24 ans, <b>Jocelyn Bell</b>, remarque sur les rouleaux de papier de son radiotélescope un « gribouillis » anormal. Il est si régulier que son équipe le surnomme, à moitié pour rire, <b>LGM-1</b> : « Little Green Men », les petits hommes verts.</p>
+          <p>Ce n’étaient pas des extraterrestres, mais quelque chose de presque aussi fou : une étoile morte qui tourne comme une toupie. Tu avais raison de ne pas sauter aux conclusions.</p>` },
+        question: { q: 'Qui a découvert le premier pulsar ?', choix: ['Albert Einstein', 'Jocelyn Bell, une étudiante', 'Galilée', 'La NASA'], bonne: 1, explication: 'Jocelyn Bell (aujourd’hui Jocelyn Bell Burnell), étudiante à Cambridge, en 1967.' } },
+      { titre: 'L’injustice et la revanche', html: `<p>En 1974, le prix Nobel de physique récompense la découverte des pulsars… mais il est attribué à son directeur de thèse, Antony Hewish, et à Martin Ryle. Pas à Jocelyn Bell. Cette injustice est devenue un symbole.</p>`,
+        twist: { titre: 'Trois millions de dollars donnés', html: `<p>En 2018, Jocelyn Bell Burnell reçoit le prix Breakthrough, doté de 3 millions de dollars. Elle donne la totalité pour financer des bourses d’étudiants en physique issus de groupes sous-représentés. Et bonus : les impulsions de son pulsar ornent la célèbre pochette de l’album <i>Unknown Pleasures</i> du groupe Joy Division (1979).</p>` } },
+      { titre: 'Nous sommes des poussières d’étoiles', html: `<p>Juste après le Big Bang, l’univers ne contenait presque que de l’hydrogène et de l’hélium. Le carbone, l’oxygène, le fer et tous les autres éléments ont été fabriqués dans le cœur des étoiles, puis dispersés par leurs explosions. L’or et le platine viennent en partie de collisions d’étoiles à neutrons.</p>
+        <p>Le calcium de tes os, le fer de ton sang, l’oxygène que tu respires : tout a été forgé dans des étoiles mortes avant la naissance du Soleil.</p>`,
+        question: { q: 'D’où vient le fer de ton sang ?', choix: ['Du noyau de la Terre', 'D’étoiles mortes il y a des milliards d’années', 'Des météorites récentes', 'Du Big Bang'], bonne: 1, explication: 'Il a été fabriqué par fusion dans des étoiles massives, puis dispersé par des supernovas, bien avant la formation du système solaire.' } }
+    ],
+    retenir: ['Les étoiles naissent dans les nébuleuses et meurent selon leur masse.', 'Le signal était un pulsar, découvert par Jocelyn Bell en 1967.', 'Les atomes de ton corps ont été fabriqués dans les étoiles.'],
+    suspense: 'Mystère résolu ? Pas tout à fait. Sous le bip, la radio de Stella laisse entendre un faible souffle, venu de toutes les directions à la fois… Mais d’abord, il faut affronter les objets les plus extrêmes de l’univers.'
+  },
+  {
+    id: 'trous-noirs', icone: '🕳️', titre: 'Chapitre 10 : les trous noirs', sousTitre: 'Là où le temps ralentit',
+    scenes: [
+      { titre: 'Une idée née dans les tranchées', html: `<p>En 1915, Einstein publie la relativité générale : la gravité n’est pas une force mystérieuse, mais une <b>courbure de l’espace et du temps</b> causée par la masse. Quelques semaines plus tard, l’astronome allemand <b>Karl Schwarzschild</b>, alors soldat sur le front russe en pleine Première Guerre mondiale, trouve une solution exacte à ses équations. Elle décrit, sans qu’on le comprenne encore, un trou noir. Il meurt quelques mois plus tard.</p>` },
+      { titre: 'Qu’est-ce qu’un trou noir ?', html: `<p>Un trou noir est une région où la matière est si concentrée que rien ne peut s’en échapper, pas même la lumière, une fois franchie sa frontière : l’<b>horizon des événements</b>. Pour que la Terre devienne un trou noir, il faudrait la comprimer dans une bille de moins de 2 cm de diamètre.</p>`, schema: 'trounoir',
+        twist: { titre: 'Un trou noir n’aspire pas', html: `<p>On imagine les trous noirs comme des aspirateurs cosmiques. Faux ! Si le Soleil était remplacé par un trou noir de même masse (il ferait 6 km de diamètre), la Terre continuerait de tourner exactement sur la même orbite. Il ferait juste très froid et très noir. Le danger, c’est de s’en approcher de très près.</p>` },
+        question: { q: 'Si le Soleil devenait un trou noir de même masse, que deviendrait l’orbite de la Terre ?', choix: ['La Terre serait aspirée', 'L’orbite ne changerait pas', 'La Terre serait éjectée', 'Elle tomberait en spirale lentement'], bonne: 1, explication: 'La gravité à distance ne dépend que de la masse : même masse, même orbite. Seule la lumière et la chaleur disparaîtraient.' } },
+      { titre: 'Le temps élastique', html: `<p>Près d’une grande masse, le temps s’écoule plus lentement. Ce n’est pas de la science-fiction : les horloges des satellites GPS, plus loin de la Terre, avancent d’environ 38 microsecondes par jour par rapport aux nôtres. Sans correction relativiste, ton GPS se tromperait de plusieurs kilomètres par jour !</p>
+        <p>Près de l’horizon d’un trou noir, cet effet devient extrême : pour un observateur lointain, le temps d’un voyageur qui s’approche semble presque se figer.</p>` },
+      { titre: 'Enfin une photo', html: `<p>Pendant un siècle, les trous noirs sont restés invisibles. En 2019, le réseau <b>Event Horizon Telescope</b>, qui relie des radiotélescopes de toute la planète pour former un télescope virtuel grand comme la Terre, publie la première image de l’ombre d’un trou noir : celui de la galaxie M87, 6,5 milliards de fois la masse du Soleil. En 2022 suit celui du centre de notre galaxie, Sagittarius A*.</p>`,
+        twist: { titre: 'On les entend aussi', html: `<p>Le 14 septembre 2015, les détecteurs LIGO captent un frisson de l’espace-temps : deux trous noirs ont fusionné il y a 1,3 milliard d’années. Leur onde gravitationnelle a déformé la Terre d’un millième de la taille d’un proton. Einstein pensait qu’on ne pourrait jamais la mesurer. Aujourd’hui, on en détecte plusieurs par semaine.</p>` },
+        action: ['🌌 Pointer M87 dans le ciel', 'ciel', 'M87'] }
+    ],
+    retenir: ['La gravité est une courbure de l’espace-temps (Einstein, 1915).', 'Un trou noir n’aspire pas : il ne piège que ce qui s’approche trop.', 'Photographiés en 2019 et 2022, entendus depuis 2015.'],
+    suspense: '« Prends de la hauteur », dit Stella. Vous vous élevez au-dessus de la Voie lactée… et vous découvrez qu’on ne s’est pas toujours trouvé là où on le croyait.'
+  },
+  {
+    id: 'galaxies', icone: '🌀', titre: 'Chapitre 11 : notre galaxie et les autres', sousTitre: 'L’humanité perd encore sa place au centre',
+    scenes: [
+      { titre: 'Le fleuve de lait', html: `<p>Loin des villes, une bande laiteuse traverse le ciel : la <b>Voie lactée</b>. En 1610, Galilée la regarde dans sa lunette et découvre qu’elle est faite d’innombrables étoiles. C’est notre galaxie, vue de l’intérieur : un disque de 100 à 400 milliards d’étoiles, de 100 000 années-lumière de diamètre.</p>`,
+        action: ['🌀 Voir la Voie lactée en 3D', 'cosmos', 'galaxie'] },
+      { titre: 'Nous ne sommes pas au centre', html: `<p>Au début du XX<sup>e</sup> siècle, on pensait le Soleil au centre de la galaxie. En 1918, l’Américain Harlow Shapley étudie les amas globulaires, des boules d’étoiles réparties autour de la galaxie. Ils ne sont pas centrés sur nous, mais sur un point lointain dans le Sagittaire.</p>
+        <p>Après Copernic (la Terre n’est pas au centre du système solaire), c’est le deuxième déménagement : le Soleil est en banlieue, à 26 000 années-lumière du centre.</p>`,
+        question: { q: 'Combien de temps met le Soleil pour faire le tour de la galaxie ?', choix: ['Un an', '26 000 ans', 'Environ 230 millions d’années', '13,8 milliards d’années'], bonne: 2, explication: 'Environ 230 millions d’années : une « année galactique ». La dernière fois que le Soleil était au même endroit, les premiers dinosaures apparaissaient.' } },
+      { titre: 'Le Grand Débat', html: `<p>Le 26 avril 1920, à Washington, deux astronomes s’affrontent. Harlow Shapley affirme que la Voie lactée est tout l’univers et que les « nébuleuses spirales » sont des nuages proches. Heber Curtis soutient que ce sont d’autres galaxies, des « univers-îles » lointains.</p>`,
+        question: { q: 'Qui avait raison sur la nature des nébuleuses spirales ?', choix: ['Shapley : ce sont des nuages proches', 'Curtis : ce sont d’autres galaxies', 'Aucun des deux', 'Les deux'], bonne: 1, explication: 'Curtis avait raison sur ce point… même si Shapley avait raison sur la position du Soleil dans la galaxie. Chacun avait une moitié de la vérité.' },
+        twist: { titre: '« VAR! »', html: `<p>En octobre 1923, Edwin Hubble photographie la nébuleuse d’Andromède avec le plus grand télescope du monde. Sur une plaque, il repère une étoile variable d’un type dont on sait calculer la distance, grâce à une loi découverte par l’astronome <b>Henrietta Leavitt</b>. Il raye une annotation et écrit en rouge : <b>« VAR! »</b>. Andromède est bien au-delà de la Voie lactée. D’un coup, l’univers devient des milliards de fois plus grand.</p>` } },
+      { titre: 'La collision annoncée', html: `<p>Andromède, à 2,5 millions d’années-lumière, fonce vers nous à environ 110 km/s. Pendant des années, on a affirmé qu’elle percuterait la Voie lactée dans 4 à 5 milliards d’années.</p>`,
+        twist: { titre: 'Peut-être pas !', html: `<p>En 2025, une équipe a refait les calculs avec les dernières mesures des télescopes Hubble et Gaia, en tenant compte des autres galaxies du groupe. Résultat : il n’y aurait qu’environ <b>une chance sur deux</b> que la collision ait lieu dans les 10 prochains milliards d’années. Et même si elle a lieu, les étoiles, très espacées, ne se heurteraient presque jamais.</p>` },
+        action: ['🌌 Voir le Groupe local en 3D', 'cosmos', 'groupe'] }
+    ],
+    retenir: ['La Voie lactée compte des centaines de milliards d’étoiles ; le Soleil est en banlieue.', 'Hubble a prouvé en 1923 qu’il existe d’autres galaxies.', 'La collision avec Andromède n’est plus certaine.'],
+    suspense: 'Le faible souffle de la radio de Stella persiste, identique dans toutes les directions. « Ce bruit, dit-elle, c’est peut-être la plus vieille chose que tu entendras jamais. »'
+  },
+  {
+    id: 'univers', icone: '💫', titre: 'Chapitre 12 : l’univers tout entier', sousTitre: 'Le deuxième mystère de la radio',
+    scenes: [
+      { titre: 'L’univers gonfle', html: `<p>En 1927, un prêtre et physicien belge, <b>Georges Lemaître</b>, propose que l’univers est en expansion. En 1929, Hubble confirme : plus une galaxie est lointaine, plus elle s’éloigne vite. Ce ne sont pas les galaxies qui fuient dans l’espace : c’est l’<b>espace lui-même qui s’étire</b>, comme la pâte d’un gâteau aux raisins qui gonfle au four.</p>
+        <p>Si tout s’éloigne aujourd’hui, alors autrefois, tout était plus proche, plus dense, plus chaud. Lemaître parle d’un « atome primitif ».</p>`,
+        action: ['🧪 Démonstration : l’expansion', 'demo', 'expansion'] },
+      { titre: 'Un nom donné pour se moquer ?', html: `<p>Pendant des années, un autre modèle s’oppose à celui de Lemaître : l’univers stationnaire, éternel et immuable, défendu notamment par l’astronome anglais Fred Hoyle.</p>`,
+        twist: { titre: 'C’est l’adversaire qui a baptisé le Big Bang', html: `<p>Le 28 mars 1949, à la radio de la BBC, Fred Hoyle évoque la théorie rivale en parlant de « <b>Big Bang</b> », le « grand boum ». On a longtemps dit qu’il voulait la ridiculiser ; lui a toujours affirmé que ce n’était qu’une image frappante. Ironie de l’histoire : c’est son expression qui est restée pour désigner la théorie qu’il combattait.</p>` } },
+      { titre: 'Le souffle de la radio', html: `<p>En 1964, deux ingénieurs américains, Arno Penzias et Robert Wilson, testent une grande antenne. Ils captent un léger bruit, venu de toutes les directions, de jour comme de nuit. Ils pensent à une panne, nettoient l’antenne… et en chassent un couple de pigeons ! Le bruit persiste.</p>`,
+        twist: { titre: 'Le souffle, c’était l’écho du Big Bang', html: `<p>Le faible souffle de la radio de Stella, c’est lui : le <b>fond diffus cosmologique</b>, la plus vieille lumière de l’univers, émise 380 000 ans après le Big Bang, quand l’univers est devenu transparent. Étirée par l’expansion, elle nous arrive aujourd’hui sous forme de micro-ondes, à −270 °C. Penzias et Wilson ont reçu le prix Nobel en 1978. Et environ 1 % de la « neige » des anciennes télévisions venait de là : tout le monde avait le Big Bang dans son salon.</p>` },
+        question: { q: 'Quel âge a l’univers ?', choix: ['4,6 milliards d’années', '13,8 milliards d’années', '100 milliards d’années', 'Il est éternel'], bonne: 1, explication: '13,8 milliards d’années. 4,6 milliards, c’est l’âge du Soleil et de la Terre.' } },
+      { titre: 'L’univers invisible', html: `<p>Dans les années 1930, Fritz Zwicky remarque que des galaxies tournent dans leur amas bien trop vite pour la matière visible. Dans les années 1970, <b>Vera Rubin</b> montre que les étoiles au bord des galaxies tournent aussi trop vite. Il manque de la masse : une <b>matière noire</b> invisible.</p>
+        <p>En 1998, nouvelle claque : en observant des supernovas lointaines, deux équipes découvrent que l’expansion de l’univers <b>accélère</b>. Une mystérieuse <b>énergie noire</b> pousse tout.</p>`,
+        question: { q: 'Quelle part de l’univers est faite de matière ordinaire (atomes) ?', choix: ['Environ 5 %', 'Environ 50 %', 'Environ 95 %', '100 %'], bonne: 0, explication: 'Environ 5 %. Le reste : environ 27 % de matière noire et 68 % d’énergie noire, dont on ignore encore la nature.' } },
+      { titre: 'Les surprises de James Webb', html: `<p>Lancé le jour de Noël 2021, le télescope spatial James Webb regarde si loin qu’il voit des galaxies telles qu’elles étaient moins de 300 millions d’années après le Big Bang.</p>`,
+        twist: { titre: 'Trop tôt, trop brillantes', html: `<p>On s’attendait à trouver quelques galaxies bébés, petites et pâles. Webb en a trouvé beaucoup, déjà brillantes et bien formées, plus tôt que prévu. Et deux méthodes de mesure de la vitesse d’expansion donnent des résultats différents (la « tension de Hubble »). Les cosmologistes ne savent pas encore si c’est une erreur de mesure… ou le signe d’une physique nouvelle.</p>` },
+        action: ['📏 Voyager jusqu’aux confins', 'cosmos', 'echelle'] }
+    ],
+    retenir: ['L’univers est en expansion depuis 13,8 milliards d’années (Lemaître, Hubble).', 'Le fond diffus cosmologique est la plus vieille lumière de l’univers.', '95 % de l’univers est encore une énigme (matière et énergie noires).'],
+    suspense: 'Le pulsar, c’était naturel. Le souffle, c’était le Big Bang. Mais Stella baisse la voix : « Il existe un autre signal, un vrai. Capté une seule fois, en 1977. Et personne ne l’a jamais expliqué avec certitude. »'
+  },
+  {
+    id: 'seuls', icone: '👽', titre: 'Épilogue : sommes-nous seuls ?', sousTitre: 'La plus grande question',
+    scenes: [
+      { titre: 'Des mondes par milliers', html: `<p>Jusqu’en 1995, on ne connaissait aucune planète autour d’une autre étoile semblable au Soleil. Cette année-là, les Suisses Michel Mayor et Didier Queloz découvrent <b>51 Pegasi b</b>. Aujourd’hui, on en a confirmé <b>plus de 6 000</b>, et l’on pense qu’il y a dans la Voie lactée plus de planètes que d’étoiles.</p>
+        <p>Autour de l’étoile TRAPPIST-1, à 40 années-lumière, tournent sept planètes de la taille de la Terre.</p>`,
+        question: { q: 'Comment détecte-t-on le plus souvent une exoplanète ?', choix: ['On la photographie directement', 'Elle fait légèrement baisser l’éclat de son étoile en passant devant', 'On capte ses émissions radio', 'On y envoie une sonde'], bonne: 1, explication: 'C’est la méthode des transits : quand la planète passe devant son étoile, l’éclat baisse un tout petit peu, à intervalles réguliers.' } },
+      { titre: 'Le signal « Wow! »', html: `<p>Le 15 août 1977, le radiotélescope Big Ear, dans l’Ohio, capte pendant 72 secondes un signal radio intense et étroit, venu de la constellation du Sagittaire, exactement comme on imagine un message artificiel. En relisant les relevés imprimés, l’astronome Jerry Ehman entoure les chiffres au stylo rouge et écrit dans la marge : <b>« Wow! »</b>.</p>
+        <p>On a pointé des télescopes vers cet endroit des dizaines de fois. Le signal n’est <b>jamais revenu</b>.</p>`,
+        twist: { titre: 'Une piste naturelle… mais pas de certitude', html: `<p>En 2024, une équipe a proposé une explication naturelle : un nuage d’hydrogène froid, brusquement « allumé » par le sursaut d’un astre très magnétique, comme un magnétar. Séduisant, mais non prouvé. Le signal Wow! reste, à ce jour, une énigme. Comme pour le pulsar de Jocelyn Bell, la leçon est la même : avant de crier aux extraterrestres, il faut éliminer toutes les explications naturelles.</p>` },
+        question: { q: 'Face à un signal mystérieux, quelle est la bonne attitude scientifique ?', choix: ['Annoncer tout de suite un contact extraterrestre', 'L’ignorer', 'Chercher à le reproduire et éliminer les causes naturelles', 'Attendre qu’il recommence sans rien faire'], bonne: 2, explication: 'Observer à nouveau, vérifier avec d’autres instruments, tester toutes les hypothèses naturelles. C’est ce qui a permis de comprendre les pulsars.' } },
+      { titre: 'Où sont-ils ?', html: `<p>En 1950, au cours d’un déjeuner, le physicien Enrico Fermi lance : « Mais où sont-ils donc ? » Si la vie intelligente est fréquente, la galaxie devrait en être remplie depuis longtemps. C’est le <b>paradoxe de Fermi</b>.</p>
+        <p>Réponses possibles : la vie est rare, ou les civilisations durent peu, ou les distances sont trop grandes, ou nous ne savons pas encore écouter. En 1961, Frank Drake a même écrit une équation pour estimer leur nombre ; le problème, c’est que nous ne connaissons pas la plupart de ses termes.</p>`,
+        twist: { titre: 'La réponse honnête', html: `<p>À ce jour, nous n’avons <b>aucune preuve</b> de vie ailleurs que sur Terre. Les annonces spectaculaires, comme celle d’un gaz possiblement biologique sur l’exoplanète K2-18 b en 2025, ont été très contestées par d’autres équipes. Mais pour la première fois de l’histoire, nous avons les instruments pour chercher vraiment. La réponse pourrait venir de ton vivant.</p>` } },
+      { titre: 'Retour au jardin', html: `<p>Le ciel pâlit. Te revoilà dans le jardin, le cou un peu raide. Stella range sa radio.</p>
+        <p>« Tu sais maintenant que la nuit est noire parce que l’univers a un âge, que la Lune tombe sans jamais arriver, que le Soleil est blanc, que tes atomes viennent des étoiles, que notre bip était une étoile morte qui tourne… et que nous vivons sur un point bleu pâle, perdu dans un rayon de Soleil. »</p>
+        <p>Elle sourit. « Le voyage ne fait que commencer. Le ciel sera là, chaque nuit, au-dessus de toi. »</p>`,
+        action: ['🏅 Relever les défis d’observation', 'defis', null] }
+    ],
+    retenir: ['Plus de 6 000 exoplanètes connues ; peut-être plus de planètes que d’étoiles.', 'Le signal Wow! (1977) reste inexpliqué avec certitude.', 'Aucune preuve de vie ailleurs… pour l’instant.'],
+    suspense: null
+  }
+];
+
+// ===== formation.js =====
+// Formation « L'Odyssée cosmique » : sommaire, lecture scène par scène, rebondissements à révéler,
+// questions notées (points d'étoile), missions vers le reste de l'atlas, fin de chapitre et diplôme.
+const Formation = (() => {
+  const total = FORMATION.reduce((n, c) => n + c.scenes.filter(s => s.question).length, 0);
+  const GRADES = [[0, '🌱 Apprenti navigateur'], [0.2, '🚀 Pilote d’étoiles'], [0.4, '🔭 Explorateur du ciel'], [0.6, '🌌 Astronome'], [0.8, '👑 Maître du cosmos']];
+  const etat = Object.assign({ ch: 0, sc: 0, faits: [], reponses: {}, libre: false, nom: '' }, Memoire.lire('formation', {}));
+  const sauver = () => Memoire.ecrire('formation', etat);
+  const points = () => Object.values(etat.reponses).filter(Boolean).length * 10;
+  const grade = () => { const r = points() / (total * 10); return GRADES.filter(([s]) => r >= s).pop()[1]; };
+  const ouvert = i => etat.libre || i === 0 || etat.faits.includes(FORMATION[i - 1].id);
+  const scenesLues = () => FORMATION.reduce((n, c, i) => n + (etat.faits.includes(c.id) ? c.scenes.length : i === etat.ch ? etat.sc : 0), 0);
+  const nbScenes = FORMATION.reduce((n, c) => n + c.scenes.length, 0);
+  const el = () => $('#formation');
+  const enHaut = () => { const d = el().closest('.defile'); if (d) d.scrollTop = 0; };
+
+  // --- Sommaire ---
+  function sommaire() {
+    const fini = etat.faits.length === FORMATION.length;
+    el().innerHTML = `
+      <div class="odyssee-hero"><div class="meta">Formation interactive · ${FORMATION.length} chapitres · ${nbScenes} scènes · ${total} questions</div>
+        <h2>🎓 L’Odyssée cosmique</h2>
+        <p>Une nuit, dans ton jardin, Stella capte sur sa vieille radio un signal mystérieux : un bip parfaitement régulier, venu des étoiles. Pour découvrir ce que c’est, il va falloir comprendre l’univers tout entier, de la Lune jusqu’au Big Bang. Chaque chapitre cache des rebondissements qui renversent les idées reçues.</p>
+        <div class="progression"><div style="width:${scenesLues() / nbScenes * 100}%"></div></div>
+        <div class="ligne"><span class="pastille">${scenesLues()} / ${nbScenes} scènes</span><span class="pastille">⭐ ${points()} points d’étoile</span><span class="pastille">${grade()}</span></div>
+        <div class="ligne" style="margin-top:14px">
+          <button class="btn primaire" id="fo-continuer">${scenesLues() ? '▶ Reprendre le voyage' : '▶ Commencer l’aventure'}</button>
+          ${fini ? '<button class="btn" id="fo-diplome">🏆 Mon diplôme</button>' : ''}
+          <label class="petit texte-2"><input type="checkbox" id="fo-libre" ${etat.libre ? 'checked' : ''}> Tout débloquer (lecture libre)</label>
+        </div></div>
+      <div class="odyssee-chemin">${FORMATION.map((c, i) => {
+        const fait = etat.faits.includes(c.id), ok = ouvert(i), courant = i === etat.ch && !fait;
+        return `<button class="etape-odyssee ${fait ? 'faite' : ''} ${courant ? 'courante' : ''}" data-ch="${i}" ${ok ? '' : 'disabled'}>
+          <span class="icone-etape">${ok ? c.icone : '🔒'}</span><span><b>${c.titre}</b><br><span class="petit texte-2">${c.sousTitre} · ${c.scenes.length} scènes</span></span>
+          <span class="statut-etape">${fait ? '✅' : courant ? '▶' : ''}</span></button>`;
+      }).join('')}</div>
+      <p class="petit texte-2" style="margin-top:14px">Ta progression est gardée dans ce navigateur. <button class="btn petit" id="fo-raz">Recommencer à zéro</button></p>`;
+    $('#fo-continuer').onclick = () => { const i = FORMATION.findIndex(c => !etat.faits.includes(c.id)); if (i === -1) diplome(); else lire(i, i === etat.ch ? etat.sc : 0); };
+    const d = $('#fo-diplome'); if (d) d.onclick = diplome;
+    $('#fo-libre').onchange = e => { etat.libre = e.target.checked; sauver(); sommaire(); };
+    $('#fo-raz').onclick = () => { if (confirm('Effacer ta progression et tes points dans la formation ?')) { Object.assign(etat, { ch: 0, sc: 0, faits: [], reponses: {} }); sauver(); sommaire(); } };
+    $$('#formation [data-ch]').forEach(b => b.onclick = () => { const i = +b.dataset.ch; lire(i, i === etat.ch ? etat.sc : 0); });
+    enHaut();
+  }
+
+  // --- Lecture d'une scène ---
+  function lire(ci, si) {
+    const c = FORMATION[ci], s = c.scenes[si], cle = `${c.id}.${si}`;
+    etat.ch = ci; etat.sc = si; sauver();
+    const repondu = cle in etat.reponses;
+    el().innerHTML = `
+      <div class="ligne" style="justify-content:space-between"><button class="btn petit" id="fo-sommaire">← Sommaire</button><span class="pastille">⭐ ${points()} · ${grade()}</span></div>
+      <div class="scene-odyssee">
+        <div class="meta">${c.icone} ${c.titre} · scène ${si + 1}/${c.scenes.length}</div>
+        <div class="progression"><div style="width:${(si + 1) / c.scenes.length * 100}%"></div></div>
+        <h2>${s.titre}</h2>
+        <div class="recit">${s.html}</div>
+        ${s.schema ? `<div class="schema">${Schemas.dessiner(s.schema)}</div>` : ''}
+        ${s.twist ? `<div class="rebondissement" id="fo-twist"><button class="btn" id="fo-reveler">🌀 Rebondissement ! Révéler</button><div class="contenu-twist" hidden><h3>🌀 ${s.twist.titre}</h3>${s.twist.html}</div></div>` : ''}
+        ${s.question ? `<div class="carte question-odyssee"><div class="meta">❓ À toi de jouer</div><div class="quiz-question">${echap(s.question.q)}</div>
+          <div class="reponses">${s.question.choix.map((x, k) => `<button data-k="${k}">${echap(x)}</button>`).join('')}</div><div id="fo-expl"></div></div>` : ''}
+        ${s.action ? `<div class="ligne" style="margin:14px 0"><button class="btn" id="fo-action">${s.action[0]}</button><span class="petit texte-2">Mission : essaie, puis reviens ici avec le bouton « Reprendre l’Odyssée ».</span></div>` : ''}
+        <div class="ligne nav-odyssee">
+          ${si > 0 || ci > 0 ? '<button class="btn" id="fo-prec">← Précédent</button>' : '<span></span>'}
+          <button class="btn petit" id="fo-ecouter" title="Stella lit la scène à voix haute">🔊 Écouter</button>
+          <button class="btn primaire" id="fo-suiv" ${s.question && !repondu ? 'disabled title="Réponds d’abord à la question"' : ''}>${si < c.scenes.length - 1 ? 'Suivant →' : 'Fin du chapitre →'}</button>
+        </div>
+      </div>`;
+    $('#fo-sommaire').onclick = sommaire;
+    const rev = $('#fo-reveler');
+    if (rev) rev.onclick = () => { rev.hidden = true; const t = $('#fo-twist .contenu-twist'); t.hidden = false; $('#fo-twist').classList.add('revele'); Bus.emettre('rebondissement', s.twist.titre); };
+    if (s.question) {
+      const q = s.question, montrer = choix => {
+        $$('#formation .reponses button').forEach((b, k) => { b.disabled = true; if (k === q.bonne) b.classList.add('bonne'); else if (k === choix) b.classList.add('fausse'); });
+        $('#fo-expl').innerHTML = `<div class="explication">${choix === q.bonne ? '✅ Bien vu ! +10 points d’étoile. ' : '❌ Pas tout à fait. '}${echap(q.explication)}</div>`;
+        const suiv = $('#fo-suiv'); suiv.disabled = false; suiv.removeAttribute('title');
+      };
+      if (cle in etat.reponses) montrer(etat.reponses[cle] ? q.bonne : -1);
+      $$('#formation .reponses button').forEach(b => b.onclick = () => {
+        const k = +b.dataset.k;
+        if (!(cle in etat.reponses)) { etat.reponses[cle] = k === q.bonne; sauver(); }
+        montrer(k);
+      });
+    }
+    const act = $('#fo-action'); if (act) act.onclick = () => mission(s.action);
+    $('#fo-ecouter').onclick = () => { const d = document.createElement('div'); d.innerHTML = s.html + (s.twist && !$('#fo-twist .contenu-twist').hidden ? s.twist.html : ''); Fee.lireAVoixHaute(`${s.titre}. ${d.textContent}`); };
+    const prec = $('#fo-prec'); if (prec) prec.onclick = () => si > 0 ? lire(ci, si - 1) : lire(ci - 1, FORMATION[ci - 1].scenes.length - 1);
+    $('#fo-suiv').onclick = () => si < c.scenes.length - 1 ? lire(ci, si + 1) : finChapitre(ci);
+    enHaut();
+  }
+
+  function mission([, type, cible]) {
+    if (type === 'ciel') Ciel.montrer(cible);
+    else if (type === 'demo') { Appli.afficherVue('demos'); Demos.afficher(cible); }
+    else if (type === 'systeme') { Appli.afficherVue('systeme'); Systeme.choisir(cible); }
+    else if (type === 'cosmos') { Appli.afficherVue('cosmos'); Cosmos.choisirScene(cible); }
+    else if (type === 'fiche') Appli.ouvrirFiche(cible);
+    else Appli.afficherVue(type);
+    $('#retour-formation').hidden = false;
+  }
+
+  // --- Fin de chapitre ---
+  function finChapitre(ci) {
+    const c = FORMATION[ci];
+    if (!etat.faits.includes(c.id)) etat.faits.push(c.id);
+    const suivant = ci + 1 < FORMATION.length ? ci + 1 : null;
+    etat.ch = suivant === null ? ci : suivant; etat.sc = 0; sauver();
+    const qs = c.scenes.map((s, k) => s.question ? etat.reponses[`${c.id}.${k}`] : null).filter(v => v !== null);
+    const bonnes = qs.filter(Boolean).length;
+    el().innerHTML = `<div class="scene-odyssee" style="text-align:center">
+      <div style="font-size:3rem">${c.icone}</div><div class="meta">Chapitre terminé</div><h2>${c.titre}</h2>
+      ${qs.length ? `<p class="chiffre">${'⭐'.repeat(bonnes)}${'☆'.repeat(qs.length - bonnes)}</p><p class="texte-2">${bonnes} bonne(s) réponse(s) sur ${qs.length} · total ${points()} points · ${grade()}</p>` : ''}
+      <div class="carte" style="text-align:left;margin:16px 0"><h3>📌 À retenir</h3><ul>${c.retenir.map(r => `<li>${r}</li>`).join('')}</ul></div>
+      ${c.suspense ? `<div class="rebondissement revele" style="text-align:left"><h3>🔮 Et maintenant…</h3><p>${c.suspense}</p></div>` : ''}
+      <div class="ligne" style="justify-content:center;margin-top:16px">
+        <button class="btn" id="fo-retour">Sommaire</button>
+        ${suivant !== null ? `<button class="btn primaire" id="fo-suivant">${FORMATION[suivant].icone} Chapitre suivant →</button>` : '<button class="btn primaire" id="fo-dipl">🏆 Recevoir mon diplôme</button>'}
+      </div></div>`;
+    $('#fo-retour').onclick = sommaire;
+    if (suivant !== null) $('#fo-suivant').onclick = () => lire(suivant, 0); else $('#fo-dipl').onclick = diplome;
+    Bus.emettre('chapitre-fini', { titre: c.titre, dernier: suivant === null });
+    enHaut();
+  }
+
+  // --- Diplôme (dessiné localement, téléchargeable en PNG) ---
+  function dessinerDiplome(canvas) {
+    const W = 1400, H = 990; canvas.width = W; canvas.height = H;
+    const g = canvas.getContext('2d');
+    const fond = g.createRadialGradient(W / 2, H * 0.4, 50, W / 2, H / 2, W * 0.75);
+    fond.addColorStop(0, '#1c2550'); fond.addColorStop(1, '#03050c'); g.fillStyle = fond; g.fillRect(0, 0, W, H);
+    let graine = 9; const al = () => { graine = (graine * 16807) % 2147483647; return (graine - 1) / 2147483646; };
+    for (let i = 0; i < 420; i++) { g.fillStyle = `rgba(255,255,255,${0.2 + al() * 0.7})`; const r = al() < 0.05 ? 2 : 1; g.beginPath(); g.arc(al() * W, al() * H, r, 0, 2 * Math.PI); g.fill(); }
+    g.strokeStyle = '#ffd27a'; g.lineWidth = 6; g.strokeRect(40, 40, W - 80, H - 80); g.lineWidth = 1.5; g.strokeRect(58, 58, W - 116, H - 116);
+    const texte = (t, y, taille, couleur = '#e8ecf8', poids = 400, style = '') => { g.font = `${style} ${poids} ${taille}px Georgia, 'Times New Roman', serif`; g.fillStyle = couleur; g.textAlign = 'center'; g.fillText(t, W / 2, y); };
+    texte('✦  DIPLÔME  ✦', 190, 64, '#ffd27a', 700);
+    texte('d’explorateur du cosmos', 250, 36, '#c9d4ff', 400, 'italic');
+    texte('décerné à', 350, 28, '#a9b3d1', 400, 'italic');
+    texte(etat.nom || 'Explorateur anonyme', 450, 76, '#ffffff', 700);
+    g.strokeStyle = '#ffd27a88'; g.beginPath(); g.moveTo(W / 2 - 330, 480); g.lineTo(W / 2 + 330, 480); g.stroke();
+    texte('pour avoir accompli l’Odyssée cosmique :', 560, 30);
+    texte(`${FORMATION.length} chapitres, du jardin aux confins de l’univers`, 605, 30);
+    texte(`${points()} points d’étoile · ${grade().replace(/^\S+\s/, '')}`, 690, 34, '#ffd27a', 700);
+    texte(`Le ${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}`, 790, 26, '#a9b3d1');
+    texte('Stella, fée des étoiles', 880, 34, '#ff9ad5', 400, 'italic');
+    // petite étoile de Stella
+    g.save(); g.translate(W / 2 + 220, 868); g.fillStyle = '#fff3b0'; g.beginPath();
+    for (let k = 0; k < 8; k++) { const r = k % 2 ? 7 : 20, a = k * Math.PI / 4; g.lineTo(Math.sin(a) * r, -Math.cos(a) * r); }
+    g.closePath(); g.fill(); g.restore();
+  }
+  function diplome() {
+    el().innerHTML = `<div class="ligne" style="justify-content:space-between"><button class="btn petit" id="fo-sommaire">← Sommaire</button><span class="pastille">⭐ ${points()} · ${grade()}</span></div>
+      <div class="scene-odyssee"><h2>🏆 Ton diplôme d’explorateur du cosmos</h2>
+      ${etat.faits.length < FORMATION.length ? `<p class="texte-2">Il te reste ${FORMATION.length - etat.faits.length} chapitre(s) à terminer pour le mériter… mais voici à quoi il ressemblera !</p>` : '<p class="texte-2">Bravo, tu as terminé toute l’Odyssée !</p>'}
+      <div class="ligne"><label for="fo-nom">Ton nom :</label><input type="text" id="fo-nom" maxlength="40" value="${echap(etat.nom)}" placeholder="Ton prénom et ton nom" style="flex:1;min-width:180px"></div>
+      <canvas id="fo-canvas" class="diplome"></canvas>
+      <div class="ligne"><button class="btn primaire" id="fo-telecharger" ${etat.faits.length < FORMATION.length ? 'disabled' : ''}>⬇ Télécharger (image PNG)</button><button class="btn" id="fo-imprimer" ${etat.faits.length < FORMATION.length ? 'disabled' : ''}>🖨 Imprimer</button></div></div>`;
+    const canvas = $('#fo-canvas'); dessinerDiplome(canvas);
+    $('#fo-sommaire').onclick = sommaire;
+    $('#fo-nom').oninput = e => { etat.nom = e.target.value.slice(0, 40); sauver(); dessinerDiplome(canvas); };
+    $('#fo-telecharger').onclick = () => canvas.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'diplome-odyssee-cosmique.png'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000); });
+    $('#fo-imprimer').onclick = () => {
+      let z = $('#zone-impression'); if (!z) { z = document.createElement('div'); z.id = 'zone-impression'; document.body.appendChild(z); }
+      z.innerHTML = `<img src="${canvas.toDataURL('image/png')}" alt="Diplôme">`;
+      setTimeout(() => window.print(), 100);
+    };
+    enHaut();
+  }
+
+  function init() {
+    const b = document.createElement('button');
+    b.id = 'retour-formation'; b.className = 'btn primaire'; b.hidden = true; b.textContent = '↩ Reprendre l’Odyssée';
+    b.onclick = () => { b.hidden = true; Appli.afficherVue('formation'); };
+    document.body.appendChild(b);
+    Bus.sur('vue', v => { if (v === 'formation') b.hidden = true; });
+    sommaire();
+  }
+  return { init, afficher: () => { if (!el().children.length) sommaire(); }, sommaire, reprendre: () => { const i = FORMATION.findIndex(c => !etat.faits.includes(c.id)); if (i === -1) diplome(); else lire(i, i === etat.ch ? etat.sc : 0); } };
+})();
+
 // ===== fee.js =====
 // Stella, la fée des étoiles : guide de l'appli. Elle répond uniquement avec la base de connaissances interne
 // et les calculs de l'atlas (aucune IA externe, aucun service en ligne). Sa voix utilise les voix installées sur l'appareil.
@@ -2943,12 +3432,17 @@ const Fee = (() => {
     const v = speechSynthesis.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith('fr') && v.localService);
     voix = v.find(x => /female|femme|hortense|julie|amelie|marie|denise|audrey/i.test(x.name)) || v[0] || null;
   }
-  function parler(texte) {
+  function parler(texte, max = 600) {
     if (!voixActive || !voix || !('speechSynthesis' in window)) return;
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(texte.replace(/<[^>]+>/g, ' ').replace(/[*_#]/g, '').slice(0, 600));
-    u.voice = voix; u.lang = voix.lang; u.rate = 1.03; u.pitch = 1.25;
-    speechSynthesis.speak(u);
+    // phrase par phrase : certains navigateurs coupent les lectures trop longues
+    const phrases = texte.replace(/<[^>]+>/g, ' ').replace(/[*_#]/g, '').slice(0, max).match(/[^.!?…]+[.!?…]*/g) || [];
+    for (const p of phrases) {
+      if (!p.trim()) continue;
+      const u = new SpeechSynthesisUtterance(p.trim());
+      u.voice = voix; u.lang = voix.lang; u.rate = 1.03; u.pitch = 1.25;
+      speechSynthesis.speak(u);
+    }
   }
 
   // --- Messages ---
@@ -2984,6 +3478,7 @@ const Fee = (() => {
     if (contient(q, 'merci')) return message('Avec plaisir ! Les étoiles sont toujours là pour toi. 🌟');
     if (contient(q, 'qui es tu', 'tu es qui', 'ton nom', 'es tu une ia', 'es tu un robot')) return message('Je suis <b>Stella</b>, la petite fée de cet atlas. Je ne suis pas une IA connectée : je réponds avec la base de connaissances et les calculs astronomiques intégrés à l’appli, même sans internet.');
     if (contient(q, 'visite', 'guide moi', 'montre moi l appli', 'comment ca marche', 'aide')) return message('Je te fais visiter ? Suis-moi !', { actions: [['🧚 Commencer la visite', demarrerVisite]] });
+    if (contient(q, 'formation', 'cours', 'odyssee', 'apprendre', 'lecon', 'raconte moi une histoire', 'histoire du signal')) return message('Viens vivre l’<b>Odyssée cosmique</b> : 14 chapitres, un signal mystérieux à élucider et des rebondissements à chaque étape !', { actions: [['🎓 Ouvrir la formation', () => Appli.afficherVue('formation')], ['▶ Reprendre où j’en étais', () => { Appli.afficherVue('formation'); Formation.reprendre(); }]] });
     if (contient(q, 'quiz', 'question pour moi', 'teste moi', 'interroge')) return message('Prêt pour un petit quiz ? Choisis ton thème.', { actions: [['🧠 Ouvrir les quiz', () => Appli.afficherVue('quiz')], ['⭐ Reconnais la constellation', () => { Appli.afficherVue('quiz'); Appli.lancerQuiz('constellations'); }]] });
     if (contient(q, 'demonstration', 'demo', 'experience', 'experimenter', 'manipuler')) return message('Voici mes expériences préférées :', { actions: Demos.liste.map(d => [d.titre, () => { Appli.afficherVue('demos'); Demos.afficher(d.id); }]) });
     if (contient(q, 'decouverte', 'incroyable', 'epoustouflant', 'couper le souffle', 'wow', 'etonne moi', 'surprends moi')) {
@@ -3065,6 +3560,7 @@ const Fee = (() => {
     { vue: 'ciel', cible: '#t-avant', texte: 'Ces boutons accélèrent le temps : regarde le ciel tourner, les planètes avancer, la Lune changer de phase. « Maintenant » te ramène au présent.' },
     { vue: 'ciel', cible: '#ciel-btn-options', texte: 'Ici tu choisis ta ville (ou ta position), et ce que tu veux afficher : constellations, grilles, sol transparent pour voir le ciel de l’autre côté de la Terre…' },
     { vue: 'cesoir', cible: '.onglet[data-vue="cesoir"]', texte: '« Ce soir » te prépare le programme de la nuit : planètes visibles, phase de la Lune, plus beaux objets, prochains événements.' },
+    { vue: 'formation', cible: '.onglet[data-vue="formation"]', texte: 'La <b>formation « L’Odyssée cosmique »</b> : une grande aventure en 14 chapitres, avec un signal mystérieux à élucider, des rebondissements, des questions et un diplôme à ton nom à la fin.' },
     { vue: 'systeme', cible: '#systeme-zone', texte: 'Le <b>système solaire en 3D</b>, avec les vraies positions des planètes. Accélère le temps et clique sur une planète pour la suivre.' },
     { vue: 'cosmos', cible: '#cosmos-barre', texte: 'L’<b>univers en 3D</b> : nos étoiles voisines, la Voie lactée, nos galaxies voisines, la toile cosmique, et un voyage de la Terre jusqu’aux confins.' },
     { vue: 'medias', cible: '.onglet[data-vue="medias"]', texte: 'Les vraies <b>photos et vidéos de la NASA</b>, avec l’image astronomique du jour (il faut internet pour cet onglet seulement).' },
@@ -3105,6 +3601,7 @@ const Fee = (() => {
   // Petites astuces la première fois que l'on ouvre un onglet
   const ASTUCES = {
     cesoir: 'Le programme de la nuit est calculé pour ta ville. Change-la dans « Ciel en direct » › ⚙️.',
+    formation: 'Chaque rebondissement se révèle au clic. Ne triche pas : essaie de deviner avant ! 😉',
     systeme: 'Astuce : clique sur Saturne, puis accélère le temps pour voir ses anneaux s’incliner au fil des années.',
     cosmos: 'Essaie « Échelle de l’univers » puis le bouton 🚀 Voyage : ça donne le vertige !',
     medias: 'Tape un sujet en français ou en anglais : les photos viennent directement de la médiathèque de la NASA.',
@@ -3145,12 +3642,14 @@ const Fee = (() => {
     $('#fee-suggestions').innerHTML = sug.map(s => `<button class="btn petit">${s}</button>`).join('');
     $$('#fee-suggestions button').forEach(b => b.onclick = () => question(b.textContent));
     Bus.sur('vue', astuce);
+    Bus.sur('chapitre-fini', ({ titre, dernier }) => { if (ouverte) message(dernier ? 'Tu as terminé toute l’Odyssée ! Je suis tellement fière de toi. 🏆✨' : `Chapitre « ${titre} » terminé ! La suite est encore plus surprenante… 🌟`); });
     Bus.sur('quiz-fin', ({ score, total }) => {
       if (ouverte) message(score === total ? `Parfait, ${score}/${total} ! Tu es un vrai astronome. 🏆` : `${score}/${total}, bravo ! Chaque question ratée est une chose apprise. ✨`);
     });
     if (!Memoire.lire('visite-faite', false)) setTimeout(() => { if (etapeVisite < 0 && !ouverte) { const a = document.createElement('div'); a.id = 'astuce-fee'; a.className = 'astuce-fee'; a.innerHTML = '🧚 Bonjour ! Je suis Stella. Clique sur moi pour une visite guidée ou pour me poser une question.'; a.onclick = () => { a.hidden = true; ouvrir(); }; document.body.appendChild(a); setTimeout(() => { a.hidden = true; }, 12000); } }, 1500);
   }
-  return { init, ouvrir, question, demarrerVisite };
+  const lireAVoixHaute = texte => { const avant = voixActive; voixActive = true; if (!voix) choisirVoix(); if (!voix) alert('Aucune voix française n’est installée sur cet appareil.'); parler(texte, 6000); voixActive = avant; };
+  return { init, ouvrir, question, demarrerVisite, lireAVoixHaute };
 })();
 
 // ===== app.js =====
@@ -3171,6 +3670,7 @@ const Appli = (() => {
     $$('.vue').forEach(v => v.classList.toggle('active', v.id === 'vue-' + id));
     Systeme.activer(id === 'systeme'); Cosmos.activer(id === 'cosmos'); Demos.activer(id === 'demos');
     if (id === 'cesoir') construireCeSoir();
+    if (id === 'formation') Formation.afficher();
     if (id === 'medias') initMedias();
     if (id === 'ciel') Ciel.redessiner();
     const o = $(`.onglet[data-vue="${id}"]`); if (o) o.scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -3579,7 +4079,7 @@ const Appli = (() => {
   // ---------- Démarrage ----------
   function init() {
     const etapes = [['Ciel', () => Ciel.init()], ['Système solaire', () => Systeme.init()], ['Univers', () => Cosmos.init()], ['Démos', () => Demos.init()], ['Découvertes', construireDecouvertes],
-      ['Encyclopédie', () => construireEncyclo()], ['Quiz', accueilQuiz], ['Défis', construireDefis], ['Outils', construireOutils], ['Stella', () => Fee.init()]];
+      ['Encyclopédie', () => construireEncyclo()], ['Quiz', accueilQuiz], ['Défis', construireDefis], ['Outils', construireOutils], ['Formation', () => Formation.init()], ['Stella', () => Fee.init()]];
     for (const [nom, f] of etapes) { try { f(); } catch (e) { console.error(`Erreur au démarrage (${nom})`, e); } }
     $$('.onglet').forEach(b => b.onclick = () => afficherVue(b.dataset.vue));
     $('#btn-rouge').onclick = e => { const on = document.body.classList.toggle('nuit-rouge'); e.currentTarget.setAttribute('aria-pressed', on); Memoire.ecrire('rouge', on); };
@@ -3587,7 +4087,7 @@ const Appli = (() => {
     Lieu.surChangement(() => { cacheNuit = null; if (vueActive === 'cesoir') construireCeSoir(); });
     window.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#visionneuse').hidden) { $('#visionneuse').hidden = true; $('#visionneuse').innerHTML = ''; } });
     // L'adresse peut viser un onglet (index.html#systeme) ou lancer la visite (#visite) : c'est ce qu'utilise le lanceur .bat
-    const VUES = ['ciel', 'cesoir', 'systeme', 'cosmos', 'medias', 'decouvertes', 'demos', 'encyclo', 'quiz', 'defis', 'outils'];
+    const VUES = ['ciel', 'cesoir', 'formation', 'systeme', 'cosmos', 'medias', 'decouvertes', 'demos', 'encyclo', 'quiz', 'defis', 'outils'];
     const suivreAdresse = () => {
       const h = decodeURIComponent(location.hash.slice(1));
       if (VUES.includes(h)) { afficherVue(h); return true; }
